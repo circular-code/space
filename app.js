@@ -32,7 +32,7 @@ function mouseMoveHandler(e) {
     mouseY = e.clientY;
 }
 
-function clickHandler(e) {
+function mouseClickHandler(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
 }
