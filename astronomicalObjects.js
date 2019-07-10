@@ -22,5 +22,5 @@ function Star(beamRadius) {
 };
 
 // Inherit from the parent class
-Star.prototype = Object.create(AstronomicalObject.prototype);
-Star.prototype.constructor = Enemy;
+//Star.prototype = Object.create(AstronomicalObject.prototype);
+//Star.prototype.constructor = Enemy;
