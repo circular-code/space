@@ -17,10 +17,12 @@ AstronomicalObject.prototype.draw = function() {
 };
 
 function Star() {
+    AstronomicalObject.call(this, radius, x, y);
     this.color = '#ff0000';
 }
 
 function Planet() {
+    AstronomicalObject.call(this, radius, x, y);
     this.color = '#ff0000';
 }
 
