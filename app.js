@@ -8,6 +8,7 @@ var mouseY = 0;
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("click", mouseClickHandler, false);
 
 function randomNumBetween(max, min) {
     if (typeof max === 'undefined'){
@@ -27,6 +28,11 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+}
+
+function clickHandler(e) {
     mouseX = e.clientX;
     mouseY = e.clientY;
 }
