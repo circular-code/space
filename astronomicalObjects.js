@@ -24,6 +24,7 @@ function Planet() {
     this.color = '#ff0000';
 }
 
-// Inherit from the parent class
-//Star.prototype = Object.create(AstronomicalObject.prototype);
-//Star.prototype.constructor = Enemy;
+Star.prototype = Object.create(AstronomicalObject.prototype);
+Star.prototype.constructor = AstronomicalObject;
+Planet.prototype = Object.create(AstronomicalObject.prototype);
+Planet.prototype.constructor = AstronomicalObject;

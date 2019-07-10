@@ -49,16 +49,18 @@ function distance (x1, y1, x2, y2) {
 
 function draw() {
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.rect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#333333";
-  ctx.fill();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#333333";
+    ctx.fill();
 
-  ship.move();
-  ship.draw();
-  ship.checkCollision();
+    map.draw();
 
-  requestAnimationFrame(draw);
+    ship.move();
+    ship.draw();
+    ship.checkCollision();
+
+    requestAnimationFrame(draw);
 }
 
 var ship = new Ship({radius: 10, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 5});
