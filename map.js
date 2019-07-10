@@ -14,7 +14,7 @@ Map.prototype.addRandomPlanetsAndStars = function() {
 
     var starsAmount = randomNumBetween(10);
     while (starsAmount) {
-        this.suns.push(new Star());
+        this.stars.push(new Star());
         starsAmount--;
     }
 
@@ -22,8 +22,7 @@ Map.prototype.addRandomPlanetsAndStars = function() {
 };
 
 Map.prototype.draw = function() {
-    var i = 0, j = 0;
-    for (i; i< this.all.length; i++) {
+    for (var i = 0; i< this.all.length; i++) {
         this.all[i].draw();
     }
 };
