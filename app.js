@@ -9,6 +9,17 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
+function randomNumBetween(max, min) {
+    if (typeof max === 'undefined'){
+        console.error('max undefined');
+        return false;
+    }
+    if (typeof min === 'undefined'){
+        min = 0;
+    }
+    return Math.floor(Math.random()*(max-min)+min);
+}
+
 function keyDownHandler(e) {
 }
 
@@ -30,25 +41,74 @@ function Ship (params) {
     this.x = params.x;
     this.y = params.y;
     this.speed = params.speed;
-    this.draw = function() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-        ctx.fillStyle = "#eeeeee";
-        ctx.fill();
-        ctx.closePath();
-    }
-    this.move = function() {
-        if (this.x < mouseX) {
+}
+Ship.prototype.draw = function() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+    ctx.fillStyle = "#eeeeee";
+    ctx.fill();
+    ctx.closePath();
+}
+Ship.prototype.move = function() {
+    if (this.x < mouseX) {
+        if ((this.x + this.speed) > mouseX) {
+            this.x = mouseX;
+        }
+        else {
             this.x += this.speed;
         }
-        else if (this.x > mouseX) {
+    }
+    else if (this.x > mouseX) {
+        if ((this.x + this.speed) < mouseX) {
+            this.x = mouseX;
+        }
+        else {
             this.x -= this.speed;
         }
-        if (this.y < mouseY) {
+    }
+    if (this.y < mouseY) {
+        if ((this.y + this.speed) > mouseY) {
+            this.y = mouseY;
+        }
+        else {
             this.y += this.speed;
         }
-        else if (this.y > mouseY) {
+    }
+    else if (this.y > mouseY) {
+        if ((this.y + this.speed) < mouseY) {
+            this.y = mouseY;
+        }
+        else {
             this.y -= this.speed;
+        }
+    }
+}
+
+function Map () {
+    this.planets = [];
+    this.suns = [];
+    this.addRandomPlanetsAndSuns = function() {
+
+        var planetAmount = randomNumBetween(10);
+        while (planetAmount) {
+
+            this.planets.push(new Planet());
+            planetAmount--;
+        }
+
+        var sunAmount = randomNumBetween(10);
+        while (sunAmount) {
+            this.suns.push(new Sun());
+            sunAmount--;
+        }
+    }
+    this.draw = function() {
+        var i = 0, j = 0;
+        for (i; i< planets.length; i++) {
+            planets[i].draw();
+        }
+        for (j; j< planets.length; j++) {
+            suns[j].draw();
         }
     }
 }
@@ -74,4 +134,5 @@ function draw() {
 }
 
 var ship = new Ship({radius: 10, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 5});
+var map = new Map();
 draw();
