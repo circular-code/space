@@ -28,8 +28,6 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
 }
 
 function mouseClickHandler(e) {
