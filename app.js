@@ -1,35 +1,77 @@
-const app = new PIXI.Application({
-    width: 800, height: 600, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
-});
-document.body.appendChild(app.view);
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var mouseX = 0;
+var mouseY = 0;
 
-const container = new PIXI.Container();
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
-app.stage.addChild(container);
-
-// Create a new texture
-const texture = PIXI.Texture.from('examples/assets/bunny.png');
-
-// Create a 5x5 grid of bunnies
-for (let i = 0; i < 25; i++) {
-    const bunny = new PIXI.Sprite(texture);
-    bunny.anchor.set(0.5);
-    bunny.x = (i % 5) * 40;
-    bunny.y = Math.floor(i / 5) * 40;
-    container.addChild(bunny);
+function keyDownHandler(e) {
 }
 
-// Move container to the center
-container.x = app.screen.width / 2;
-container.y = app.screen.height / 2;
+function keyUpHandler(e) {
+}
 
-// Center bunny sprite in local container coordinates
-container.pivot.x = container.width / 2;
-container.pivot.y = container.height / 2;
+function mouseMoveHandler(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+}
 
-// Listen for animate update
-app.ticker.add((delta) => {
-    // rotate the container!
-    // use delta to create frame-independent transform
-    container.rotation -= 0.01 * delta;
-});
+function collisionDetection() {
+}
+
+function Ship (params) {
+    // this.width = params.width;
+    // this.height = params.height;
+    this.radius = params.radius;
+    this.x = params.x;
+    this.y = params.y;
+    this.speed = params.speed;
+    this.draw = function() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = "#eeeeee";
+        ctx.fill();
+        ctx.closePath();
+    }
+    this.move = function() {
+        if (this.x < mouseX) {
+            this.x += this.speed;
+        }
+        else if (this.x > mouseX) {
+            this.x -= this.speed;
+        }
+        if (this.y < mouseY) {
+            this.y += this.speed;
+        }
+        else if (this.y > mouseY) {
+            this.y -= this.speed;
+        }
+    }
+}
+
+// function drawPaddle() {
+//   ctx.beginPath();
+//   ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+//   ctx.fillStyle = "#0095DD";
+//   ctx.fill();
+//   ctx.closePath();
+// }
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.rect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#333333";
+  ctx.fill();
+  ship.move();
+  ship.draw();
+  collisionDetection();
+
+  requestAnimationFrame(draw);
+}
+
+var ship = new Ship({radius: 10, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 5});
+draw();
