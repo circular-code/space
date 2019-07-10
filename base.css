@@ -57,8 +57,12 @@ body {
     overflow: hidden;
 }
 
-body > div {
-	    -webkit-box-shadow: inset 0px 0px 50px 3px rgba(0,0,0,0.38);
+#shadow {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    -webkit-box-shadow: inset 0px 0px 50px 3px rgba(0,0,0,0.38);
     -moz-box-shadow: inset 0px 0px 50px 3px rgba(0,0,0,0.38);
     box-shadow: inset 0px 0px 182px 55px rgba(0,0,0,1);
 }
