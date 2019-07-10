@@ -5,16 +5,16 @@ function Map () {
 }
 
 Map.prototype.addRandomPlanetsAndStars = function() {
-    var planetAmount = randomNumBetween(10);
+    var planetAmount = randomNumBetween(20,10);
     while (planetAmount) {
 
-        this.planets.push(new Planet());
+        this.planets.push(new Planet(randomNumBetween(20,10),randomNumBetween(canvas.width),randomNumBetween(canvas.height)));
         planetAmount--;
     }
 
-    var starsAmount = randomNumBetween(10);
+    var starsAmount = randomNumBetween(10,1);
     while (starsAmount) {
-        this.stars.push(new Star());
+        this.stars.push(new Star(randomNumBetween(40,20),randomNumBetween(canvas.width),randomNumBetween(canvas.height)));
         starsAmount--;
     }
 

@@ -48,10 +48,15 @@ Ship.prototype.move = function() {
     }
 };
 Ship.prototype.checkCollision = function() {
+    var ship = this;
     var collidedObjects = map.all.filter(function(object) {
-        return distance(this.x, this.y, object.x, object.y) <= this.radius + object.radius;
+        return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius;
     });
 
-    if (collidedObjects.length > 0)
-        return collidedObjects;
+    if (collidedObjects.length > 0) {
+        alert('You dead.');
+        mouseX = 0;
+        mouseY = 0;
+        location.reload();
+    }
 };

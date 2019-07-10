@@ -36,7 +36,7 @@ function mouseClickHandler(e) {
 }
 
 function distance (x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2-x1) + Math.pow(y2-y1));
+    return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
 }
 
 // function drawPaddle() {
@@ -63,7 +63,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var ship = new Ship({radius: 10, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 5});
+var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1});
 var map = new Map();
 map.addRandomPlanetsAndStars();
 draw();

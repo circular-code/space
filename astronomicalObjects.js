@@ -1,9 +1,9 @@
 // Stars, Planets, Dwarf planets, minor planets, exoplanets, brown dwarfs, galaxies, discs, nebulae, void
 
-function AstronomicalObject() {
-    this.radius = randomNumBetween(30);
-    this.x = randomNumBetween(canvas.width);
-    this.y = randomNumBetween(canvas.height);
+function AstronomicalObject(radius, x, y) {
+    this.radius = radius;
+    this.x = x;
+    this.y = y;
     this.color = '#0000ff';
 }
 
@@ -16,14 +16,14 @@ AstronomicalObject.prototype.draw = function() {
     ctx.closePath();
 };
 
-function Star() {
+function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = '#ff0000';
+    this.color = '#FFCC33';
 }
 
-function Planet() {
+function Planet(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = '#ff0000';
+    this.color = '#86C2B4';
 }
 
 Star.prototype = Object.create(AstronomicalObject.prototype);
