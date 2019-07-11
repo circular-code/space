@@ -5,9 +5,9 @@ canvas.height = window.innerHeight;
 var mouseX = 0;
 var mouseY = 0;
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+// document.addEventListener("keydown", keyDownHandler, false);
+// document.addEventListener("keyup", keyUpHandler, false);
+// document.addEventListener("mousemove", mouseMoveHandler, false);
 document.addEventListener("click", mouseClickHandler, false);
 
 function randomNumBetween(max, min) {
@@ -21,18 +21,18 @@ function randomNumBetween(max, min) {
     return Math.floor(Math.random()*(max-min)+min);
 }
 
-function keyDownHandler(e) {
-}
+// function keyDownHandler(e) {
+// }
 
-function keyUpHandler(e) {
-}
+// function keyUpHandler(e) {
+// }
 
-function mouseMoveHandler(e) {
-}
+// function mouseMoveHandler(e) {
+// }
 
 function mouseClickHandler(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    mouseX = e.clientX + camera.x;
+    mouseY = e.clientY + camera.y;
 }
 
 function distance (x1, y1, x2, y2) {
@@ -41,14 +41,18 @@ function distance (x1, y1, x2, y2) {
 
 function draw() {
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#333333";
     ctx.fill();
 
-    map.draw();
-
     ship.move();
+
+    camera.focus();
+    ctx.translate(-camera.x, -camera.y)
+
+    map.draw();
     ship.draw();
     ship.checkCollision();
     ship.refuelEnergy();
@@ -56,7 +60,8 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1, energy: 1500});
+var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1, energy: 2500});
 var map = new Map();
+var camera = new Camera();
 map.addRandomPlanetsAndStars();
 draw();

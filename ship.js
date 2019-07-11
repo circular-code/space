@@ -6,8 +6,8 @@ function Ship (params) {
     this.y = params.y;
     this.speed = params.speed;
     this.energy = params.energy;
-    this.energyCapacity = 1500;
-    this.energyRegenerationAmount = 1;
+    this.energyCapacity = 2500;
+    this.energyRegenerationAmount = 3;
 }
 
 Ship.prototype.draw = function() {
@@ -55,47 +55,24 @@ Ship.prototype.move = function() {
     }
     else {
         if (this.x < mouseX) {
-            if ((this.x + this.speed) > mouseX) {
-                this.x = mouseX;
-                this.energy -= this.speed;
-            }
-            else {
-                this.x += this.speed;
-                this.energy -= this.speed;
-            }
+            this.x += this.speed;
+            this.energy -= this.speed;
         }
         else if (this.x > mouseX) {
-            if ((this.x + this.speed) < mouseX) {
-                this.x = mouseX;
-                this.energy -= this.speed;
-            }
-            else {
-                this.x -= this.speed;
-                this.energy -= this.speed;
-            }
+            this.x -= this.speed;
+            this.energy -= this.speed;
         }
         if (this.y < mouseY) {
-            if ((this.y + this.speed) > mouseY) {
-                this.y = mouseY;
-                this.energy -= this.speed;
-            }
-            else {
-                this.y += this.speed;
-                this.energy -= this.speed;
-            }
+            this.y += this.speed;
+            this.energy -= this.speed;
         }
         else if (this.y > mouseY) {
-            if ((this.y + this.speed) < mouseY) {
-                this.y = mouseY;
-                this.energy -= this.speed;
-            }
-            else {
-                this.y -= this.speed;
-                this.energy -= this.speed;
-            }
+            this.y -= this.speed;
+            this.energy -= this.speed;
         }
     }
 };
+
 Ship.prototype.checkCollision = function() {
     var ship = this;
     var collidedObjects = map.all.filter(function(object) {
