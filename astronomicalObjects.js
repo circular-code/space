@@ -37,8 +37,6 @@ Star.prototype.draw = function() {
     // range
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
-    ctx.strokeStyle = this.color;
-    // ctx.stroke();
     ctx.globalAlpha = 0.3;
     ctx.fillStyle = this.color;
     ctx.fill();

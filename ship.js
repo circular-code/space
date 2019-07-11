@@ -30,7 +30,7 @@ Ship.prototype.draw = function() {
     ctx.beginPath();
     ctx.rect(this.x - 15, this.y + 15, (this.energy / this.energyCapacity) * 30, 5);
     ctx.globalAlpha = 0.7;
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#00FF00";
     ctx.fill();
     ctx.closePath();
 };
