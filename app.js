@@ -39,14 +39,6 @@ function distance (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
 }
 
-// function drawPaddle() {
-//   ctx.beginPath();
-//   ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-//   ctx.fillStyle = "#0095DD";
-//   ctx.fill();
-//   ctx.closePath();
-// }
-
 function draw() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -59,11 +51,12 @@ function draw() {
     ship.move();
     ship.draw();
     ship.checkCollision();
+    ship.refuelEnergy();
 
     requestAnimationFrame(draw);
 }
 
-var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1});
+var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1, energy: 1500});
 var map = new Map();
 map.addRandomPlanetsAndStars();
 draw();
