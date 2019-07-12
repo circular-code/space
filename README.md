@@ -1,2 +1,2 @@
 # space
-space exploration game/pixie js test
+space exploration game
