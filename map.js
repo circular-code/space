@@ -29,13 +29,13 @@ Map.prototype.draw = function() {
     }
 
     //draw grid
-    for (var x = 0; x <= canvas.width + camera.x; x += 100) {
+    for (var x = 0; x <= canvas.width + viewport.x; x += 100) {
         ctx.moveTo(0.5 + x, 0);
-        ctx.lineTo(0.5 + x, canvas.height + camera.y);
+        ctx.lineTo(0.5 + x, canvas.height + viewport.y);
     }
-    for (var y = 0; y <= canvas.height + camera.y; y += 100) {
+    for (var y = 0; y <= canvas.height + viewport.y; y += 100) {
         ctx.moveTo(0, 0.5 + y);
-        ctx.lineTo(canvas.width + camera.x, 0.5 + y);
+        ctx.lineTo(canvas.width + viewport.x, 0.5 + y);
     }
     ctx.strokeStyle = "rgba(255,255,255,.1)";
     ctx.stroke();

@@ -31,8 +31,8 @@ function randomNumBetween(max, min) {
 // }
 
 function mouseClickHandler(e) {
-    mouseX = e.clientX + camera.x;
-    mouseY = e.clientY + camera.y;
+    mouseX = e.clientX + viewport.x;
+    mouseY = e.clientY + viewport.y;
 }
 
 function distance (x1, y1, x2, y2) {
@@ -49,8 +49,8 @@ function draw() {
 
     ship.move();
 
-    camera.focus();
-    ctx.translate(-camera.x, -camera.y)
+    viewport.focus();
+    ctx.translate(-viewport.x, -viewport.y)
 
     map.draw();
     ship.draw();
@@ -60,8 +60,8 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var ship = new Ship({radius: 3, x: canvas.width/2 - 5, y:canvas.height/2 - 5, speed: 1, energy: 2500});
+var ship = new Ship({radius: 3, x: 3000, y:3000, speed: 1, energy: 2500});
 var map = new Map();
-var camera = new Camera();
+var viewport = new Viewport();
 map.addRandomPlanetsAndStars();
 draw();
