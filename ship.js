@@ -37,8 +37,8 @@ Ship.prototype.draw = function() {
 
 Ship.prototype.refuelEnergy = function() {
     var ship = this;
-    var collidedObjects = map.stars.filter(function(object) {
-        return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range;
+    var collidedObjects = map.chunks[0].allAstronomicalObjects.filter(function(object) {
+        return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
     });
 
     if (collidedObjects.length > 0 && this.energyCapacity > (this.energy + this.energyRegenerationAmount)) {
