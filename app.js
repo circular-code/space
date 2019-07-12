@@ -65,5 +65,5 @@ function draw() {
 var ship = new Ship({radius: 3, x: 2500, y:2500, speed: 1, energy: 2500});
 var map = new Map();
 var viewport = new Viewport();
-map.addRandomPlanetsAndStars();
+map.addChunks();
 draw();
