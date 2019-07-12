@@ -21,6 +21,8 @@ function randomNumBetween(max, min) {
     return Math.floor(Math.random()*(max-min)+min);
 }
 
+//TODO: save map state and player position
+
 // function keyDownHandler(e) {
 // }
 
@@ -60,7 +62,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var ship = new Ship({radius: 3, x: 3000, y:3000, speed: 1, energy: 2500});
+var ship = new Ship({radius: 3, x: 2500, y:2500, speed: 1, energy: 2500});
 var map = new Map();
 var viewport = new Viewport();
 map.addRandomPlanetsAndStars();

@@ -1,31 +1,24 @@
 function Map () {
-    this.planets = [];
-    this.stars = [];
-    this.all = [];
-    this.width = 6000;
-    this.height = 6000;
+    this.chunks = [];
+    this.width = 5000;
+    this.height = 5000;
+    //TODO: calculate width/height based on chunks
 }
 
-Map.prototype.addRandomPlanetsAndStars = function() {
-    var planetAmount = randomNumBetween(300,100);
-    while (planetAmount) {
+Map.prototype.generateChunk = function() {
+    var chunk = new Chunk();
+    chunk.populate();
+    return chunk;
+};
 
-        this.planets.push(new Planet(randomNumBetween(20,10),randomNumBetween(this.width),randomNumBetween(this.height)));
-        planetAmount--;
-    }
-
-    var starsAmount = randomNumBetween(100,50);
-    while (starsAmount) {
-        this.stars.push(new Star(randomNumBetween(40,20),randomNumBetween(this.width),randomNumBetween(this.height)));
-        starsAmount--;
-    }
-
-    this.all = this.planets.concat(this.stars);
+Map.prototype.addChunks = function(position, ) {
+    //TODO do this for multiple chunks, maybe only after player reached edge of current chunk
+    this.chunks.push(this.generateChunk());
 };
 
 Map.prototype.draw = function() {
-    for (var i = 0; i< this.all.length; i++) {
-        this.all[i].draw();
+    for (var i = 0; i< this.chunks.length; i++) {
+        this.chunks[i].draw();
     }
 
     //draw grid
