@@ -75,7 +75,7 @@ Ship.prototype.move = function() {
 
 Ship.prototype.checkCollision = function() {
     var ship = this;
-    var collidedObjects = map.all.filter(function(object) {
+    var collidedObjects = map.chunks[0].allAstronomicalObjects.filter(function(object) {
         return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius;
     });
 
