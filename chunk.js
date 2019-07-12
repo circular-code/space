@@ -1,12 +1,13 @@
 function Chunk () {
     this.allAstronomicalObjects = [];
-    this.width = 2500;
-    this.height = 2500;
+    this.width = 5000;
+    this.height = 5000;
     //TODO: add some kind of koordinate system to base chunks on.
 }
 
 Chunk.prototype.populate = function() {
-    var planetAmount = randomNumBetween(300,100);
+
+    var planetAmount = randomNumBetween(200,100);
     while (planetAmount) {
 
         this.allAstronomicalObjects.push(new Planet(randomNumBetween(20,10),randomNumBetween(this.width),randomNumBetween(this.height)));
