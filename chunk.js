@@ -21,7 +21,7 @@ Chunk.prototype.populate = function() {
 }
 
 Chunk.prototype.draw = function() {
-    for (var i = 0; i< this.all.length; i++) {
+    for (var i = 0; i< this.allAstronomicalObjects.length; i++) {
         this.allAstronomicalObjects[i].draw();
     }
 }
