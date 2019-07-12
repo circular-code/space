@@ -4,7 +4,6 @@ function Camera () {
 }
 
 Camera.prototype.focus = function() {
-    // Account for half of player w/h to make their rectangle centered
     this.x = this.clamp(ship.x - canvas.width / 2 + ship.radius / 2, 0, map.width - canvas.width);
     this.y = this.clamp(ship.y - canvas.height / 2 + ship.radius / 2, 0, map.height - canvas.height);
 };
