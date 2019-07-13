@@ -50,6 +50,7 @@ function draw() {
     ctx.fill();
 
     ship.move();
+    ship.checkActiveChunk();
 
     viewport.focus();
     ctx.translate(-viewport.x, -viewport.y)
@@ -61,9 +62,10 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
-
-var ship = new Ship({radius: 3, x: 2500, y:2500, speed: 1, energy: 2500});
-var map = new Map();
+var size = 1000;
+var radius = 3;
+var ship = new Ship({radius: radius, x: size/2 - radius/2, y:size/2 - radius/2, speed: 1, energy: 2500});
+var map = new Map(size);
 var viewport = new Viewport();
-map.addChunks();
+map.addChunk(0,0);
 draw();

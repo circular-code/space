@@ -35,14 +35,55 @@ Ship.prototype.draw = function() {
     ctx.closePath();
 };
 
+Ship.prototype.checkActiveChunk = function() {
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
+
+    if (activeChunk) {
+        // if ship not inside chunk
+        if (ship.x < activeChunk.x * activeChunk.size ||
+            ship.x > (activeChunk.x * activeChunk.size + activeChunk.size) ||
+            ship.y < activeChunk.y * activeChunk.size ||
+            ship.y > (activeChunk.y * activeChunk.size + activeChunk.size)) {
+
+            activeChunk.active = false;
+            map.generateChunksAroundChunk(activeChunk.x, activeChunk.y);
+        }
+    }
+    else {
+        activeChunk = map.chunks.filter(function(chunk){
+            return ship.x > chunk.x * chunk.size &&
+            ship.x < (chunk.x * chunk.size + chunk.size) &&
+            ship.y > chunk.y * chunk.size &&
+            ship.y < (chunk.y * chunk.size + chunk.size)
+        })[0];
+
+        if (activeChunk) {
+            activeChunk.active = true;
+            map.generateChunksAroundChunk(activeChunk.x, activeChunk.y);
+        }
+        else {
+            console.error('ship out of bounds');
+        }
+    }
+}
+
 Ship.prototype.refuelEnergy = function() {
     var ship = this;
-    var collidedObjects = map.chunks[0].allAstronomicalObjects.filter(function(object) {
-        return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
-    });
 
-    if (collidedObjects.length > 0 && this.energyCapacity > (this.energy + this.energyRegenerationAmount)) {
-        this.energy += this.energyRegenerationAmount;
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
+
+    if (activeChunk) {
+        var collidedObjects = activeChunk.allAstronomicalObjects.filter(function(object) {
+            return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
+        });
+
+        if (collidedObjects.length > 0 && this.energyCapacity > (this.energy + this.energyRegenerationAmount)) {
+            this.energy += this.energyRegenerationAmount;
+        }
     }
 };
 

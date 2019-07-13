@@ -1,19 +1,27 @@
-function Map () {
+function Map (size) {
     this.chunks = [];
-    this.width = 5000;
-    this.height = 5000;
-    //TODO: calculate width/height based on chunks
+    this.chunkSize = size;
 }
 
-Map.prototype.generateChunk = function() {
-    var chunk = new Chunk();
+Map.prototype.generateChunk = function(x, y) {
+    var chunk = new Chunk(x, y, this.chunkSize);
     chunk.populate();
     return chunk;
 };
 
-Map.prototype.addChunks = function(position, ) {
-    //TODO do this for multiple chunks, maybe only after player reached edge of current chunk
-    this.chunks.push(this.generateChunk());
+Map.prototype.generateChunksAroundChunk = function(x,y) {
+    this.addChunk(x+1, y+1);
+    this.addChunk(x+1, y);
+    this.addChunk(x, y+1);
+    this.addChunk(x-1, y+1);
+    this.addChunk(x-1, y-1);
+    this.addChunk(x+1, y-1);
+    this.addChunk(x-1, y);
+    this.addChunk(x, y-1);
+}
+
+Map.prototype.addChunk = function(x, y) {
+    this.chunks.push(this.generateChunk(x, y));
 };
 
 Map.prototype.draw = function() {
