@@ -44,16 +44,18 @@ function distance (x1, y1, x2, y2) {
 function draw() {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
     ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#333333";
+    // ctx.fillStyle = "#01020E";
+    ctx.fillStyle = "#090E26";
     ctx.fill();
 
     ship.move();
     ship.checkActiveChunk();
 
     viewport.focus();
-    ctx.translate(-viewport.x, -viewport.y)
+
+    ctx.translate(-viewport.x, -viewport.y);
 
     map.draw();
     ship.draw();

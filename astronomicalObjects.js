@@ -9,11 +9,14 @@ function AstronomicalObject(radius, x, y) {
 
 // Draw instance on the screen
 AstronomicalObject.prototype.draw = function() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
+
+    if (viewport.isInside(this.x, this.y)) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+    }
 };
 
 function Star(radius, x, y) {
@@ -27,21 +30,24 @@ Star.prototype.constructor = AstronomicalObject;
 
 Star.prototype.draw = function() {
 
-    // hull
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
+    if (viewport.isInside(this.x, this.y)) {
 
-    // range
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
-    ctx.globalAlpha = 0.3;
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
-    ctx.globalAlpha = 1;
+        // hull
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+
+        // range
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
+        ctx.globalAlpha = 0.1;
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+    }
 }
 
 function Planet(radius, x, y) {
