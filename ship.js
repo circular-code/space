@@ -102,22 +102,17 @@ Ship.prototype.move = function() {
         location.reload();
     }
     else {
-        if (this.x < mouseX) {
-            this.x += this.speed;
-            this.energy -= this.speed;
-        }
-        else if (this.x > mouseX) {
-            this.x -= this.speed;
-            this.energy -= this.speed;
-        }
-        if (this.y < mouseY) {
-            this.y += this.speed;
-            this.energy -= this.speed;
-        }
-        else if (this.y > mouseY) {
-            this.y -= this.speed;
-            this.energy -= this.speed;
-        }
+        var dx = mouseX - this.x;
+        var dy = mouseY - this.y;
+        var angle = Math.atan2(dy,dx);
+
+        var xVelocity = this.speed * Math.cos(angle);
+        var yVelocity = this.speed * Math.sin(angle);
+
+        this.x += xVelocity;
+        this.y += yVelocity;
+        if (Math.abs(dx) > 1 && Math.abs(dy) > 1)
+            this.energy -= this.speed * 3;
     }
 };
 

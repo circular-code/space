@@ -2,8 +2,6 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-var mouseX = 0;
-var mouseY = 0;
 
 // document.addEventListener("keydown", keyDownHandler, false);
 // document.addEventListener("keyup", keyUpHandler, false);
@@ -66,7 +64,9 @@ function draw() {
 }
 var size = 1000;
 var radius = 3;
-var ship = new Ship({radius: radius, x: size/2 - radius/2, y:size/2 - radius/2, speed: 1, energy: 2500});
+var mouseX = size/2 - radius/2;
+var mouseY = size/2 - radius/2;
+var ship = new Ship({radius: radius, x: mouseX, y: mouseY, speed: 1, energy: 2500});
 var map = new Map(size);
 var viewport = new Viewport();
 map.addChunk(0,0);

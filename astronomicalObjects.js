@@ -19,6 +19,10 @@ AstronomicalObject.prototype.draw = function() {
     }
 };
 
+AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
+    return distance(x, y, this.x, this.y) <= radius + this.radius;
+}
+
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,200) + ',' + randomNumBetween(130) + ', 1)';
