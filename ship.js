@@ -129,7 +129,7 @@ Ship.prototype.checkCollision = function() {
     if (activeChunk.active === true) {
 
         var collidedObjects = activeChunk.allAstronomicalObjects.filter(function(object) {
-            return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius;
+            return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius && object.type !== 'nebula';
         });
 
         if (collidedObjects.length > 0) {

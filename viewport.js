@@ -9,7 +9,7 @@ Viewport.prototype.focus = function() {
 };
 
 Viewport.prototype.isInside = function(x, y) {
-    return x > this.x - 100 && x < (this.x + canvas.width + 100) && y > this.y - 100 && y < (this.y + canvas.height + 100);
+    return x > this.x - 700 && x < (this.x + canvas.width + 700) && y > this.y - 700 && y < (this.y + canvas.height + 700);
 }
 
 // Viewport.prototype.draw = function() {
