@@ -25,7 +25,7 @@ AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
 
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,200) + ',' + randomNumBetween(130) + ', 1)';
+    this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,100) + ',' + randomNumBetween(200) + ', 1)';
     this.range = this.radius + randomNumBetween(40,10);
     this.type = 'star';
 }
@@ -56,8 +56,61 @@ Star.prototype.draw = function() {
 
 function Planet(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(70) +',' + randomNumBetween(200,100) + ',' + randomNumBetween(255, 160) + ', 1)';
     this.type = 'planet';
+
+    var pType = getType("planet");
+    var pSType = getType("giantPlanet");
+
+    this.planetType = pType;
+    this.planetSubType = pSType;
+
+    switch (pType) {
+        case 'giant':
+
+            switch (pSType) {
+                case 'gas':
+                    this.color = 'rgba(' + randomNumBetween(235,200) +',' + randomNumBetween(210,170) + ',' + randomNumBetween(185, 150) + ', 1)';
+                    break;
+
+                case 'ice':
+                    this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(190,175) + ',' + randomNumBetween(220, 195) + ', 1)';
+                    break;
+
+                case 'solid':
+                    this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
+                    break;
+            }
+
+            break;
+
+        case 'meso':
+           
+            break;
+
+        case 'mini-neptune':
+            
+            break;
+
+        case 'planemo':
+            
+            break;
+
+        case 'planetar':
+        
+            break;
+
+        case 'super-earth':
+            
+            break;
+
+        case 'super-jupiter':
+            
+            break;
+
+        case 'sub-earth':
+        
+            break;
+    }
 }
 
 Planet.prototype = Object.create(AstronomicalObject.prototype);
@@ -67,17 +120,7 @@ function Nebula(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = 'rgba(' + randomNumBetween(70) +',' + randomNumBetween(200,100) + ',' + randomNumBetween(255, 160) + ', 1)';
     this.type = 'nebula';
-
-    var type = randomNumBetween(3);
-
-    var nebulaType = [
-        "emission",
-        "reflection",
-        "dark",
-        "supernova",
-    ]
-
-    this.nebulaType = nebulaType[type];
+    this.nebulaType = getType("nebula");
 }
 
 Nebula.prototype = Object.create(AstronomicalObject.prototype);
@@ -85,7 +128,6 @@ Nebula.prototype.constructor = AstronomicalObject;
 Nebula.prototype.draw = function() {
 
     if (viewport.isInside(this.x, this.y)) {
-
 
         switch (this.nebulaType) {
             case 'emission':
@@ -183,3 +225,32 @@ function Asteroid(radius, x, y) {
 
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
+
+function getType(type) {
+    console.log(types[type][randomNumBetween(types[type].length)]);
+    return types[type][randomNumBetween(types[type].length)];
+}
+
+var types = {
+    nebula: [
+        "emission",
+        "reflection",
+        "dark",
+        "supernova",
+    ],
+    planet: [
+        "giant",
+        // "meso",
+        // "mini-neptune",
+        // "planemo",
+        // "planetar",
+        // "super-earth",
+        // "super-jupiter",
+        // "sub-earth"
+    ],
+    giantPlanet: [
+        "gas",
+        "ice",
+        "solid"
+    ]
+}

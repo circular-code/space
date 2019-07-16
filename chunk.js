@@ -40,7 +40,7 @@ Chunk.prototype.populate = function() {
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(40,20),
+                    randomNumBetween(100,20),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -64,11 +64,11 @@ Chunk.prototype.populate = function() {
             break;
 
         case "stars":
-            var starsAmount = randomNumBetween(this.size/160, this.size/320);
+            var starsAmount = randomNumBetween(this.size/320, this.size/640);
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(40,20),
+                    randomNumBetween(100,20),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -93,12 +93,12 @@ Chunk.prototype.populate = function() {
 
         case "asteroidfield":
 
-            var starsAmount = randomNumBetween(3, 1);
+            var starsAmount = randomNumBetween(5, 2);
             
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(40,20),
+                    randomNumBetween(100,20),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -148,12 +148,12 @@ Chunk.prototype.populate = function() {
             break;
         
         case "nebula":
-            var starsAmount = randomNumBetween(this.size/16, this.size/32);
+            var starsAmount = randomNumBetween(this.size/160, this.size/320);
             
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(40,20),
+                    randomNumBetween(100,20),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
