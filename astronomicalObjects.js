@@ -25,7 +25,7 @@ AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,100) + ',' + randomNumBetween(200) + ', 1)';
-    this.range = this.radius + randomNumBetween(40,10);
+    this.range = this.radius + randomNumBetween(50,30);
     this.type = 'star';
 }
 
@@ -43,6 +43,18 @@ Star.prototype.draw = function() {
         ctx.closePath();
 
         // range
+
+        // ctx.shadowColor = this.color;
+        // ctx.shadowBlur = this.range;
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius + (this.range - this.radius)/2, 0, Math.PI*2);
+        ctx.globalAlpha = 0.1;
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
         ctx.globalAlpha = 0.1;
@@ -255,8 +267,29 @@ function Asteroid(radius, x, y) {
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
 
+function BackgroundStar(radius, x, y) {
+    AstronomicalObject.call(this, radius, x, y);
+    this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,200) + ',' + randomNumBetween(255, 200) + ', 1)';
+    this.type = 'bgstar';
+    this.opacity = randomNumBetween(100);
+}
+
+BackgroundStar.prototype = Object.create(AstronomicalObject.prototype);
+BackgroundStar.prototype.constructor = AstronomicalObject;
+
+BackgroundStar.prototype.draw = function() {
+    if (viewport.isInside(this.x, this.y)) {
+        ctx.beginPath();
+        ctx.globalAlpha = this.opacity/100;
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+    }
+};
+
 function getType(type) {
-    console.log(types[type][randomNumBetween(types[type].length)]);
     return types[type][randomNumBetween(types[type].length)];
 }
 

@@ -45,7 +45,7 @@ function draw() {
     ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
     ctx.rect(0, 0, canvas.width, canvas.height);
     // ctx.fillStyle = "#01020E";
-    ctx.fillStyle = "#090E26";
+    ctx.fillStyle = "#080517";
     ctx.fill();
 
     ship.move();
@@ -62,7 +62,7 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
-var size = 1000;
+var size = 5000;
 var radius = 3;
 var mouseX = size/2 - radius/2;
 var mouseY = size/2 - radius/2;

@@ -8,6 +8,22 @@ function Ship (params) {
     this.energy = params.energy;
     this.energyCapacity = 2500;
     this.energyRegenerationAmount = 3;
+    this.level = 1;
+    this.equipment = {
+        predefineModules: {
+            storage: {
+                level: 1,
+                resources: {
+                    rawMaterials:[],
+                    manufacturedMaterials:[],
+                    data:[]
+                },
+            },
+            resourceScanner: {level: 1},
+            shield: {level: 1}
+        },
+        additionalModules: [undefined, undefined, undefined],
+    }
 }
 
 Ship.prototype.draw = function() {
@@ -34,6 +50,17 @@ Ship.prototype.draw = function() {
     ctx.fill();
     ctx.globalAlpha = 1;
     ctx.closePath();
+
+    //shield
+    ctx.globalAlpha = 0.3;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI*2);
+    ctx.strokeStyle = '#05C7F2';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.closePath();
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 1;
 };
 
 Ship.prototype.checkActiveChunk = function() {
@@ -84,7 +111,10 @@ Ship.prototype.refuelEnergy = function() {
     var activeChunk = map.chunks[0];
 
     if (activeChunk.active === true) {
-        var collidedObjects = activeChunk.allAstronomicalObjects.filter(function(object) {
+
+        var all = getClosestObjects(activeChunk);
+
+        var collidedObjects = all.filter(function(object) {
             return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
         });
 
@@ -123,7 +153,9 @@ Ship.prototype.checkCollision = function() {
 
     if (activeChunk.active === true) {
 
-        var collidedObjects = activeChunk.allAstronomicalObjects.filter(function(object) {
+        var all = getClosestObjects(activeChunk);
+
+        var collidedObjects = all.filter(function(object) {
             return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius && object.type !== 'nebula';
         });
 
@@ -134,3 +166,24 @@ Ship.prototype.checkCollision = function() {
         }
     }
 };
+
+function getClosestObjects(chunk) {
+
+    var all = chunk.allAstronomicalObjects || [];
+
+    for (var i = 0; i < map.chunks.length; i++) {
+        var c = map.chunks[i];
+        if ((c.x === chunk.x+1 && c.y === chunk.y-1) ||
+            (c.x === chunk.x && c.y === chunk.y-1) ||
+            (c.x === chunk.x-1 && c.y === chunk.y-1) ||
+            (c.x === chunk.x+1 && c.y === chunk.y) ||
+            (c.x === chunk.x-1 && c.y === chunk.y) ||
+            (c.x === chunk.x+1 && c.y === chunk.y+1) ||
+            (c.x === chunk.x && c.y === chunk.y+1) ||
+            (c.x === chunk.x-1 && c.y === chunk.y-1)) {
+            all = all.concat(map.chunks[i].allAstronomicalObjects);
+        }
+    }
+
+    return all;
+}

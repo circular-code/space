@@ -1,5 +1,6 @@
 function Chunk (x, y, size) {
     this.allAstronomicalObjects = [];
+    this.backgroundStars = [];
     this.size = size;
     this.x = x;
     this.y = y;
@@ -205,7 +206,27 @@ Chunk.prototype.getRandomType = function() {
     this.type = chunkType[type];
 }
 
+Chunk.prototype.generateBackground = function() {
+    var bstarAmount = randomNumBetween(this.size/10, this.size/20);
+    while (bstarAmount) {
+        
+        var bgstar =  new BackgroundStar(
+            randomNumBetween(3,1),
+            randomNumBetween(this.size + this.x * this.size, this.x * this.size),
+            randomNumBetween(this.size + this.y * this.size, this.y * this.size)
+        )
+
+        this.backgroundStars.push(bgstar);
+
+        bstarAmount--;
+    }
+}
+
 Chunk.prototype.draw = function() {
+    for (var j = 0; j < this.backgroundStars.length; j++) {
+        this.backgroundStars[j].draw();
+    }
+
     for (var i = 0; i < this.allAstronomicalObjects.length; i++) {
         this.allAstronomicalObjects[i].draw();
     }
