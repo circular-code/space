@@ -9,7 +9,6 @@ function AstronomicalObject(radius, x, y) {
 
 // Draw instance on the screen
 AstronomicalObject.prototype.draw = function() {
-
     if (viewport.isInside(this.x, this.y)) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
@@ -64,6 +63,14 @@ function Planet(radius, x, y) {
     this.planetType = pType;
     this.planetSubType = pSType;
 
+    var hasBelt = this.hasBelt = !randomNumBetween(9);
+
+    if (hasBelt) {
+        this.beltRadius = radius + randomNumBetween(30,20);
+        this.beltColor = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
+        this.beltWidth = randomNumBetween(15,5);
+    }
+
     switch (pType) {
         case 'giant':
 
@@ -115,6 +122,28 @@ function Planet(radius, x, y) {
 
 Planet.prototype = Object.create(AstronomicalObject.prototype);
 Planet.prototype.constructor = AstronomicalObject;
+Planet.prototype.draw = function() {
+
+    if (viewport.isInside(this.x, this.y)) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+
+        if (this.hasBelt) {
+            ctx.globalAlpha = 0.3;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.beltRadius, 0, Math.PI*2);
+            ctx.strokeStyle = this.beltColor;
+            ctx.lineWidth = this.beltWidth;
+            ctx.stroke();
+            ctx.closePath();
+            ctx.lineWidth = 1;
+            ctx.globalAlpha = 1;
+        }
+    }
+}
 
 function Nebula(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
@@ -219,7 +248,7 @@ Nebula.prototype.draw = function() {
 
 function Asteroid(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = '#A1A4A6';
+    this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
     this.type = 'asteroid';
 }
 
