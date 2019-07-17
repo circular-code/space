@@ -68,6 +68,7 @@ Star.prototype.draw = function() {
 function Planet(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.type = 'planet';
+    this.resources = {};
 
     var pType = getType("planet");
     var pSType = getType("giantPlanet");
@@ -89,14 +90,17 @@ function Planet(radius, x, y) {
             switch (pSType) {
                 case 'gas':
                     this.color = 'rgba(' + randomNumBetween(235,200) +',' + randomNumBetween(210,170) + ',' + randomNumBetween(185, 150) + ', 1)';
+                    this.resources.gas = 5000;
                     break;
 
                 case 'ice':
                     this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(190,175) + ',' + randomNumBetween(220, 195) + ', 1)';
+                    this.resources.crystal = 5000;
                     break;
 
                 case 'solid':
                     this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
+                    this.resources.metal = 5000;
                     break;
             }
 
