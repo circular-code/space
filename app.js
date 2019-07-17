@@ -62,7 +62,7 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
-var size = 5000;
+var size =  1000;
 var radius = 3;
 var mouseX = size/2 - radius/2;
 var mouseY = size/2 - radius/2;
