@@ -1,6 +1,6 @@
-function Viewport () {
-    this.x = 0;
-    this.y = 0;
+function Viewport (x,y) {
+    this.x = x;
+    this.y = y;
 }
 
 Viewport.prototype.focus = function() {

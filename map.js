@@ -1,6 +1,6 @@
-function Map (size) {
-    this.chunks = [];
-    this.chunkSize = size;
+function Map (oldMap, size) {
+    this.chunks = (oldMap && oldMap.chunks) || [];
+    this.chunkSize = (oldMap && oldMap.chunkSize) || size;
 }
 
 Map.prototype.generateChunk = function(x, y) {
@@ -48,6 +48,32 @@ Map.prototype.addChunk = function(x, y) {
 
 Map.prototype.draw = function() {
     for (var i = 0; i< this.chunks.length; i++) {
+        //TODO: re-add methods to chunk objects
+
+
+// Create an object with methods (probably using a factory
+// function or from a class in a real application)
+// const counter = {
+    // count: 0,
+      
+    // increment () {
+    //   this.count++
+    // }
+//   }
+  
+  // Check if there's some state stored in the local
+  // storage, and if so, assign it to the counter intance
+//   const counterState = localStorage.counterState
+  
+//   if (counterState) {
+    // Object.assign(counter, JSON.parse(counterState))
+//   }
+  
+  // Then somewhere else, do something that modifies state, 
+  // and persist it to the local storage
+//   counter.increment()
+//   localStorage.counterState = JSON.stringify(counter)
+
         this.chunks[i].draw();
     }
 

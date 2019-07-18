@@ -6,7 +6,15 @@ canvas.height = window.innerHeight;
 // document.addEventListener("keydown", keyDownHandler, false);
 // document.addEventListener("keyup", keyUpHandler, false);
 // document.addEventListener("mousemove", mouseMoveHandler, false);
-document.addEventListener("click", mouseClickHandler, false);
+
+//TODO: comment in, as soon as objects all have their correct methods after loading saved state
+// document.addEventListener("click", mouseClickHandler, false);
+
+document.getElementById('saveButton').addEventListener('click', function() {
+    localStorage.setItem('space-ship-state', JSON.stringify(ship));
+    localStorage.setItem('space-map-state', JSON.stringify(map));
+    localStorage.setItem('space-viewport-state', JSON.stringify(viewport));
+});
 
 function randomNumBetween(max, min) {
     if (typeof max === 'undefined'){
@@ -62,12 +70,43 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
+
 var size =  1000;
 var radius = 3;
-var mouseX = size/2 - radius/2;
-var mouseY = size/2 - radius/2;
-var ship = new Ship({radius: radius, x: mouseX, y: mouseY, speed: 1, energy: 2500});
-var map = new Map(size);
-var viewport = new Viewport();
-map.addChunk(0,0);
+
+var ship = JSON.parse(localStorage.getItem('space-ship-state'));
+
+var mouseX;
+var mouseY;
+
+if (!ship) {
+    mouseX = size/2 - radius/2;
+    mouseY = size/2 - radius/2;
+    ship = new Ship(undefined, {radius: radius, x: mouseX, y: mouseY, speed: 1, energy: 2500});
+}
+else {
+    ship = new Ship(ship, undefined);
+    mouseX = ship.x;
+    mouseY = ship.y;
+}
+
+var map = JSON.parse(localStorage.getItem('space-map-state'));
+
+if (!map) {
+    map = new Map(undefined, size);
+    map.addChunk(0,0);
+}
+else {
+    map = new Map(map, size);
+}
+
+var viewport = JSON.parse(localStorage.getItem('space-viewport-state'));
+
+if (!viewport) {
+    viewport = new Viewport(0,0);
+}
+else {
+    viewport = new Viewport(viewport.x, viewport.y);
+}
+
 draw();

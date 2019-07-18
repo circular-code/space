@@ -68,3 +68,10 @@ body {
     -moz-box-shadow: inset 0px 0px 50px 3px rgba(0,0,0,0.38);
     box-shadow: inset 0px 0px 182px 55px rgba(0,0,0,1);
 }
+
+#saveButton {
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+    z-index: 3;
+}

@@ -1,28 +1,41 @@
-function Ship (params) {
-    // this.width = params.width;
-    // this.height = params.height;
-    this.radius = params.radius;
-    this.x = params.x;
-    this.y = params.y;
-    this.speed = params.speed;
-    this.energy = params.energy;
-    this.energyCapacity = 2500;
-    this.energyRegenerationAmount = 3;
-    this.level = 1;
-    this.equipment = {
-        predefineModules: {
-            storage: {
-                level: 1,
-                resources: {
-                    rawMaterials:[],
-                    manufacturedMaterials:[],
-                    data:[]
+function Ship (oldShip, params) {
+    
+    if (oldShip) {
+
+        this.radius = oldShip.radius;
+        this.x = oldShip.x;
+        this.y = oldShip.y;
+        this.speed = oldShip.speed;
+        this.energy = oldShip.energy;
+        this.energyCapacity = oldShip.energyCapacity;
+        this.energyRegenerationAmount = oldShip.energyRegenerationAmount;
+        this.level = oldShip.level;
+        this.equipment = oldShip.equipment;
+    }
+    else {
+        this.radius = params.radius;
+        this.x = params.x;
+        this.y = params.y;
+        this.speed = params.speed;
+        this.energy = params.energy;
+        this.energyCapacity = 2500;
+        this.energyRegenerationAmount = 3;
+        this.level = 1;
+        this.equipment = {
+            predefineModules: {
+                storage: {
+                    level: 1,
+                    resources: {
+                        rawMaterials:[],
+                        manufacturedMaterials:[],
+                        data:[]
+                    },
                 },
+                resourceScanner: {level: 1},
+                shield: {level: 1}
             },
-            resourceScanner: {level: 1},
-            shield: {level: 1}
-        },
-        additionalModules: [undefined, undefined, undefined],
+            additionalModules: [undefined, undefined, undefined],
+        }
     }
 }
 
