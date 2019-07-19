@@ -106,9 +106,11 @@ Ship.prototype.checkActiveChunk = function() {
 Ship.prototype.refuelEnergy = function() {
     var ship = this;
 
-    var activeChunk = map.chunks[0];
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
 
-    if (activeChunk.active === true) {
+    if (activeChunk) {
 
         var all = getClosestObjects(activeChunk);
 
@@ -147,9 +149,11 @@ Ship.prototype.move = function() {
 Ship.prototype.checkCollision = function() {
     var ship = this;
 
-    var activeChunk = map.chunks[0];
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
 
-    if (activeChunk.active === true) {
+    if (activeChunk) {
 
         var all = getClosestObjects(activeChunk);
 

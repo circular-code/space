@@ -26,8 +26,6 @@ function randomNumBetween(max, min) {
     return Math.floor(Math.random()*(max-min)+min);
 }
 
-//TODO: save map state and player position
-
 // function keyDownHandler(e) {
 // }
 
