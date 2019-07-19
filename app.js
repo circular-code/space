@@ -1,4 +1,4 @@
-var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("pocketUniverse");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -7,8 +7,7 @@ canvas.height = window.innerHeight;
 // document.addEventListener("keyup", keyUpHandler, false);
 // document.addEventListener("mousemove", mouseMoveHandler, false);
 
-//TODO: comment in, as soon as objects all have their correct methods after loading saved state
-// document.addEventListener("click", mouseClickHandler, false);
+canvas.addEventListener("click", mouseClickHandler, false);
 
 document.getElementById('saveButton').addEventListener('click', function() {
     localStorage.setItem('space-ship-state', JSON.stringify(ship));
@@ -82,10 +81,10 @@ var mouseY;
 if (!ship) {
     mouseX = size/2 - radius/2;
     mouseY = size/2 - radius/2;
-    ship = new Ship(undefined, {radius: radius, x: mouseX, y: mouseY, speed: 1, energy: 2500});
+    ship = new Ship(radius, mouseX, mouseY, 1, 2500);
 }
 else {
-    ship = new Ship(ship, undefined);
+    ship = Object.assign(new Ship(), ship);
     mouseX = ship.x;
     mouseY = ship.y;
 }
@@ -93,11 +92,36 @@ else {
 var map = JSON.parse(localStorage.getItem('space-map-state'));
 
 if (!map) {
-    map = new Map(undefined, size);
+    map = new Map(size);
     map.addChunk(0,0);
 }
 else {
-    map = new Map(map, size);
+    map = Object.assign(new Map(), map);
+
+    for (var i = 0; i < map.chunks.length; i++) {
+        map.chunks[i] = Object.assign(new Chunk(), map.chunks[i]);
+
+        for (var j = 0; j < map.chunks[i].backgroundStars.length; j++) {
+            map.chunks[i].backgroundStars[j] = Object.assign(new BackgroundStar(), map.chunks[i].backgroundStars[j]);
+        }
+
+        for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
+            switch (map.chunks[i].allAstronomicalObjects[k].type) {
+                case 'star': 
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(), map.chunks[i].allAstronomicalObjects[k]);
+                    break;
+                case 'planet': 
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(), map.chunks[i].allAstronomicalObjects[k]);
+                    break;
+                case 'nebula': 
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(), map.chunks[i].allAstronomicalObjects[k]);
+                    break;
+                case 'asteroid': 
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(), map.chunks[i].allAstronomicalObjects[k]);
+                    break; 
+            }   
+        }
+    }
 }
 
 var viewport = JSON.parse(localStorage.getItem('space-viewport-state'));
@@ -106,7 +130,7 @@ if (!viewport) {
     viewport = new Viewport(0,0);
 }
 else {
-    viewport = new Viewport(viewport.x, viewport.y);
+    viewport = Object.assign(new Viewport(), viewport);
 }
 
 draw();
