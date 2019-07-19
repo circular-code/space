@@ -1,8 +1,10 @@
-function Ship (radius, x, y, speed, energy) {
+function Ship (radius, x, y, energy) {
     this.radius = radius;
     this.x = x;
     this.y = y;
-    this.speed = speed;
+    this.speed = 0;
+    this.speedMax = 200;
+    this.speedMin = -20;
     this.energy = energy;
     this.energyCapacity = 2500;
     this.energyRegenerationAmount = 3;
@@ -127,23 +129,24 @@ Ship.prototype.refuelEnergy = function() {
 Ship.prototype.move = function() {
 
     if (this.energy <= 0) {
-        alert('Out of energy you are doomed to drift in the void for eternity.');
-        Ship.prototype.move = function(){};
-        location.reload();
+        wPressed = false;
+        sPressed = false;
     }
-    else {
-        var dx = mouseX - this.x;
-        var dy = mouseY - this.y;
-        var angle = Math.atan2(dy,dx);
 
-        var xVelocity = this.speed * Math.cos(angle);
-        var yVelocity = this.speed * Math.sin(angle);
-
-        this.x += xVelocity;
-        this.y += yVelocity;
-        if (Math.abs(dx) > 1 && Math.abs(dy) > 1)
-            this.energy -= this.speed * 3;
+    if (wPressed && this.speed < this.speedMax) {
+        this.speed += 1;
+        this.energy -= 1;
     }
+    if (sPressed && this.speed > this.speedMin) {
+        this.speed -= 1;
+        this.energy -= 1;
+    }
+
+    var xVelocity = this.speed / 100 * Math.cos(angle);
+    var yVelocity = this.speed / 100 * Math.sin(angle);
+
+    this.x += xVelocity;
+    this.y += yVelocity;
 };
 
 Ship.prototype.checkCollision = function() {

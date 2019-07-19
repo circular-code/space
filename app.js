@@ -2,10 +2,15 @@ var canvas = document.getElementById("pocketUniverse");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+var wPressed = false;
+var sPressed = false;
+var angle = 0;
 
-// document.addEventListener("keydown", keyDownHandler, false);
-// document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 // document.addEventListener("mousemove", mouseMoveHandler, false);
+
+//TODO: change angle based on a and d instead of click
 
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
@@ -31,11 +36,23 @@ function randomNumBetween(max, min) {
     return Math.floor(Math.random()*(max-min)+min);
 }
 
-// function keyDownHandler(e) {
-// }
+function keyDownHandler(e) {
+    if (e.keyCode === 87) {
+        wPressed = true;
+    }
+    else if (e.keyCode === 83) {
+        sPressed = true;
+    }
+}
 
-// function keyUpHandler(e) {
-// }
+function keyUpHandler(e) {
+    if (e.keyCode === 87) {
+        wPressed = false;
+    }
+    else if (e.keyCode === 83) {
+        sPressed = false;
+    }
+}
 
 // function mouseMoveHandler(e) {
 // }
@@ -43,6 +60,7 @@ function randomNumBetween(max, min) {
 function mouseClickHandler(e) {
     mouseX = e.clientX + viewport.x;
     mouseY = e.clientY + viewport.y;
+    angle = Math.atan2(mouseY - ship.y, mouseX - ship.x);
 }
 
 function distance (x1, y1, x2, y2) {
@@ -73,7 +91,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var size =  1000;
+var size = 5000;
 var radius = 3;
 
 var ship = JSON.parse(localStorage.getItem('space-ship-state'));
@@ -84,7 +102,7 @@ var mouseY;
 if (!ship) {
     mouseX = size/2 - radius/2;
     mouseY = size/2 - radius/2;
-    ship = new Ship(radius, mouseX, mouseY, 1, 2500);
+    ship = new Ship(radius, mouseX, mouseY, 2500);
 }
 else {
     ship = Object.assign(new Ship(), ship);
