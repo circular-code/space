@@ -7,6 +7,11 @@ canvas.height = window.innerHeight;
 // document.addEventListener("keyup", keyUpHandler, false);
 // document.addEventListener("mousemove", mouseMoveHandler, false);
 
+window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+})
+
 canvas.addEventListener("click", mouseClickHandler, false);
 
 document.getElementById('saveButton').addEventListener('click', function() {
