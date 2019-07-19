@@ -273,7 +273,7 @@ Asteroid.prototype.constructor = AstronomicalObject;
 
 function BackgroundStar(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,200) + ',' + randomNumBetween(255, 200) + ', 1)';
+    this.color = 'rgba(' + randomNumBetween(200,0) +',' + randomNumBetween(200,0) + ',' + randomNumBetween(200, 150) + ', 1)';
     this.type = 'bgstar';
     this.opacity = randomNumBetween(100);
 }
