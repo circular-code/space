@@ -4,6 +4,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var wPressed = false;
 var sPressed = false;
+var apressed = false;
+var dPressed = false;
 var angle = 0;
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -43,6 +45,12 @@ function keyDownHandler(e) {
     else if (e.keyCode === 83) {
         sPressed = true;
     }
+    else if (e.keyCode === 65) {
+        aPressed = true;
+    }
+    else if (e.keyCode === 68) {
+        dPressed = true;
+    }
 }
 
 function keyUpHandler(e) {
@@ -51,6 +59,12 @@ function keyUpHandler(e) {
     }
     else if (e.keyCode === 83) {
         sPressed = false;
+    }
+    else if (e.keyCode === 65) {
+        aPressed = false;
+    }
+    else if (e.keyCode === 68) {
+        dPressed = false;
     }
 }
 
