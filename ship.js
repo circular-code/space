@@ -3,8 +3,9 @@ function Ship (radius, x, y, energy) {
     this.x = x;
     this.y = y;
     this.speed = 0;
-    this.speedMax = 200;
-    this.speedMin = -20;
+    this.speedMax = 350;
+    this.speedMin = -50;
+    this.acceleration = 2;
     this.energy = energy;
     this.energyCapacity = 2500;
     this.energyRegenerationAmount = 3;
@@ -134,11 +135,28 @@ Ship.prototype.move = function() {
     }
 
     if (wPressed && this.speed < this.speedMax) {
-        this.speed += 1;
+        this.speed += this.acceleration;
         this.energy -= 1;
     }
     if (sPressed && this.speed > this.speedMin) {
-        this.speed -= 1;
+        this.speed -= this.acceleration;
+        this.energy -= 1;
+    }
+
+    if (aPressed) {
+        if ((angle - 0.05) < (Math.PI * -1))
+            angle = Math.PI;
+        else
+            angle -= 0.05;
+
+        this.energy -= 1;
+    }
+    if (dPressed) {
+        if ((angle + 0.05) > Math.PI)
+            angle = Math.PI * -1;
+        else
+            angle += 0.05;
+
         this.energy -= 1;
     }
 

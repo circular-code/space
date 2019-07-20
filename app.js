@@ -4,15 +4,13 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var wPressed = false;
 var sPressed = false;
-var apressed = false;
+var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 // document.addEventListener("mousemove", mouseMoveHandler, false);
-
-//TODO: change angle based on a and d instead of click
 
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
@@ -74,7 +72,6 @@ function keyUpHandler(e) {
 function mouseClickHandler(e) {
     mouseX = e.clientX + viewport.x;
     mouseY = e.clientY + viewport.y;
-    angle = Math.atan2(mouseY - ship.y, mouseX - ship.x);
 }
 
 function distance (x1, y1, x2, y2) {
@@ -105,7 +102,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var size = 5000;
+var size = 3000;
 var radius = 3;
 
 var ship = JSON.parse(localStorage.getItem('space-ship-state'));
