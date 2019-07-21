@@ -10,7 +10,6 @@ var angle = 0;
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-// document.addEventListener("mousemove", mouseMoveHandler, false);
 
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
@@ -65,9 +64,6 @@ function keyUpHandler(e) {
         dPressed = false;
     }
 }
-
-// function mouseMoveHandler(e) {
-// }
 
 function mouseClickHandler(e) {
     mouseX = e.clientX + viewport.x;
