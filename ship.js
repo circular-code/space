@@ -15,7 +15,11 @@ function Ship (radius, x, y, energy) {
             storage: {
                 level: 1,
                 resources: {
-                    rawMaterials:[],
+                    rawMaterials: {
+                        metal: 0,
+                        crystal: 0,
+                        gas: 0
+                    },
                     manufacturedMaterials:[],
                     data:[]
                 },

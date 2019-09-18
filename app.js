@@ -8,6 +8,18 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
+var ui = {
+    crystal: document.getElementById('crystal'),
+    gas: document.getElementById('gas'),
+    metal: document.getElementById('metal'),
+    getResource: function(resource) {
+        return this[resource].innerText;
+    },
+    setResource: function(resource, value) {
+        this[resource].innerText = value;
+    },
+}
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 

@@ -87,6 +87,8 @@ function Planet(radius, x, y) {
     switch (pType) {
         case 'giant':
 
+            this.range = this.radius + randomNumBetween(50,30);
+
             switch (pSType) {
                 case 'gas':
                     this.color = 'rgba(' + randomNumBetween(235,200) +',' + randomNumBetween(210,170) + ',' + randomNumBetween(185, 150) + ', 1)';
