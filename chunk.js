@@ -206,6 +206,7 @@ Chunk.prototype.getRandomType = function() {
     this.type = chunkType[type];
 }
 
+//TODO: add a second layer of stars, to create a feeling of depth, second layer needs to move
 Chunk.prototype.generateBackground = function() {
     var bstarAmount = randomNumBetween(this.size/10, this.size/20);
     while (bstarAmount) {

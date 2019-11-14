@@ -53,4 +53,4 @@ Resource.prototype.retain = function (amount) {
         this.depleted = true;
         return amount + (this.amount - amount);
     }
-}
+};

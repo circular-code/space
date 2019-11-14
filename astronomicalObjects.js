@@ -35,6 +35,9 @@ Star.prototype.draw = function() {
 
     if (viewport.isInside(this.x, this.y)) {
 
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = this.range/2;
+
         // hull
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
@@ -42,26 +45,27 @@ Star.prototype.draw = function() {
         ctx.fill();
         ctx.closePath();
 
-        // range
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
 
-        // ctx.shadowColor = this.color;
-        // ctx.shadowBlur = this.range;
+        // ranges
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius + (this.range - this.radius)/2, 0, Math.PI*2);
-        ctx.globalAlpha = 0.1;
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius + (this.range - this.radius)/2, 0, Math.PI*2);
+        // ctx.globalAlpha = 0.1;
+        // ctx.fillStyle = this.color;
+        // ctx.fill();
+        // ctx.closePath();
+        // ctx.globalAlpha = 1;
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
-        ctx.globalAlpha = 0.1;
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
+
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
+        // ctx.globalAlpha = 0.1;
+        // ctx.fillStyle = this.color;
+        // ctx.fill();
+        // ctx.closePath();
+        // ctx.globalAlpha = 1;
     }
 }
 
@@ -92,17 +96,17 @@ function Planet(radius, x, y) {
             switch (pSType) {
                 case 'gas':
                     this.color = 'rgba(' + randomNumBetween(235,200) +',' + randomNumBetween(210,170) + ',' + randomNumBetween(185, 150) + ', 1)';
-                    this.resources.gas = 5000;
+                    this.resource = new Resource('gas', 5000, 0, 10);
                     break;
 
                 case 'ice':
                     this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(190,175) + ',' + randomNumBetween(220, 195) + ', 1)';
-                    this.resources.crystal = 5000;
+                    this.resource = new Resource('crystal', 5000, 0, 10);
                     break;
 
                 case 'solid':
                     this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
-                    this.resources.metal = 5000;
+                    this.resource = new Resource('metal', 5000, 0, 10);
                     break;
             }
 

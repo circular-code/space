@@ -1,34 +1,12 @@
-function Ship (radius, x, y, energy) {
+function Ship (radius, x, y) {
     this.radius = radius;
     this.x = x;
     this.y = y;
-    this.speed = 0;
-    this.speedMax = 350;
-    this.speedMin = -50;
-    this.acceleration = 2;
-    this.energy = energy;
-    this.energyCapacity = 2500;
-    this.energyRegenerationAmount = 3;
     this.level = 1;
-    this.equipment = {
-        predefineModules: {
-            storage: {
-                level: 1,
-                resources: {
-                    rawMaterials: {
-                        metal: 0,
-                        crystal: 0,
-                        gas: 0
-                    },
-                    manufacturedMaterials:[],
-                    data:[]
-                },
-            },
-            resourceScanner: {level: 1},
-            shield: {level: 1}
-        },
-        additionalModules: [undefined, undefined, undefined],
-    }
+    this.engine = new Engine(1, 1, 'engine', true);
+    this.storage = new Storage(1, 1, 'storage', true);
+    this.batteries = new Batteries(1, 1, 'batteries', true);
+    this.capacity = 5;
 }
 
 Ship.prototype.draw = function() {
@@ -49,7 +27,7 @@ Ship.prototype.draw = function() {
 
     //energyAmount
     ctx.beginPath();
-    ctx.rect(this.x - 15, this.y + 15, (this.energy / this.energyCapacity) * 30, 5);
+    ctx.rect(this.x - 15, this.y + 15, (this.batteries.energy / this.batteries.energyCapacity) * 30, 5);
     ctx.globalAlpha = 0.7;
     ctx.fillStyle = "#00FF00";
     ctx.fill();
@@ -125,26 +103,36 @@ Ship.prototype.refuelEnergy = function() {
             return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
         });
 
-        if (collidedObjects.length > 0 && this.energyCapacity > (this.energy + this.energyRegenerationAmount)) {
-            this.energy += this.energyRegenerationAmount;
+        if (collidedObjects.length > 0 && this.batteries.energyCapacity > (this.batteries.energy + this.batteries.energyRegenerationAmount)) {
+            this.batteries.energy += this.batteries.energyRegenerationAmount;
         }
     }
 };
 
+//TODO: Ship.prototype.mine wie refuelEnergy
+
+// Mining unterteilen in resource types.
+// Unterschiedliche Geräte notwending für unterschiedliche typen
+// an Ressourcen je Aggregatszustand?
+
+Ship.prototype.mine = function(resource, amount) {
+    Ship.store(resource.retain(amount), resource.name);
+}
+
 Ship.prototype.move = function() {
 
-    if (this.energy <= 0) {
+    if (this.batteries.energy <= 0) {
         wPressed = false;
         sPressed = false;
     }
 
-    if (wPressed && this.speed < this.speedMax) {
-        this.speed += this.acceleration;
-        this.energy -= 1;
+    if (wPressed && this.engine.speed < this.engine.speedMax) {
+        this.engine.speed += this.engine.acceleration;
+        this.batteries.energy -= 1;
     }
-    if (sPressed && this.speed > this.speedMin) {
-        this.speed -= this.acceleration;
-        this.energy -= 1;
+    if (sPressed && this.engine.speed > this.engine.speedMin) {
+        this.engine.speed -= this.engine.acceleration;
+        this.batteries.energy -= 1;
     }
 
     if (aPressed) {
@@ -153,7 +141,7 @@ Ship.prototype.move = function() {
         else
             angle -= 0.05;
 
-        this.energy -= 1;
+        this.batteries.energy -= 1;
     }
     if (dPressed) {
         if ((angle + 0.05) > Math.PI)
@@ -161,11 +149,11 @@ Ship.prototype.move = function() {
         else
             angle += 0.05;
 
-        this.energy -= 1;
+        this.batteries.energy -= 1;
     }
 
-    var xVelocity = this.speed / 100 * Math.cos(angle);
-    var yVelocity = this.speed / 100 * Math.sin(angle);
+    var xVelocity = this.engine.speed / 100 * Math.cos(angle);
+    var yVelocity = this.engine.speed / 100 * Math.sin(angle);
 
     this.x += xVelocity;
     this.y += yVelocity;
@@ -193,6 +181,25 @@ Ship.prototype.checkCollision = function() {
         }
     }
 };
+
+Ship.prototype.scan = function(aO, depth) {
+    return aO.slice(0, depth);
+}
+
+Ship.prototype.store = function(amount, name) {
+    var storage = ship.storage[name];
+
+    if (amount === storage.max)
+        return console.info('Das Lager für den Typ ' + name + ' ist bereits voll. Es konnten keine weiteren Ressourcen eingelagert werden.');
+    else if (storage.max > (storage.amount + amount))
+        storage.amount += amount;
+    else if (storage.max <= (storage.amount + amount)) {
+        storage.amount = storage.max;
+        console.info('Lager für ' + name + ' ist nun voll.');
+    }
+    else
+        console.error('Invalid storage amount or max amount.');
+}
 
 function getClosestObjects(chunk) {
 
