@@ -137,6 +137,7 @@ function draw() {
     ship.draw();
     ship.checkCollision();
     ship.refuelEnergy();
+    ship.mine();
 
     time = now;
 

@@ -116,12 +116,32 @@ Ship.prototype.refuelEnergy = function() {
 // an Ressourcen je Aggregatszustand?
 
 Ship.prototype.mine = function(resource, amount) {
-    Ship.store(resource.retain(amount), resource.name);
+
+    var ship = this;
+
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
+
+    if (activeChunk) {
+
+        var all = getClosestObjects(activeChunk);
+
+        var collidedObjects = all.filter(function(object) {
+            return object.radius ? distance(ship.x, ship.y, object.x, object.y) <= object.radius + 20 : false;
+        });
+
+        if (collidedObjects.length > 0) {
+            var aO = collidedObjects[0];
+            if (aO.type === 'planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )){
+                ship.store(aO.resource.retain(1), aO.resource.name);
+                document.getElementById(aO.resource.name).textContent = ship.storage[aO.resource.name].amount;
+            }
+        }
+    }
 }
 
 Ship.prototype.move = function(dt) {
-
-
 
     if (this.batteries.energy <= 0) {
         wPressed = false;
@@ -154,8 +174,6 @@ Ship.prototype.move = function(dt) {
         this.batteries.energy -= 1 * dt;
     }
 
-
-    // dt = 1;
     var xVelocity = this.engine.speed * Math.cos(angle);
     var yVelocity = this.engine.speed * Math.sin(angle);
 
