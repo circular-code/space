@@ -1,10 +1,11 @@
-function Chunk (x, y, size) {
+function Chunk (x, y, size, scale) {
     this.allAstronomicalObjects = [];
     this.backgroundStars = [];
     this.size = size;
     this.x = x;
     this.y = y;
     this.active = false;
+    this.scale = scale;
 }
 
 Chunk.prototype.populate = function() {
@@ -15,7 +16,7 @@ Chunk.prototype.populate = function() {
             while (planetAmount) {
                 
                 var planet =  new Planet(
-                    randomNumBetween(20,10),
+                    randomNumBetween(20 * this.scale, 10 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 )
@@ -41,7 +42,7 @@ Chunk.prototype.populate = function() {
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(100,20),
+                    randomNumBetween(100 * this.scale, 20 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -69,7 +70,7 @@ Chunk.prototype.populate = function() {
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(100,20),
+                    randomNumBetween(100 * this.scale, 20 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -99,7 +100,7 @@ Chunk.prototype.populate = function() {
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(100,20),
+                    randomNumBetween(100 * this.scale, 20 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -125,7 +126,7 @@ Chunk.prototype.populate = function() {
             while (asteroidsAmount) {
                 
                 var asteroid =  new Asteroid(
-                    randomNumBetween(15,7),
+                    randomNumBetween(15 * this.scale/2, 7 * this.scale/2),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 )
@@ -154,7 +155,7 @@ Chunk.prototype.populate = function() {
             while (starsAmount) {
                 
                 var star = new Star(
-                    randomNumBetween(100,20),
+                    randomNumBetween(100 * this.scale, 20 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 );
@@ -178,7 +179,7 @@ Chunk.prototype.populate = function() {
 
             this.allAstronomicalObjects.push(
                 new Nebula(
-                    randomNumBetween(700,600),
+                    randomNumBetween(700 * this.scale, 600 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                     randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                 )

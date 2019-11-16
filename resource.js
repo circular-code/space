@@ -1,7 +1,7 @@
 var resourceTypes = {
     deuterium: {
         planetTypes: [
-            giant_gas, giant_ice, giant_solid, meso, miniNeptune, planemo,
+            "giant_gas", "giant_ice", "giant_solid", "meso", "miniNeptune", "planemo",
         ],
         depthMin: 1,
         depthMax: 5,
@@ -11,7 +11,7 @@ var resourceTypes = {
     },
     iron: {
         planetTypes: [
-            giant_solid, meso, planetar
+            "giant_solid", "meso", "planetar"
         ],
         depthMin: 0,
         depthMax: 9,

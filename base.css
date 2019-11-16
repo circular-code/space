@@ -77,6 +77,12 @@ body {
     z-index: 3;
 }
 
+#scaleSlider {
+	position: fixed;
+    bottom: 28px;
+    right: 100px;
+}
+
 #ui {
 	position: absolute;
     top: 0;

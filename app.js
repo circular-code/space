@@ -7,6 +7,7 @@ var sPressed = false;
 var aPressed = false;
 var dPressed = false;
 var angle = 0;
+var zoom = 100;
 
 var ui = {
     crystal: document.getElementById('crystal'),
@@ -22,6 +23,23 @@ var ui = {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+// document.getElementById('scaleSlider').addEventListener('change', function(e) {
+//     zoom = +e.currentTarget.value;
+// });
+
+var handleScroll = function(e){
+    if (e.wheelDelta < 0 && zoom !== 50)
+        zoom--;
+    else if (e.wheelDelta > 0 !== 150)
+        zoom++;
+
+    return e.preventDefault() && false;
+};
+
+canvas.addEventListener('DOMMouseScroll',handleScroll,false);
+canvas.addEventListener('mousewheel',handleScroll,false);
+
 
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
@@ -90,6 +108,11 @@ function draw() {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
+    
+    // ctx.translate(viewport.x, viewport.y);
+
+    // ctx.translate(-viewport.x,- viewport.y);
+    
     ctx.rect(0, 0, canvas.width, canvas.height);
     // ctx.fillStyle = "#01020E";
     ctx.fillStyle = "#080517";
@@ -99,8 +122,9 @@ function draw() {
     ship.checkActiveChunk();
 
     viewport.focus();
-
+    ctx.scale(zoom/100, zoom/100);
     ctx.translate(-viewport.x, -viewport.y);
+    viewport.focus();
 
     map.draw();
     ship.draw();
@@ -110,7 +134,8 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var size = 3000;
+var scale = 1;
+var size = 3000 * scale * scale;
 var radius = 3;
 
 var ship = JSON.parse(localStorage.getItem('space-ship-state'));
@@ -132,7 +157,7 @@ else {
 var map = JSON.parse(localStorage.getItem('space-map-state'));
 
 if (!map) {
-    map = new Map(size);
+    map = new Map(size, scale);
     map.addChunk(0,0);
 }
 else {
@@ -166,11 +191,9 @@ else {
 
 var viewport = JSON.parse(localStorage.getItem('space-viewport-state'));
 
-if (!viewport) {
+if (!viewport)
     viewport = new Viewport(0,0);
-}
-else {
+else
     viewport = Object.assign(new Viewport(), viewport);
-}
 
 draw();

@@ -66,6 +66,16 @@ Star.prototype.draw = function() {
         // ctx.fill();
         // ctx.closePath();
         // ctx.globalAlpha = 1;
+
+        //draw range line
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
+        ctx.globalAlpha = 0.1;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
     }
 }
 

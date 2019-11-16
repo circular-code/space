@@ -1,10 +1,11 @@
-function Map (size) {
+function Map (size, scale) {
     this.chunks = [];
     this.chunkSize = size;
+    this.scale = scale;
 }
 
 Map.prototype.generateChunk = function(x, y) {
-    var chunk = new Chunk(x, y, this.chunkSize);
+    var chunk = new Chunk(x, y, this.chunkSize, this.scale);
     chunk.getRandomType();
     chunk.populate();
     chunk.generateBackground();
