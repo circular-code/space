@@ -104,7 +104,12 @@ function distance (x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
 }
 
+var time = Date.now();
+
 function draw() {
+
+    var now = Date.now(),
+    dt = (now - time) / 1000.0;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
@@ -118,7 +123,9 @@ function draw() {
     ctx.fillStyle = "#080517";
     ctx.fill();
 
-    ship.move();
+    if (dt)
+        ship.move(dt);
+
     ship.checkActiveChunk();
 
     viewport.focus();
@@ -131,6 +138,9 @@ function draw() {
     ship.checkCollision();
     ship.refuelEnergy();
 
+    time = now;
+
+    //returns a DomHighResTimestamp
     requestAnimationFrame(draw);
 }
 

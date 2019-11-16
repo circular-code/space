@@ -119,7 +119,9 @@ Ship.prototype.mine = function(resource, amount) {
     Ship.store(resource.retain(amount), resource.name);
 }
 
-Ship.prototype.move = function() {
+Ship.prototype.move = function(dt) {
+
+
 
     if (this.batteries.energy <= 0) {
         wPressed = false;
@@ -128,35 +130,37 @@ Ship.prototype.move = function() {
 
     if (wPressed && this.engine.speed < this.engine.speedMax) {
         this.engine.speed += this.engine.acceleration;
-        this.batteries.energy -= 1;
+        this.batteries.energy -= 1 * dt;
     }
     if (sPressed && this.engine.speed > this.engine.speedMin) {
         this.engine.speed -= this.engine.acceleration;
-        this.batteries.energy -= 1;
+        this.batteries.energy -= 1 * dt;
     }
 
     if (aPressed) {
         if ((angle - 0.05) < (Math.PI * -1))
             angle = Math.PI;
         else
-            angle -= 0.05;
+            angle -= 0.05 * dt * 100;
 
-        this.batteries.energy -= 1;
+        this.batteries.energy -= 1  * dt;
     }
     if (dPressed) {
         if ((angle + 0.05) > Math.PI)
             angle = Math.PI * -1;
         else
-            angle += 0.05;
+            angle += 0.05 * dt * 100;
 
-        this.batteries.energy -= 1;
+        this.batteries.energy -= 1 * dt;
     }
 
-    var xVelocity = this.engine.speed / 100 * Math.cos(angle);
-    var yVelocity = this.engine.speed / 100 * Math.sin(angle);
 
-    this.x += xVelocity;
-    this.y += yVelocity;
+    // dt = 1;
+    var xVelocity = this.engine.speed * Math.cos(angle);
+    var yVelocity = this.engine.speed * Math.sin(angle);
+
+    this.x += xVelocity * dt;
+    this.y += yVelocity * dt;
 };
 
 Ship.prototype.checkCollision = function() {
