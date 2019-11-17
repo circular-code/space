@@ -20,7 +20,7 @@ Ship.prototype.draw = function() {
 
     //energyContainer
     ctx.beginPath();
-    ctx.rect(this.x - 15, this.y + 15, 30, 5);
+    ctx.rect(this.x - 15, this.y + 20, 30, 1);
     ctx.strokeStyle = '#FFFFFF';
     ctx.stroke();
     ctx.closePath();
@@ -39,7 +39,7 @@ Ship.prototype.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI*2);
     ctx.strokeStyle = '#05C7F2';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 1;
     ctx.stroke();
     ctx.closePath();
     ctx.lineWidth = 1;
@@ -88,7 +88,7 @@ Ship.prototype.checkActiveChunk = function() {
     }
 }
 
-Ship.prototype.refuelEnergy = function() {
+Ship.prototype.refuelEnergy = function(dt) {
     var ship = this;
 
     var activeChunk = map.chunks.filter(function(chunk){
@@ -100,16 +100,15 @@ Ship.prototype.refuelEnergy = function() {
         var all = getClosestObjects(activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return object.range ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
+            return object.type === 'star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
         });
 
+        //TODO: load twice as fast when in range of two suns
         if (collidedObjects.length > 0 && this.batteries.energyCapacity > (this.batteries.energy + this.batteries.energyRegenerationAmount)) {
-            this.batteries.energy += this.batteries.energyRegenerationAmount;
+            this.batteries.energy += this.batteries.energyRegenerationAmount * dt;
         }
     }
 };
-
-//TODO: Ship.prototype.mine wie refuelEnergy
 
 // Mining unterteilen in resource types.
 // Unterschiedliche Geräte notwending für unterschiedliche typen

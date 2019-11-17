@@ -7,6 +7,8 @@ var sPressed = false;
 var aPressed = false;
 var dPressed = false;
 var angle = 0;
+
+//TODO: adjust render distance to zoom level, and refocus on center (ship)
 var zoom = 100;
 
 var ui = {
@@ -40,7 +42,6 @@ var handleScroll = function(e){
 canvas.addEventListener('DOMMouseScroll',handleScroll,false);
 canvas.addEventListener('mousewheel',handleScroll,false);
 
-
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -54,7 +55,7 @@ document.getElementById('saveButton').addEventListener('click', function() {
     localStorage.setItem('space-viewport-state', JSON.stringify(viewport));
 });
 
-function randomNumBetween(max, min) {
+function randomNumBetween(max, min, convertToHex) {
     if (typeof max === 'undefined'){
         console.error('max undefined');
         return false;
@@ -62,7 +63,15 @@ function randomNumBetween(max, min) {
     if (typeof min === 'undefined'){
         min = 0;
     }
-    return Math.floor(Math.random()*(max-min)+min);
+
+    var number = Math.floor(Math.random()*(max-min)+min);
+    
+    if (convertToHex) {
+        number = number.toString(16);
+        return number.length === 1 ? '0' + number : number;
+    }
+    else
+        return number;
 }
 
 function keyDownHandler(e) {
@@ -119,8 +128,7 @@ function draw() {
     // ctx.translate(-viewport.x,- viewport.y);
     
     ctx.rect(0, 0, canvas.width, canvas.height);
-    // ctx.fillStyle = "#01020E";
-    ctx.fillStyle = "#080517";
+    ctx.fillStyle = "#08050C";
     ctx.fill();
 
     if (dt)
@@ -136,12 +144,15 @@ function draw() {
     map.draw();
     ship.draw();
     ship.checkCollision();
-    ship.refuelEnergy();
+
+    if (dt)
+        ship.refuelEnergy(dt);
+
     ship.mine();
 
     time = now;
 
-    //returns a DomHighResTimestamp
+    //returns a DomHighResTimestamp, use maybe instead of Date.now() ?
     requestAnimationFrame(draw);
 }
 

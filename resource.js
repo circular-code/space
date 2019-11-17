@@ -26,13 +26,25 @@ example: {
 
 /* how many layers can a planet have, how many resource spots will be distributed on the planet? */
 
-function Resource (name, amount, depthMin, depthMax) {
+function Resource (name, type, amount, depthMin, depthMax) {
+
+    // e.g. crystal
     this.name = name;
+
+    // solid, fluid, gas
+    this.type = type;
+
+    //positive integer
     this.amount = amount;
+
+    // float between 0 - 1
     this.quality = Math.random();
+
+    // random value inside depth range
     this.depth = randomNumBetween(depthMax, depthMin);
+    
+    // depletion flag
     this.depleted = false;
-    this.type = this.type;
 }
 
 Resource.prototype.retain = function (amount) {

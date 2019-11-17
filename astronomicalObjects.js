@@ -24,7 +24,7 @@ AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
 
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(255,200) +',' + randomNumBetween(255,100) + ',' + randomNumBetween(200) + ', 1)';
+    this.color = '#' + randomNumBetween(255,200,true) + randomNumBetween(255,100,true) + randomNumBetween(200,0,true);
     this.range = this.radius + randomNumBetween(50,30);
     this.type = 'star';
 }
@@ -94,8 +94,8 @@ function Planet(radius, x, y) {
 
     if (hasBelt) {
         this.beltRadius = radius + randomNumBetween(30,20);
-        this.beltColor = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
-        this.beltWidth = randomNumBetween(15,5);
+        this.beltColor = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
+        this.beltWidth = randomNumBetween(15,10);
     }
 
     switch (pType) {
@@ -105,21 +105,18 @@ function Planet(radius, x, y) {
 
             switch (pSType) {
                 case 'gas':
-                    // this.color = 'rgba(' + randomNumBetween(235,200) +',' + randomNumBetween(210,170) + ',' + randomNumBetween(185, 150) + ', 1)';
-                    this.color = 'red';
-                    this.resource = new Resource('gas', 5000, 0, 10);
+                    this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
+                    this.resource = new Resource('gas', 'gas', 5000, 0, 10);
                     break;
 
                 case 'ice':
-                    // this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(190,175) + ',' + randomNumBetween(220, 195) + ', 1)';
-                    this.color = 'blue';
-                    this.resource = new Resource('crystal', 5000, 0, 10);
+                    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
+                    this.resource = new Resource('crystal', 'solid', 5000, 0, 10);
                     break;
 
                 case 'solid':
-                    // this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
-                    this.color = 'purple';
-                    this.resource = new Resource('metal', 5000, 0, 10);
+                    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
+                    this.resource = new Resource('metal', 'solid', 5000, 0, 10);
                     break;
             }
 
@@ -182,7 +179,7 @@ Planet.prototype.draw = function() {
 
 function Nebula(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(70) +',' + randomNumBetween(200,100) + ',' + randomNumBetween(255, 160) + ', 1)';
+    this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
     this.type = 'nebula';
     this.nebulaType = getType("nebula");
 }
@@ -283,16 +280,18 @@ Nebula.prototype.draw = function() {
 
 function Asteroid(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(170,150) +',' + randomNumBetween(170,150) + ',' + randomNumBetween(170, 150) + ', 1)';
+    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
     this.type = 'asteroid';
 }
 
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
 
+
+//TODO: Backgroundstars überarbeiten, sprengen save
 function BackgroundStar(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = 'rgba(' + randomNumBetween(200,0) +',' + randomNumBetween(200,0) + ',' + randomNumBetween(200, 150) + ', 1)';
+    this.color = '#' + randomNumBetween(200,0,true) + randomNumBetween(200,0,true) + randomNumBetween(200, 150,true);
     this.type = 'bgstar';
     this.opacity = randomNumBetween(100);
 }

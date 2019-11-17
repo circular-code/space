@@ -32,17 +32,18 @@ function Engine(level, size, type, builtin) {
     this.speed = 0;
     this.speedMax = 350;
     this.speedMin = -50;
-    this.acceleration = 2;
+    this.acceleration = 1;
 }
 
 Engine.prototype = Object.create(Module.prototype);
 Engine.prototype.constructor = Module;
 
+//TODO: introduce alternative energies like a fuel tank as starter energy, maybe also a different kind of energy to make "jumps"?
 function Batteries(level, size, type, builtin) {
     Module.call(this, level, size, type, builtin);
-    this.energy = 2500;
-    this.energyCapacity = 2500;
-    this.energyRegenerationAmount = 3;
+    this.energy = 50;
+    this.energyCapacity = 50;
+    this.energyRegenerationAmount = 1;
 }
 
 Batteries.prototype = Object.create(Module.prototype);
