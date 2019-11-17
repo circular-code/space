@@ -3,9 +3,9 @@ function Ship (radius, x, y) {
     this.x = x;
     this.y = y;
     this.level = 1;
-    this.engine = new Engine(1, 1, 'engine', true);
-    this.storage = new Storage(1, 1, 'storage', true);
-    this.batteries = new Batteries(1, 1, 'batteries', true);
+    this.engine = new Engine(1, 'engine', true);
+    this.storages = [new Storage(1, 'storage', true, 'solid')]
+    this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
 }
 
@@ -20,7 +20,7 @@ Ship.prototype.draw = function() {
 
     //energyContainer
     ctx.beginPath();
-    ctx.rect(this.x - 15, this.y + 20, 30, 1);
+    ctx.rect(this.x + 15, this.y + 16, 0.5, 3);
     ctx.strokeStyle = '#FFFFFF';
     ctx.stroke();
     ctx.closePath();
@@ -133,8 +133,8 @@ Ship.prototype.mine = function(resource, amount) {
         if (collidedObjects.length > 0) {
             var aO = collidedObjects[0];
             if (aO.type === 'planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )){
-                ship.store(aO.resource.retain(1), aO.resource.name);
-                document.getElementById(aO.resource.name).textContent = ship.storage[aO.resource.name].amount;
+                ship.store(aO.resource.retain(1), aO.resource.type);
+                document.getElementById(aO.resource.type).textContent = ship.storages[0].amount;
             }
         }
     }
@@ -207,19 +207,23 @@ Ship.prototype.scan = function(aO, depth) {
     return aO.slice(0, depth);
 }
 
-Ship.prototype.store = function(amount, name) {
-    var storage = ship.storage[name];
+Ship.prototype.store = function(amount, name, type) {
 
-    if (amount === storage.max)
-        return console.info('Das Lager für den Typ ' + name + ' ist bereits voll. Es konnten keine weiteren Ressourcen eingelagert werden.');
-    else if (storage.max > (storage.amount + amount))
-        storage.amount += amount;
-    else if (storage.max <= (storage.amount + amount)) {
-        storage.amount = storage.max;
-        console.info('Lager für ' + name + ' ist nun voll.');
+    var storages = ship.storages.filter(function(storage){
+        return storage.storageType === type && storage.size !== storage.amount;
+    });
+
+    for (var i = 0; i < storages.length; i++) {
+
+        if (storage.size >= (storage.amount + amount)) {
+            storage.amount += amount;
+            break;
+        }
+        else if (storage.size < (storage.amount + amount)) {
+            storage.amount = storage.size;
+            amount = storage.amount + amount - storage.size;
+        }
     }
-    else
-        console.error('Invalid storage amount or max amount.');
 }
 
 function getClosestObjects(chunk) {

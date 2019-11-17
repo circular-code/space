@@ -287,8 +287,7 @@ function Asteroid(radius, x, y) {
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
 
-
-//TODO: Backgroundstars überarbeiten, sprengen save
+//TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(200,0,true) + randomNumBetween(200,0,true) + randomNumBetween(200, 150,true);

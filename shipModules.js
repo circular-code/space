@@ -1,25 +1,19 @@
-function Module(level, size, type, builtin) {
+function Module(level, type, builtin) {
     this.level = level;
-    this.size = size;
     this.type = type; //scanner, storage, engine, batteries
     this.builtin = builtin;
 }
 
-// storage type?
-function Storage(level, size, type, builtin) {
-    Module.call(this, level, size, type, builtin);
-        this.metal = {
-            amount: 0,
-            max: 500
-        };
-        this.crystal = {
-            amount: 0,
-            max: 500
-        };
-        this.gas = {
-            amount: 0,
-            max: 500
-        };
+// yes, this is overriding storage api, but I really dont need this kind of access and the name is hard to replace.
+function Storage(level, type, builtin, storageType) {
+    Module.call(this, level, type, builtin);
+    this.amount = 0;
+    this.size = size;
+
+    if (storageType === 'solid' || storageType === 'liquid' || storageType === 'gas' || storageType === 'plasma')
+        this.storageType = storageType;
+    else
+        console.error('Invalid storage type defined for Storage initialisation.');
     // this.manufacturedMaterials = [],
     // this.data = [];
 }
@@ -27,8 +21,8 @@ function Storage(level, size, type, builtin) {
 Storage.prototype = Object.create(Module.prototype);
 Storage.prototype.constructor = Module;
 
-function Engine(level, size, type, builtin) {
-    Module.call(this, level, size, type, builtin);
+function Engine(level, type, builtin) {
+    Module.call(this, level, type, builtin);
     this.speed = 0;
     this.speedMax = 350;
     this.speedMin = -50;
