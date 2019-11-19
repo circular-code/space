@@ -4,7 +4,7 @@ function Ship (radius, x, y) {
     this.y = y;
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
-    this.storages = [new Storage(1, 'storage', true, 'solid')]
+    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas')]
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
 }
@@ -132,9 +132,10 @@ Ship.prototype.mine = function(resource, amount) {
 
         if (collidedObjects.length > 0) {
             var aO = collidedObjects[0];
-            if (aO.type === 'planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )){
+            if (aO.type === 'planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )) {
                 ship.store(aO.resource.retain(1), aO.resource.type);
-                document.getElementById(aO.resource.type).textContent = ship.storages[0].amount;
+                //TODO: farben füllen in storage element
+                // document.getElementById(aO.resource.type).textContent = ship.storages[0].amount;
             }
         }
     }
@@ -210,7 +211,7 @@ Ship.prototype.scan = function(aO, depth) {
 Ship.prototype.store = function(amount, name, type) {
 
     var storages = ship.storages.filter(function(storage){
-        return storage.storageType === type && storage.size !== storage.amount;
+        return storage.contentType === type && storage.size !== storage.amount;
     });
 
     for (var i = 0; i < storages.length; i++) {

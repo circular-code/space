@@ -156,7 +156,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var scale = 1;
+var scale = 3;
 var size = 3000 * scale * scale;
 var radius = 3;
 

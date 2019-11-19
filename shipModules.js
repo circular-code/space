@@ -5,13 +5,13 @@ function Module(level, type, builtin) {
 }
 
 // yes, this is overriding storage api, but I really dont need this kind of access and the name is hard to replace.
-function Storage(level, type, builtin, storageType) {
+function Storage(level, type, builtin, contentType) {
     Module.call(this, level, type, builtin);
     this.amount = 0;
-    this.size = size;
+    this.size = 100;
 
-    if (storageType === 'solid' || storageType === 'liquid' || storageType === 'gas' || storageType === 'plasma')
-        this.storageType = storageType;
+    if (contentType === 'solid' || contentType === 'liquid' || contentType === 'gas' || contentType === 'plasma')
+        this.contentType = contentType;
     else
         console.error('Invalid storage type defined for Storage initialisation.');
     // this.manufacturedMaterials = [],

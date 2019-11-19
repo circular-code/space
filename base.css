@@ -84,9 +84,9 @@ body {
 }
 
 #ui {
-	position: absolute;
-    top: 0;
-    right: 0;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     color: white;
     z-index: 3;
 }
@@ -106,4 +106,54 @@ body {
 
 .resourceTitle {
     min-width: 70px;
+}
+
+.storage-container-solid,
+.storage-container-liquid,
+.storage-container-gas {
+	margin-bottom: 5px;
+	border: 1px solid rgba(255,255,255,0.3);
+	text-align: center;
+}
+
+.storage-container-solid {
+    max-width: 55px;
+    height: 27px;
+    padding: 5px 5px 5px 0px;
+    text-align: center;
+}
+
+.solid {
+	background: #b96c40;
+	height: 10px;
+	width: 5px;
+	margin-left: 5px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.storage-container-liquid {
+	max-width: 50px;
+	padding: 5px;
+}
+
+.liquid {
+	background: aquamarine;
+	width: 3px;
+	height: 30px;
+	margin-right: 2px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.storage-container-gas {
+	max-width: 50px;
+	padding: 5px;
+}
+
+.gas {
+	background: greenyellow;
+	height: 10px;
+	width: 5px;
+	display: inline-block;
 }
