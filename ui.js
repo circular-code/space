@@ -1,6 +1,9 @@
 var userInterface = (function() {
 
-    var ui = {dom:document.getElementById('ui')};
+    var ui = {
+        dom:document.getElementById('ui')
+    };
+
     ui.create = function() {
         ui.dom.appendChild(ui.createShip());
         ui.dom.appendChild(ui.createStorage());
@@ -35,6 +38,6 @@ var userInterface = (function() {
         return container;
     }
 
-    ui.create();
+    return ui;
 })();
 

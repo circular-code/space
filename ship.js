@@ -4,7 +4,7 @@ function Ship (radius, x, y) {
     this.y = y;
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
-    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas')]
+    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas'), new Storage(1, 'storage', true, 'plasma')]
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
 }
@@ -208,23 +208,29 @@ Ship.prototype.scan = function(aO, depth) {
     return aO.slice(0, depth);
 }
 
-Ship.prototype.store = function(amount, name, type) {
+Ship.prototype.store = function(amount, type) {
 
     var storages = ship.storages.filter(function(storage){
         return storage.contentType === type && storage.size !== storage.amount;
     });
 
     for (var i = 0; i < storages.length; i++) {
-
+        var storage = storages[i];
         if (storage.size >= (storage.amount + amount)) {
             storage.amount += amount;
+            amount = 0;
+            storage.refresh();
             break;
         }
         else if (storage.size < (storage.amount + amount)) {
             storage.amount = storage.size;
             amount = storage.amount + amount - storage.size;
+            storage.refresh();
         }
     }
+
+    if (amount > 0)
+        console.info('storage amount reached for type ' + type);
 }
 
 function getClosestObjects(chunk) {

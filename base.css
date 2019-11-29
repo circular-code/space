@@ -110,7 +110,8 @@ body {
 
 .storage-container-solid,
 .storage-container-liquid,
-.storage-container-gas {
+.storage-container-gas,
+.storage-container-plasma {
 	margin-bottom: 5px;
 	border: 1px solid rgba(255,255,255,0.3);
 	text-align: center;
@@ -122,38 +123,59 @@ body {
     padding: 5px 5px 5px 0px;
     text-align: center;
 }
-
 .solid {
-	background: #b96c40;
+	background: gray;
 	height: 10px;
 	width: 5px;
 	margin-left: 5px;
 	display: inline-block;
 	vertical-align: top;
 }
+.solid.active {
+	background: #b96c40;
+}
 
 .storage-container-liquid {
 	max-width: 50px;
 	padding: 5px;
 }
-
 .liquid {
-	background: aquamarine;
+	background: gray;
 	width: 3px;
 	height: 30px;
 	margin-right: 2px;
 	display: inline-block;
 	vertical-align: top;
 }
+.liquid.active {
+	background: aquamarine;
+}
 
 .storage-container-gas {
 	max-width: 50px;
 	padding: 5px;
 }
-
 .gas {
-	background: greenyellow;
+	background: gray;
 	height: 10px;
 	width: 5px;
 	display: inline-block;
+}
+.gas.active {
+	background: greenyellow;
+}
+
+.storage-container-plasma {
+	max-width: 50px;
+	padding: 5px;
+}
+.plasma {
+	background: gray;
+	width: 50px;
+	height: 1px;
+	margin-bottom: 2px;
+	display: block;
+}
+.plasma.active {
+	background: blue;
 }

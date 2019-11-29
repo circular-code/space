@@ -111,7 +111,7 @@ function Planet(radius, x, y) {
 
                 case 'ice':
                     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
-                    this.resource = new Resource('crystal', 'solid', 5000, 0, 10);
+                    this.resource = new Resource('crystal', 'liquid', 5000, 0, 10);
                     break;
 
                 case 'solid':

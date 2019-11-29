@@ -176,6 +176,8 @@ else {
     mouseY = ship.y;
 }
 
+userInterface.create();
+
 var map = JSON.parse(localStorage.getItem('space-map-state'));
 
 if (!map) {

@@ -4,11 +4,12 @@ function Module(level, type, builtin) {
     this.builtin = builtin;
 }
 
-// yes, this is overriding storage api, but I really dont need this kind of access and the name is hard to replace.
+// yes, this is overriding this kind of storage api access, but I really dont need it and the name is hard to replace.
 function Storage(level, type, builtin, contentType) {
     Module.call(this, level, type, builtin);
     this.amount = 0;
     this.size = 100;
+    this.domUnits;
 
     if (contentType === 'solid' || contentType === 'liquid' || contentType === 'gas' || contentType === 'plasma')
         this.contentType = contentType;
@@ -20,6 +21,19 @@ function Storage(level, type, builtin, contentType) {
 
 Storage.prototype = Object.create(Module.prototype);
 Storage.prototype.constructor = Module;
+
+Storage.prototype.refresh = function() {
+    //TODO mit querySelector nur die units des entsprechenden storages herausfiltern, ggf id vergeben für storage oder anhand von iterationsindex herausfinden (aus ship.store übergeben)
+    if (!this.domUnits && userInterface && userInterface.dom)
+        this.domUnits = userInterface.dom.querySelectorAll('.' + this.contentType);
+
+    var num = this.amount / 10;
+    for (var i = 0; i < this.domUnits.length; i++) {
+            this.domUnits[i].classList.remove('active');
+            if (i <= num)
+                this.domUnits[i].classList.add('active');
+    };
+};
 
 function Engine(level, type, builtin) {
     Module.call(this, level, type, builtin);
