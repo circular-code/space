@@ -287,6 +287,31 @@ function Asteroid(radius, x, y) {
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
 
+function Wormhole(radius, x, y, partner) {
+    AstronomicalObject.call(this, radius, x, y);
+    this.color = '#' + randomNumBetween(235,170,true) + randomNumBetween(10,0,true) + randomNumBetween(235, 170,true);
+    this.type = 'wormhole';
+
+    if (partner) {
+        this.partner = partner;
+        partner.partner = this;
+    }
+}
+
+Wormhole.prototype = Object.create(AstronomicalObject.prototype);
+Wormhole.prototype.constructor = AstronomicalObject;
+
+Wormhole.prototype.draw = function() {
+
+    if (viewport.isInside(this.x, this.y)) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);

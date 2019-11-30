@@ -10,20 +10,19 @@ function Storage(level, type, builtin, contentType) {
     this.amount = 0;
     this.size = 100;
     this.domUnits;
+    // this.manufacturedMaterials = [],
+    // this.data = [];
 
     if (contentType === 'solid' || contentType === 'liquid' || contentType === 'gas' || contentType === 'plasma')
         this.contentType = contentType;
     else
         console.error('Invalid storage type defined for Storage initialisation.');
-    // this.manufacturedMaterials = [],
-    // this.data = [];
 }
 
 Storage.prototype = Object.create(Module.prototype);
 Storage.prototype.constructor = Module;
 
 Storage.prototype.refresh = function() {
-    //TODO mit querySelector nur die units des entsprechenden storages herausfiltern, ggf id vergeben für storage oder anhand von iterationsindex herausfinden (aus ship.store übergeben)
     if (!this.storageUI && userInterface && userInterface.dom)
         this.createUI();
 

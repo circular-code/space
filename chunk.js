@@ -186,22 +186,67 @@ Chunk.prototype.populate = function() {
             );
             break;
 
+        case "wormhole":
+            var starsAmount = randomNumBetween(this.size/160, this.size/320);
+            
+            while (starsAmount) {
+                
+                var star = new Star(
+                    randomNumBetween(100 * this.scale, 20 * this.scale),
+                    randomNumBetween(this.size + this.x * this.size, this.x * this.size),
+                    randomNumBetween(this.size + this.y * this.size, this.y * this.size)
+                );
+
+                var collided = false;
+
+                for (var i = 0; i < this.allAstronomicalObjects.length; i++)
+                    if (this.allAstronomicalObjects[i].type !== 'nebula')
+                        if (this.allAstronomicalObjects[i].checkCollision(star.radius, star.x, star.y)) {
+                            collided = true;
+                            break;
+                        }
+
+                if (collided)
+                    starsAmount++;        
+                else
+                    this.allAstronomicalObjects.push(star);
+
+                starsAmount--;
+            }
+
+            var start = new Wormhole(
+                randomNumBetween(10 * this.scale, 10 * this.scale),
+                randomNumBetween(this.size + this.x * this.size, this.x * this.size),
+                randomNumBetween(this.size + this.y * this.size, this.y * this.size),
+            )
+            var otherStart = 
+            new Wormhole(
+                randomNumBetween(10 * this.scale, 10 * this.scale),
+                randomNumBetween(this.size + this.x * this.size, this.x * this.size),
+                randomNumBetween(this.size + this.y * this.size, this.y * this.size),
+                start
+            )
+
+            this.allAstronomicalObjects.push(start, otherStart);
+            break;
+
         case "void":
     }
 }
 
 Chunk.prototype.getRandomType = function() {
-    var type = randomNumBetween(9);
+    var type = randomNumBetween(1);
 
     var chunkType = [
-        "stars",
-        "stars",
-        "starsAndPlanets",
-        "starsAndPlanets",
-        "starsAndPlanets",
-        "asteroidfield",
-        "void",
-        "nebula",
+        // "stars",
+        // "stars",
+        // "starsAndPlanets",
+        // "starsAndPlanets",
+        // "starsAndPlanets",
+        // "asteroidfield",
+        // "void",
+        // "nebula",
+        "wormhole"
     ]
 
     this.type = chunkType[type];

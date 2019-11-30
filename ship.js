@@ -160,26 +160,28 @@ Ship.prototype.move = function(dt) {
         this.engine.speed -= this.engine.acceleration;
         this.batteries.energy -= 1 * dt;
     }
+    if (!this.engine.angle)
+        this.engine.angle = 0;
 
     if (aPressed) {
-        if ((angle - 0.05) < (Math.PI * -1))
-            angle = Math.PI;
+        if ((this.engine.angle - 0.05) < (Math.PI * -1))
+            this.engine.angle = Math.PI;
         else
-            angle -= 0.05 * dt * 100;
+            this.engine.angle -= 0.05 * dt * 100;
 
         this.batteries.energy -= 1  * dt;
     }
     if (dPressed) {
-        if ((angle + 0.05) > Math.PI)
-            angle = Math.PI * -1;
+        if ((this.engine.angle + 0.05) > Math.PI)
+            this.engine.angle = Math.PI * -1;
         else
-            angle += 0.05 * dt * 100;
+            this.engine.angle += 0.05 * dt * 100;
 
         this.batteries.energy -= 1 * dt;
     }
 
-    var xVelocity = this.engine.speed * Math.cos(angle);
-    var yVelocity = this.engine.speed * Math.sin(angle);
+    var xVelocity = this.engine.speed * Math.cos(this.engine.angle);
+    var yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
     this.x += xVelocity * dt;
     this.y += yVelocity * dt;
@@ -201,9 +203,17 @@ Ship.prototype.checkCollision = function() {
         });
 
         if (collidedObjects.length > 0) {
-            alert('You collided with an astronomical entity and got smashed to bits in the process.');
-            Ship.prototype.checkCollision = function(){};
-            location.reload();
+
+            if (collidedObjects[0].type === 'wormhole' && collidedObjects[0].partner) {
+                ship.x = collidedObjects[0].partner.x + collidedObjects[0].partner.radius + 30;
+                ship.y = collidedObjects[0].partner.y + collidedObjects[0].partner.radius + 30;
+                ship.engine.angle = randomNumBetween(Math.PI, -Math.PI);
+            }
+            else {
+                alert('You collided with an astronomical entity and got smashed to bits in the process.');
+                Ship.prototype.checkCollision = function(){};
+                location.reload();
+            }
         }
     }
 };
