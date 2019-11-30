@@ -24,16 +24,33 @@ Storage.prototype.constructor = Module;
 
 Storage.prototype.refresh = function() {
     //TODO mit querySelector nur die units des entsprechenden storages herausfiltern, ggf id vergeben für storage oder anhand von iterationsindex herausfinden (aus ship.store übergeben)
-    if (!this.domUnits && userInterface && userInterface.dom)
-        this.domUnits = userInterface.dom.querySelectorAll('.' + this.contentType);
+    if (!this.storageUI && userInterface && userInterface.dom)
+        this.createUI();
+
+    var elements = this.storageUI.querySelectorAll('.' + this.contentType);
 
     var num = this.amount / 10;
-    for (var i = 0; i < this.domUnits.length; i++) {
-            this.domUnits[i].classList.remove('active');
+    for (var i = 0; i < elements.length; i++) {
+            elements[i].classList.remove('active');
             if (i <= num)
-                this.domUnits[i].classList.add('active');
+                elements[i].classList.add('active');
     };
 };
+
+Storage.prototype.createUI = function() {
+
+    var storageContainer = document.createElement('div');
+    storageContainer.className = 'storage-container-' + this.contentType;
+
+    for (var j = 0; j < 10; j++) {
+        var div = document.createElement('div');
+        div.classList.add(this.contentType);
+        storageContainer.appendChild(div);
+    }
+
+    this.storageUI = storageContainer;
+    document.getElementById('storage').appendChild(storageContainer);
+}
 
 function Engine(level, type, builtin) {
     Module.call(this, level, type, builtin);

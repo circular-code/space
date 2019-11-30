@@ -7,6 +7,10 @@ function Ship (radius, x, y) {
     this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas'), new Storage(1, 'storage', true, 'plasma')]
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
+
+    this.storages.forEach(storage => {
+        storage.createUI();
+    });
 }
 
 Ship.prototype.draw = function() {
