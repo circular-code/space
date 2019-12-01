@@ -24,9 +24,9 @@ AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
 
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = '#' + randomNumBetween(255,200,true) + randomNumBetween(255,100,true) + randomNumBetween(200,0,true);
+    this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
     this.range = this.radius + randomNumBetween(50,30);
-    this.type = 'star';
+    this.name = 'Star';
 }
 
 Star.prototype = Object.create(AstronomicalObject.prototype);
@@ -48,30 +48,11 @@ Star.prototype.draw = function() {
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
 
-        // ranges
-
-        // ctx.beginPath();
-        // ctx.arc(this.x, this.y, this.radius + (this.range - this.radius)/2, 0, Math.PI*2);
-        // ctx.globalAlpha = 0.1;
-        // ctx.fillStyle = this.color;
-        // ctx.fill();
-        // ctx.closePath();
-        // ctx.globalAlpha = 1;
-
-
-        // ctx.beginPath();
-        // ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
-        // ctx.globalAlpha = 0.1;
-        // ctx.fillStyle = this.color;
-        // ctx.fill();
-        // ctx.closePath();
-        // ctx.globalAlpha = 1;
-
         //draw range line
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.range, 0, Math.PI*2);
-        ctx.globalAlpha = 0.1;
-        ctx.strokeStyle = '#ffffff';
+        ctx.globalAlpha = 0.03;
+        ctx.strokeStyle = this.color;
         ctx.lineWidth = 1;
         ctx.stroke();
         ctx.closePath();
@@ -79,10 +60,11 @@ Star.prototype.draw = function() {
     }
 }
 
-function Planet(radius, x, y) {
+function Planet(radius, x, y, chunk) {
     AstronomicalObject.call(this, radius, x, y);
-    this.type = 'planet';
     this.resources = {};
+    this.name = 'Planet';
+    this.moons = [];
 
     var pType = getType("planet");
     var pSType = getType("giantPlanet");
@@ -91,11 +73,22 @@ function Planet(radius, x, y) {
     this.planetSubType = pSType;
 
     var hasBelt = this.hasBelt = !randomNumBetween(9);
-
     if (hasBelt) {
         this.beltRadius = radius + randomNumBetween(30,20);
         this.beltColor = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
         this.beltWidth = randomNumBetween(15,10);
+    }
+
+    var hasMoon = this.hasMoon = !randomNumBetween(5);
+    if (hasMoon) {
+        var chance = randomNumBetween(9);
+        var chanceList = [1,1,1,1,2,2,2,3,4,5];
+        var amount = chanceList[chance];
+
+        while (amount) {
+            this.moons.push(new Moon(this, chunk));
+            amount--;
+        }
     }
 
     switch (pType) {
@@ -174,14 +167,19 @@ Planet.prototype.draw = function() {
             ctx.lineWidth = 1;
             ctx.globalAlpha = 1;
         }
+
+        if (this.moons.length > 0)
+            this.moons.forEach(moon => {
+                moon.draw();
+            });
     }
 }
 
 function Nebula(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
-    this.type = 'nebula';
     this.nebulaType = getType("nebula");
+    this.name = 'Nebula';
 }
 
 Nebula.prototype = Object.create(AstronomicalObject.prototype);
@@ -281,7 +279,7 @@ Nebula.prototype.draw = function() {
 function Asteroid(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-    this.type = 'asteroid';
+    this.name = 'Asteroid';
 }
 
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
@@ -289,8 +287,9 @@ Asteroid.prototype.constructor = AstronomicalObject;
 
 function Wormhole(radius, x, y, partner) {
     AstronomicalObject.call(this, radius, x, y);
-    this.color = '#' + randomNumBetween(235,170,true) + randomNumBetween(10,0,true) + randomNumBetween(235, 170,true);
-    this.type = 'wormhole';
+    this.color = '#' + randomNumBetween(200,130,true) + randomNumBetween(10,0,true) + randomNumBetween(200, 130,true);
+    this.range = this.radius + randomNumBetween(50,30);
+    this.name = 'Wormhole';
 
     if (partner) {
         this.partner = partner;
@@ -304,19 +303,100 @@ Wormhole.prototype.constructor = AstronomicalObject;
 Wormhole.prototype.draw = function() {
 
     if (viewport.isInside(this.x, this.y)) {
+
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = this.range;
+        ctx.globalAlpha = 1;
+
+        // hull
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.closePath();
+
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
     }
 }
+
+function Moon(planet, chunk) {
+
+    this.origin = planet;
+    this.extRadius = radius + randomNumBetween(30,10);
+
+    var collided = true;
+
+    while (collided) {
+
+        var counter = 0;
+
+        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+        this.radius = radius * (randomNumBetween(5,1)/10);
+    
+        this.x = planet.x + this.extRadius * Math.cos(this.angle);
+        this.y = planet.y + this.extRadius * Math.sin(this.angle);
+
+        var all = chunk.allAstronomicalObjects;
+    
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].type !== 'nebula') {
+                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                    collided = true;
+                    break;
+                }
+
+                collided = false;
+            }
+        }
+        
+        counter++;
+        if (counter === 100) {
+            collided = false;
+            console.log(planet, chunk);
+        }
+        collided = false;
+    }
+
+    AstronomicalObject.call(this, this.radius, this.x, this.y);
+
+    var chance = randomNumBetween(3);
+    var chanceList = ['#eeeeee', '#eeeeee', '#ee5533', '#ee3355'];
+
+    this.color = chanceList[chance];
+    this.name = 'Moon';
+
+    
+}
+
+Moon.prototype = Object.create(AstronomicalObject.prototype);
+Moon.prototype.constructor = AstronomicalObject;
+
+Moon.prototype.draw = function() {
+    if (viewport.isInside(this.x, this.y)) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+
+        //draw range line
+        ctx.beginPath();
+        ctx.arc(this.origin.x, this.origin.y, this.extRadius, 0, Math.PI*2);
+        ctx.globalAlpha = 0.1;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+    }
+};
+
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(200,0,true) + randomNumBetween(200,0,true) + randomNumBetween(200, 150,true);
-    this.type = 'bgstar';
     this.opacity = randomNumBetween(100);
 }
 

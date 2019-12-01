@@ -104,7 +104,7 @@ Ship.prototype.refuelEnergy = function(dt) {
         var all = getClosestObjects(activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return object.type === 'star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
+            return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
         });
 
         //TODO: load twice as fast when in range of two suns
@@ -136,10 +136,8 @@ Ship.prototype.mine = function(resource, amount) {
 
         if (collidedObjects.length > 0) {
             var aO = collidedObjects[0];
-            if (aO.type === 'planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )) {
+            if (aO.name === 'Planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )) {
                 ship.store(aO.resource.retain(1), aO.resource.type);
-                //TODO: farben füllen in storage element
-                // document.getElementById(aO.resource.type).textContent = ship.storages[0].amount;
             }
         }
     }
@@ -187,6 +185,8 @@ Ship.prototype.move = function(dt) {
     this.y += yVelocity * dt;
 };
 
+//TODO: check collision when generating ship
+
 Ship.prototype.checkCollision = function() {
     var ship = this;
 
@@ -199,12 +199,12 @@ Ship.prototype.checkCollision = function() {
         var all = getClosestObjects(activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius && object.type !== 'nebula';
+            return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius && object.name !== 'Nebula';
         });
 
         if (collidedObjects.length > 0) {
 
-            if (collidedObjects[0].type === 'wormhole' && collidedObjects[0].partner) {
+            if (collidedObjects[0].name === 'Wormhole' && collidedObjects[0].partner) {
                 ship.x = collidedObjects[0].partner.x + collidedObjects[0].partner.radius + 30;
                 ship.y = collidedObjects[0].partner.y + collidedObjects[0].partner.radius + 30;
                 ship.engine.angle = randomNumBetween(Math.PI, -Math.PI);

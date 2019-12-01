@@ -18,7 +18,8 @@ Chunk.prototype.populate = function() {
                 var planet =  new Planet(
                     randomNumBetween(20 * this.scale, 10 * this.scale),
                     randomNumBetween(this.size + this.x * this.size, this.x * this.size),
-                    randomNumBetween(this.size + this.y * this.size, this.y * this.size)
+                    randomNumBetween(this.size + this.y * this.size, this.y * this.size),
+                    this
                 )
 
                 var collided = false;
@@ -65,6 +66,34 @@ Chunk.prototype.populate = function() {
             }
             break;
 
+        case 'planets': 
+            var planetAmount = randomNumBetween(this.size/40, this.size/80);
+            while (planetAmount) {
+                
+                var planet =  new Planet(
+                    randomNumBetween(20 * this.scale, 10 * this.scale),
+                    randomNumBetween(this.size + this.x * this.size, this.x * this.size),
+                    randomNumBetween(this.size + this.y * this.size, this.y * this.size),
+                    this
+                )
+
+                var collided = false;
+
+                for (var i = 0; i < this.allAstronomicalObjects.length; i++)
+                    if (this.allAstronomicalObjects[i].type !== 'nebula')
+                        if (this.allAstronomicalObjects[i].checkCollision(planet.radius, planet.x, planet.y)) {
+                            collided = true;
+                            break;
+                        }
+
+                if (collided)
+                    planetAmount++;        
+                else
+                    this.allAstronomicalObjects.push(planet);
+
+                planetAmount--;
+            }
+            break;
         case "stars":
             var starsAmount = randomNumBetween(this.size/320, this.size/640);
             while (starsAmount) {
@@ -235,17 +264,15 @@ Chunk.prototype.populate = function() {
 }
 
 Chunk.prototype.getRandomType = function() {
-    var type = randomNumBetween(1);
+    var type = randomNumBetween(3);
 
     var chunkType = [
-        // "stars",
-        // "stars",
-        // "starsAndPlanets",
-        // "starsAndPlanets",
-        // "starsAndPlanets",
-        // "asteroidfield",
-        // "void",
-        // "nebula",
+        "stars",
+        "starsAndPlanets",
+        "planets",
+        "asteroidfield",
+        "void",
+        "nebula",
         "wormhole"
     ]
 
@@ -254,7 +281,7 @@ Chunk.prototype.getRandomType = function() {
 
 //TODO: add a second layer of stars, to create a feeling of depth, second layer needs to move
 Chunk.prototype.generateBackground = function() {
-    var bstarAmount = randomNumBetween(this.size, this.size/2);
+    var bstarAmount = randomNumBetween(this.size/5 * scale, this.size/10 * scale);
     while (bstarAmount) {
         
         var bgstar =  new BackgroundStar(

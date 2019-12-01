@@ -195,17 +195,17 @@ else {
         }
 
         for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
-            switch (map.chunks[i].allAstronomicalObjects[k].type) {
-                case 'star': 
+            switch (map.chunks[i].allAstronomicalObjects[k].name) {
+                case 'Star': 
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'planet': 
+                case 'Planet': 
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'nebula': 
+                case 'Nebula': 
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'asteroid': 
+                case 'Asteroid': 
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(), map.chunks[i].allAstronomicalObjects[k]);
                     break; 
             }   
