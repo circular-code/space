@@ -8,6 +8,7 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
+//TODO: implement save/load to/from file instead of local Storage
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 var zoom = 100;
 
