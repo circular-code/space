@@ -15,18 +15,15 @@ Chunk.prototype.populate = function() {
             var planetAmount = randomNumBetween(this.size/40, this.size/80);
             while (planetAmount) {
                 
-                var planet =  new Planet(
-                    randomNumBetween(20 * this.scale, 10 * this.scale),
-                    randomNumBetween(this.size + this.x * this.size, this.x * this.size),
-                    randomNumBetween(this.size + this.y * this.size, this.y * this.size),
-                    this
-                )
+                var planetRadius = randomNumBetween(20 * this.scale, 10 * this.scale);
+                var planetX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
+                var planetY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
 
                 var collided = false;
 
                 for (var i = 0; i < this.allAstronomicalObjects.length; i++)
                     if (this.allAstronomicalObjects[i].type !== 'nebula')
-                        if (this.allAstronomicalObjects[i].checkCollision(planet.radius, planet.x, planet.y)) {
+                        if (this.allAstronomicalObjects[i].checkCollision(planetRadius, planetX, planetY)) {
                             collided = true;
                             break;
                         }
@@ -34,7 +31,7 @@ Chunk.prototype.populate = function() {
                 if (collided)
                     planetAmount++;        
                 else
-                    this.allAstronomicalObjects.push(planet);
+                    this.allAstronomicalObjects.push(new Planet (planetRadius, planetX, planetY, this));
 
                 planetAmount--;
             }
@@ -70,18 +67,15 @@ Chunk.prototype.populate = function() {
             var planetAmount = randomNumBetween(this.size/40, this.size/80);
             while (planetAmount) {
                 
-                var planet =  new Planet(
-                    randomNumBetween(20 * this.scale, 10 * this.scale),
-                    randomNumBetween(this.size + this.x * this.size, this.x * this.size),
-                    randomNumBetween(this.size + this.y * this.size, this.y * this.size),
-                    this
-                )
+                var planetRadius = randomNumBetween(20 * this.scale, 10 * this.scale);
+                var planetX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
+                var planetY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
 
                 var collided = false;
 
                 for (var i = 0; i < this.allAstronomicalObjects.length; i++)
                     if (this.allAstronomicalObjects[i].type !== 'nebula')
-                        if (this.allAstronomicalObjects[i].checkCollision(planet.radius, planet.x, planet.y)) {
+                        if (this.allAstronomicalObjects[i].checkCollision(planetRadius, planetX, planetY)) {
                             collided = true;
                             break;
                         }
@@ -89,7 +83,7 @@ Chunk.prototype.populate = function() {
                 if (collided)
                     planetAmount++;        
                 else
-                    this.allAstronomicalObjects.push(planet);
+                    this.allAstronomicalObjects.push(new Planet (planetRadius, planetX, planetY, this));
 
                 planetAmount--;
             }
@@ -264,12 +258,12 @@ Chunk.prototype.populate = function() {
 }
 
 Chunk.prototype.getRandomType = function() {
-    var type = randomNumBetween(3);
+    var type = randomNumBetween(2);
 
     var chunkType = [
-        "stars",
         "starsAndPlanets",
         "planets",
+        "stars",
         "asteroidfield",
         "void",
         "nebula",

@@ -81,7 +81,7 @@ function Planet(radius, x, y, chunk) {
 
     var hasMoon = this.hasMoon = !randomNumBetween(5);
     if (hasMoon) {
-        var chance = randomNumBetween(9);
+        var chance = randomNumBetween(9,9);
         var chanceList = [1,1,1,1,2,2,2,3,4,5];
         var amount = chanceList[chance];
 
@@ -323,16 +323,18 @@ Wormhole.prototype.draw = function() {
 function Moon(planet, chunk) {
 
     this.origin = planet;
-    this.extRadius = radius + randomNumBetween(30,10);
+    this.extRadius = planet.radius + randomNumBetween(30,10);
 
-    var collided = true;
+    var collided2 = true;
 
-    while (collided) {
+    var counter = 0;
 
-        var counter = 0;
+    //TODO: prevent Moons from colliding with each other or planet (moon radius can not be larger than distance of planet.radius and extRadius)
+
+    while (collided2) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.radius = radius * (randomNumBetween(5,1)/10);
+        this.radius = planet.radius * (randomNumBetween(5,1)/10);
     
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
@@ -342,20 +344,26 @@ function Moon(planet, chunk) {
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
                 if (all[i].checkCollision(this.radius, this.x, this.y)) {
-                    collided = true;
+                    // console.log('collided with ', all[i], this);
+                    collided2 = true;
                     break;
                 }
 
-                collided = false;
+                collided2 = false;
+            }
+            else {
+                collided2 = false;
             }
         }
-        
+
+        if (all.length === 0)
+            collided2 = false;
+
         counter++;
-        if (counter === 100) {
-            collided = false;
-            console.log(planet, chunk);
+        if (counter === 100000) {
+            collided2 = false;
+            console.error(planet, chunk);
         }
-        collided = false;
     }
 
     AstronomicalObject.call(this, this.radius, this.x, this.y);
@@ -365,8 +373,6 @@ function Moon(planet, chunk) {
 
     this.color = chanceList[chance];
     this.name = 'Moon';
-
-    
 }
 
 Moon.prototype = Object.create(AstronomicalObject.prototype);

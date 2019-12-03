@@ -10,6 +10,9 @@ var angle = 0;
 
 //TODO: implement save/load to/from file instead of local Storage
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
+//TODO: prevent beeing generated on something and instantly dying
+//TODO: cancel drawing after collision with aO
+
 var zoom = 100;
 
 var ui = {
@@ -157,7 +160,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var scale = 1;
+var scale = 2;
 var size = 3000 * scale * scale;
 var radius = 3;
 
