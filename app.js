@@ -12,6 +12,7 @@ var angle = 0;
 //TODO: implement save/load to/from file instead of local Storage
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: prevent beeing generated on something and instantly dying
+//TODO: adjust amount of aO created with scale?
 //TODO: cancel drawing after collision with aO
 
 var zoom = 100;
