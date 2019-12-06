@@ -25,7 +25,7 @@ var ui = {
     setResource: function(resource, value) {
         this[resource].innerText = value;
     },
-}
+};
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -49,7 +49,7 @@ canvas.addEventListener('mousewheel',handleScroll,false);
 window.addEventListener('resize', function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-})
+});
 
 canvas.addEventListener("click", mouseClickHandler, false);
 
@@ -69,7 +69,7 @@ function randomNumBetween(max, min, convertToHex) {
     }
 
     var number = Math.floor(Math.random()*(max-min)+min);
-    
+
     if (convertToHex) {
         number = number.toString(16);
         return number.length === 1 ? '0' + number : number;
@@ -126,11 +126,11 @@ function draw() {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
-    
+
     // ctx.translate(viewport.x, viewport.y);
 
     // ctx.translate(-viewport.x,- viewport.y);
-    
+
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#08050C";
     ctx.fill();
@@ -200,19 +200,19 @@ else {
 
         for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
             switch (map.chunks[i].allAstronomicalObjects[k].name) {
-                case 'Star': 
+                case 'Star':
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'Planet': 
+                case 'Planet':
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'Nebula': 
+                case 'Nebula':
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(), map.chunks[i].allAstronomicalObjects[k]);
                     break;
-                case 'Asteroid': 
+                case 'Asteroid':
                     map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(), map.chunks[i].allAstronomicalObjects[k]);
-                    break; 
-            }   
+                    break;
+            }
         }
     }
 }

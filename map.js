@@ -39,9 +39,9 @@ Map.prototype.generateChunksAroundChunk = function(x,y) {
     }
 
     for (var k = 0; k < chunkCoords.length; k++) {
-        this.addChunk(chunkCoords[k].x, chunkCoords[k].y)    
+        this.addChunk(chunkCoords[k].x, chunkCoords[k].y);
     }
-}
+};
 
 Map.prototype.addChunk = function(x, y) {
     this.chunks.push(this.generateChunk(x, y));

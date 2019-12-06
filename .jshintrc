@@ -1,0 +1,4 @@
+{
+    "globals": { "ctx": true },
+    "esversion": 6
+}

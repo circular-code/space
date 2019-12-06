@@ -4,7 +4,7 @@ function Ship (radius, x, y) {
     this.y = y;
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
-    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas'), new Storage(1, 'storage', true, 'plasma')]
+    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas'), new Storage(1, 'storage', true, 'plasma')];
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
 
@@ -71,7 +71,7 @@ Ship.prototype.checkActiveChunk = function() {
             return ship.x > chunk.x * chunk.size &&
             ship.x < (chunk.x * chunk.size + chunk.size) &&
             ship.y > chunk.y * chunk.size &&
-            ship.y < (chunk.y * chunk.size + chunk.size)
+            ship.y < (chunk.y * chunk.size + chunk.size);
         })[0];
 
         if (activeChunk) {
@@ -79,7 +79,7 @@ Ship.prototype.checkActiveChunk = function() {
 
             if (map.chunks.length > 1)
                 map.chunks.splice(map.chunks.indexOf(activeChunk),1);
-                
+
             var swappedChunk = map.chunks.splice(0,1,activeChunk);
             if (swappedChunk[0] !== activeChunk) {
                 map.chunks.push(swappedChunk[0]);
@@ -90,7 +90,7 @@ Ship.prototype.checkActiveChunk = function() {
             console.error('ship out of bounds');
         }
     }
-}
+};
 
 Ship.prototype.refuelEnergy = function(dt) {
     var ship = this;
@@ -141,7 +141,7 @@ Ship.prototype.mine = function(resource, amount) {
             }
         }
     }
-}
+};
 
 Ship.prototype.move = function(dt) {
 
@@ -220,7 +220,7 @@ Ship.prototype.checkCollision = function() {
 
 Ship.prototype.scan = function(aO, depth) {
     return aO.slice(0, depth);
-}
+};
 
 Ship.prototype.store = function(amount, type) {
 
@@ -245,7 +245,7 @@ Ship.prototype.store = function(amount, type) {
 
     if (amount > 0)
         console.info('storage amount reached for type ' + type);
-}
+};
 
 function getClosestObjects(chunk) {
 

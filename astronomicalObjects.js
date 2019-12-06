@@ -20,7 +20,7 @@ AstronomicalObject.prototype.draw = function() {
 
 AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
     return distance(x, y, this.x, this.y) <= radius + this.radius;
-}
+};
 
 function Star(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
@@ -58,7 +58,7 @@ Star.prototype.draw = function() {
         ctx.closePath();
         ctx.globalAlpha = 1;
     }
-}
+};
 
 function Planet(radius, x, y, chunk) {
     AstronomicalObject.call(this, radius, x, y);
@@ -116,31 +116,31 @@ function Planet(radius, x, y, chunk) {
             break;
 
         case 'meso':
-           
+
             break;
 
         case 'mini-neptune':
-            
+
             break;
 
         case 'planemo':
-            
+
             break;
 
         case 'planetar':
-        
+
             break;
 
         case 'super-earth':
-            
+
             break;
 
         case 'super-jupiter':
-            
+
             break;
 
         case 'sub-earth':
-        
+
             break;
     }
 }
@@ -173,7 +173,7 @@ Planet.prototype.draw = function() {
                 moon.draw();
             });
     }
-}
+};
 
 function Nebula(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
@@ -188,15 +188,17 @@ Nebula.prototype.draw = function() {
 
     if (viewport.isInside(this.x, this.y)) {
 
+        var innerRadius, outerRadius, gradient;
+
         switch (this.nebulaType) {
             case 'emission':
                 ctx.beginPath();
-                var innerRadius = this.radius/4;
-                var outerRadius = this.radius;
+                innerRadius = this.radius/4;
+                outerRadius = this.radius;
                 // Radius of the entire circle.
                 ctx.globalAlpha = 0.2;
 
-                var gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
+                gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
                 gradient.addColorStop(0, 'purple');
                 gradient.addColorStop(0.3, 'blue');
                 gradient.addColorStop(0.4, 'green');
@@ -214,12 +216,12 @@ Nebula.prototype.draw = function() {
 
             case 'reflection':
                 ctx.beginPath();
-                var innerRadius = this.radius/3;
-                var outerRadius = this.radius;
+                innerRadius = this.radius/3;
+                outerRadius = this.radius;
                 // Radius of the entire circle.
                 ctx.globalAlpha = 0.3;
 
-                var gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
+                gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
                 gradient.addColorStop(0, '#51FFD6');
                 gradient.addColorStop(1, 'white');
 
@@ -233,12 +235,12 @@ Nebula.prototype.draw = function() {
 
             case 'dark':
                 ctx.beginPath();
-                var innerRadius = this.radius/3;
-                var outerRadius = this.radius;
+                innerRadius = this.radius/3;
+                outerRadius = this.radius;
                 // Radius of the entire circle.
                 ctx.globalAlpha = 0.3;
 
-                var gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
+                gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
                 gradient.addColorStop(0, '#582335');
                 gradient.addColorStop(0.3, '#6F274C');
                 gradient.addColorStop(0.6, '#652323');
@@ -254,12 +256,12 @@ Nebula.prototype.draw = function() {
 
             case 'supernova':
                 ctx.beginPath();
-                var innerRadius = this.radius/4;
-                var outerRadius = this.radius/2;
+                innerRadius = this.radius/4;
+                outerRadius = this.radius/2;
                 // Radius of the entire circle.
                 ctx.globalAlpha = 0.3;
 
-                var gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
+                gradient = ctx.createRadialGradient(this.x, this.y, innerRadius, this.x, this.y, outerRadius);
                 gradient.addColorStop(0, 'white');
                 gradient.addColorStop(0.3, 'purple');
                 gradient.addColorStop(0.6, 'white');
@@ -274,7 +276,7 @@ Nebula.prototype.draw = function() {
                 break;
         }
     }
-}
+};
 
 function Asteroid(radius, x, y) {
     AstronomicalObject.call(this, radius, x, y);
@@ -318,52 +320,46 @@ Wormhole.prototype.draw = function() {
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
     }
-}
+};
 
 function Moon(planet, chunk) {
 
     this.origin = planet;
     this.extRadius = planet.radius + randomNumBetween(30,10);
 
-    var collided2 = true;
+    var moonCollided = true;
 
     var counter = 0;
 
     //TODO: prevent Moons from colliding with each other or planet (moon radius can not be larger than distance of planet.radius and extRadius)
 
-    while (collided2) {
+    while (moonCollided) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
         this.radius = planet.radius * (randomNumBetween(5,1)/10);
-    
+
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
 
         var all = chunk.allAstronomicalObjects;
-    
+
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
                 if (all[i].checkCollision(this.radius, this.x, this.y)) {
                     // console.log('collided with ', all[i], this);
-                    collided2 = true;
+                    moonCollided = true;
                     break;
                 }
 
-                collided2 = false;
+                moonCollided = false;
             }
             else {
-                collided2 = false;
+                moonCollided = false;
             }
         }
 
         if (all.length === 0)
-            collided2 = false;
-
-        counter++;
-        if (counter === 100000) {
-            collided2 = false;
-            console.error(planet, chunk);
-        }
+            moonCollided = false;
     }
 
     AstronomicalObject.call(this, this.radius, this.x, this.y);
@@ -447,4 +443,4 @@ var types = {
         "ice",
         "solid"
     ]
-}
+};

@@ -16,7 +16,7 @@ var resourceTypes = {
         depthMin: 0,
         depthMax: 9,
     }
-}
+};
 
 /*
 example: {
@@ -42,7 +42,7 @@ function Resource (name, type, amount, depthMin, depthMax) {
 
     // random value inside depth range
     this.depth = randomNumBetween(depthMax, depthMin);
-    
+
     // depletion flag
     this.depleted = false;
 }

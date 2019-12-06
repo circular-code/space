@@ -9,7 +9,7 @@ function Storage(level, type, builtin, contentType) {
     Module.call(this, level, type, builtin);
     this.amount = 0;
     this.size = 100;
-    this.domUnits;
+    this.domUnits = undefined;
     // this.manufacturedMaterials = [],
     // this.data = [];
 
@@ -33,7 +33,7 @@ Storage.prototype.refresh = function() {
             elements[i].classList.remove('active');
             if (i <= num)
                 elements[i].classList.add('active');
-    };
+    }
 };
 
 Storage.prototype.createUI = function() {
@@ -49,7 +49,7 @@ Storage.prototype.createUI = function() {
 
     this.storageUI = storageContainer;
     document.getElementById('storage').appendChild(storageContainer);
-}
+};
 
 function Engine(level, type, builtin) {
     Module.call(this, level, type, builtin);
