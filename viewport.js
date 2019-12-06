@@ -1,3 +1,4 @@
+'use strict';
 function Viewport (x,y) {
     this.x = x;
     this.y = y;

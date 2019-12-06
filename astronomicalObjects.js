@@ -1,3 +1,4 @@
+'use strict';
 // Stars, Planets, Dwarf planets, minor planets, exoplanets, brown dwarfs, galaxies, discs, nebulae, void
 
 function AstronomicalObject(radius, x, y) {

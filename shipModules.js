@@ -1,3 +1,4 @@
+'use strict';
 function Module(level, type, builtin) {
     this.level = level;
     this.type = type; //scanner, storage, engine, batteries

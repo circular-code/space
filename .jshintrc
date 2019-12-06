@@ -1,4 +1,35 @@
 {
-    "globals": { "ctx": true },
-    "esversion": 6
+    "globals": {
+        "ctx": true,
+        "randomNumBetween": true,
+        "Planet": true,
+        "Star": true,
+        "Asteroid":true,
+        "Nebula":true,
+        "scale":true,
+        "Wormhole": true,
+        "BackgroundStar":true,
+        "Ship":true,
+        "Chunk":true,
+        "viewport":true,
+        "Viewport":true,
+        "Resource":true,
+        "Distance":true,
+        "map":true,
+        "ship":true,
+        "Engine":true,
+        "Batteries":true,
+        "distance":true,
+        "canvas":true,
+        "sPressed":true,
+        "wPressed":true,
+        "aPressed":true,
+        "dPressed":true,
+        "console":true,
+        "alert":true,
+        "userInterface":true
+    },
+    "esversion": 6,
+    "browser":true,
+    "strict":"global"
 }

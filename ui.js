@@ -1,3 +1,4 @@
+'use strict';
 var userInterface = (function() {
 
     var ui = {

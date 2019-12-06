@@ -1,3 +1,4 @@
+'use strict';
 function Map (size, scale) {
     this.chunks = [];
     this.chunkSize = size;

@@ -1,3 +1,4 @@
+'use strict';
 var canvas = document.getElementById("pocketUniverse");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;

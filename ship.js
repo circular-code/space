@@ -1,3 +1,4 @@
+'use strict';
 function Ship (radius, x, y) {
     this.radius = radius;
     this.x = x;
