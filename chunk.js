@@ -14,191 +14,24 @@ Chunk.prototype.populate = function() {
 
     switch (this.type) {
         case 'starsAndPlanets':
-            {
-                let planetAmount = randomNumBetween(this.size/40, this.size/80);
-                while (planetAmount) {
-
-                    let planetRadius = randomNumBetween(20 * this.scale, 10 * this.scale);
-                    let planetX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let planetY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(planetRadius, planetX, planetY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        planetAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Planet (planetRadius, planetX, planetY, this));
-
-                    planetAmount--;
-                }
-
-                var starsAmount = randomNumBetween(this.size/160, this.size/320);
-                while (starsAmount) {
-
-                    let starRadius = randomNumBetween(100 * this.scale, 20 * this.scale);
-                    let starX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let starY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(starRadius, starX, starY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        starsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Star(starRadius,starX,starY));
-
-                    starsAmount--;
-                }
-            }
+                createAstronomicalObjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
+                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
             break;
 
         case 'planets':
-            {
-                let planetAmount = randomNumBetween(this.size/40, this.size/80);
-                while (planetAmount) {
-
-                    let planetRadius = randomNumBetween(20 * this.scale, 10 * this.scale);
-                    let planetX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let planetY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (var i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(planetRadius, planetX, planetY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        planetAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Planet (planetRadius, planetX, planetY, this));
-
-                    planetAmount--;
-                }
-            }
+                createAstronomicalObjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
             break;
         case "stars":
-            {
-                let starsAmount = randomNumBetween(this.size/320, this.size/640);
-                while (starsAmount) {
-
-                    let starRadius = randomNumBetween(100 * this.scale, 20 * this.scale);
-                    let starX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let starY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(starRadius, starX, starY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        starsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Star(starRadius,starX,starY));
-
-                    starsAmount--;
-                }
-        }
+                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
             break;
 
         case "asteroidfield":
-            {
-                let starsAmount = randomNumBetween(5, 2);
-
-                while (starsAmount) {
-
-                    let starRadius = randomNumBetween(100 * this.scale, 20 * this.scale);
-                    let starX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let starY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(starRadius, starX, starY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        starsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Star(starRadius,starX,starY));
-
-                    starsAmount--;
-                }
-
-                var asteroidsAmount = randomNumBetween(this.size/10, this.size/20);
-                while (asteroidsAmount) {
-
-                    let asteroidRadius = randomNumBetween(15 * this.scale/2, 7 * this.scale/2);
-                    let asteroidX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let asteroidY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(asteroidRadius, asteroidX, asteroidY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        asteroidsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Asteroid(asteroidRadius,asteroidX,asteroidY));
-
-                    asteroidsAmount--;
-                }
-            }
+                createAstronomicalObjects(this, Star, this.size/640, this.size/1280, 100 * this.scale, 20 * this.scale);
+                createAstronomicalObjects(this, Asteroid, this.size/10, this.size/20, 15 * this.scale/2,  7 * this.scale/2);
             break;
 
         case "nebula":
-            {
-                let starsAmount = randomNumBetween(this.size/160, this.size/320);
-
-                while (starsAmount) {
-
-                    let starRadius = randomNumBetween(100 * this.scale, 20 * this.scale);
-                    let starX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let starY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(starRadius,starX, starY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        starsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Star(starRadius,starX,starY));
-
-                    starsAmount--;
-                }
+                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
 
                 this.allAstronomicalObjects.push(
                     new Nebula(
@@ -207,35 +40,11 @@ Chunk.prototype.populate = function() {
                         randomNumBetween(this.size + this.y * this.size, this.y * this.size)
                     )
                 );
-            }
             break;
 
         case "wormhole":
             {
-                let starsAmount = randomNumBetween(this.size/160, this.size/320);
-
-                while (starsAmount) {
-
-                    let starRadius = randomNumBetween(100 * this.scale, 20 * this.scale);
-                    let starX = randomNumBetween(this.size + this.x * this.size, this.x * this.size);
-                    let starY = randomNumBetween(this.size + this.y * this.size, this.y * this.size);
-
-                    let collided = false;
-
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(starRadius,starX, starY)) {
-                                collided = true;
-                                break;
-                            }
-
-                    if (collided)
-                        starsAmount++;
-                    else
-                        this.allAstronomicalObjects.push(new Star(starRadius,starX,starY));
-
-                    starsAmount--;
-                }
+                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
 
                 let wormholePairAmount = 1;
 
@@ -322,3 +131,34 @@ Chunk.prototype.draw = function() {
         this.allAstronomicalObjects[i].draw();
     }
 };
+
+function checkAllCollisions(chunk, x, y, radius) {
+    var collided = false;
+    for (let i = 0; i < chunk.allAstronomicalObjects.length; i++)
+        if (chunk.allAstronomicalObjects[i].type !== 'nebula')
+            if (chunk.allAstronomicalObjects[i].checkCollision(radius, x, y)) {
+                collided = true;
+                break;
+            }
+
+    return collided;
+}
+
+function createAstronomicalObjects(chunk, classHolder, amountMax, amountMin, radiusMax, radiusMin) {
+    let planetAmount = randomNumBetween(amountMax, amountMin);
+    while (planetAmount > 0) {
+
+        let planetRadius = randomNumBetween(radiusMax, radiusMin);
+        let planetX = randomNumBetween(chunk.size + chunk.x * chunk.size, chunk.x * chunk.size);
+        let planetY = randomNumBetween(chunk.size + chunk.y * chunk.size, chunk.y * chunk.size);
+
+        let collided = checkAllCollisions(chunk, planetX, planetY, planetRadius);
+
+        if (collided)
+            planetAmount++;
+        else
+            chunk.allAstronomicalObjects.push(new classHolder(planetRadius, planetX, planetY, chunk));
+
+        planetAmount--;
+    }
+}

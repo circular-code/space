@@ -320,14 +320,13 @@ Wormhole.prototype.draw = function() {
 
 function Moon(planet, chunk) {
 
-    this.origin = planet;
+    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+    // this.origin = planet;
+    this.originX = planet.x;
+    this.originY = planet.y;
     this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
 
     var moonCollided = true;
-
-    var counter = 0;
-
-    //TODO: prevent Moons from colliding with each other or planet (moon radius can not be larger than distance of planet.radius and extRadius)
 
     while (moonCollided) {
 
@@ -342,7 +341,6 @@ function Moon(planet, chunk) {
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
                 if (all[i].checkCollision(this.radius, this.x, this.y)) {
-                    // console.log('collided with ', all[i], this);
                     moonCollided = true;
                     break;
                 }
@@ -382,7 +380,7 @@ Moon.prototype.draw = function() {
 
         //draw range line
         ctx.beginPath();
-        ctx.arc(this.origin.x, this.origin.y, this.extRadius, 0, Math.PI*2);
+        ctx.arc(this.originX, this.originY, this.extRadius, 0, Math.PI*2);
         ctx.globalAlpha = 0.1;
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1;

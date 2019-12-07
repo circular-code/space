@@ -15,6 +15,7 @@ var angle = 0;
 //TODO: adjust amount of aO created with scale
 //TODO: cancel drawing after collision with aO
 //TODO: make it more difficult to steer ship depending on higher speed
+//TODO: change to es6 style
 
 var zoom = 100;
 
@@ -32,10 +33,6 @@ var ui = {
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
-// document.getElementById('scaleSlider').addEventListener('change', function(e) {
-//     zoom = +e.currentTarget.value;
-// });
 
 var handleScroll = function(e){
     if (e.wheelDelta < 0 && zoom !== 50)
@@ -57,9 +54,14 @@ window.addEventListener('resize', function() {
 canvas.addEventListener("click", mouseClickHandler, false);
 
 document.getElementById('saveButton').addEventListener('click', function() {
-    localStorage.setItem('space-ship-state', JSON.stringify(ship));
-    localStorage.setItem('space-map-state', JSON.stringify(map));
-    localStorage.setItem('space-viewport-state', JSON.stringify(viewport));
+
+    var obj = {
+        ship: ship,
+        map: map,
+        viewport: viewport
+    };
+
+    download(JSON.stringify(obj), 'space-game', 'application/json');
 });
 
 function randomNumBetween(max, min, convertToHex) {
@@ -167,32 +169,54 @@ var scale = 2;
 var size = 3000 * scale * scale;
 var radius = 3;
 
-var ship = JSON.parse(localStorage.getItem('space-ship-state'));
-
-var mouseX;
-var mouseY;
-
-if (!ship) {
-    mouseX = size/2 - radius/2;
-    mouseY = size/2 - radius/2;
-    ship = new Ship(radius, mouseX, mouseY, 2500);
-}
-else {
-    ship = Object.assign(new Ship(), ship);
-    mouseX = ship.x;
-    mouseY = ship.y;
-}
+// var ship = JSON.parse(localStorage.getItem('space-ship-state'));
+var mouseX = size/2 - radius/2;
+var mouseY = size/2 - radius/2;
+var ship = new Ship(radius, mouseX, mouseY, 2500);
 
 userInterface.create();
 
-var map = JSON.parse(localStorage.getItem('space-map-state'));
+var map = new Map(size, scale);
+map.addChunk(0,0);
 
-if (!map) {
-    map = new Map(size, scale);
-    map.addChunk(0,0);
+var viewport = new Viewport(0,0);
+
+draw();
+
+function download(data, filename, type) {
+    var file = new Blob([data], {type: type});
+    if (window.navigator.msSaveOrOpenBlob)
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else {
+        var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
 }
-else {
-    map = Object.assign(new Map(), map);
+
+function onChange(event) {
+    var reader = new FileReader();
+    reader.onload = onReaderLoad;
+    reader.readAsText(event.target.files[0]);
+}
+
+function onReaderLoad(event) {
+    console.log(event.target.result);
+    var obj = JSON.parse(event.target.result);
+    
+    ship = Object.assign(new Ship(), obj.ship);
+    mouseX = ship.x;
+    mouseY = ship.y;
+
+    //TODO: map load besser implementieren, ui clearen, gesamtes system "ladebereit" aufsetzen
+    map = Object.assign(new Map(), obj.map);
 
     for (var i = 0; i < map.chunks.length; i++) {
         map.chunks[i] = Object.assign(new Chunk(), map.chunks[i]);
@@ -218,13 +242,18 @@ else {
             }
         }
     }
+
+    viewport = Object.assign(new Viewport(), obj.viewport);
 }
 
-var viewport = JSON.parse(localStorage.getItem('space-viewport-state'));
+document.getElementById('fileUpload').addEventListener('change', onChange);
 
-if (!viewport)
-    viewport = new Viewport(0,0);
-else
-    viewport = Object.assign(new Viewport(), viewport);
-
-draw();
+document.getElementById('options').addEventListener('click', function() {
+    var optionsContainer = document.getElementById('optionsContainer');
+    if (optionsContainer.classList.contains('visible')) {
+        optionsContainer.classList.remove('visible');
+    }
+    else {
+        optionsContainer.classList.add('visible');
+    }
+});

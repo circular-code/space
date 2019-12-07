@@ -70,7 +70,14 @@ body {
 	pointer-events: none;
 }
 
-#saveButton {
+#topUi {
+	position: fixed;
+	top: 30px;
+	left: 30px;
+    z-index: 3;
+}
+
+#bottomUi {
 	position: fixed;
 	bottom: 30px;
 	right: 30px;
@@ -178,4 +185,21 @@ body {
 }
 .plasma.active {
 	background: blue;
+}
+
+#optionsContainer label,
+#optionsContainer input {
+	color: white;
+}
+
+#options {
+	cursor: pointer;
+}
+
+#optionsContainer {
+	display: none;
+}
+
+#optionsContainer.visible {
+	display: block;
 }
