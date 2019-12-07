@@ -82,7 +82,7 @@ function Planet(radius, x, y, chunk) {
 
     var hasMoon = this.hasMoon = !randomNumBetween(5);
     if (hasMoon) {
-        var chance = randomNumBetween(9,9);
+        var chance = randomNumBetween(9);
         var chanceList = [1,1,1,1,2,2,2,3,4,5];
         var amount = chanceList[chance];
 
@@ -168,11 +168,6 @@ Planet.prototype.draw = function() {
             ctx.lineWidth = 1;
             ctx.globalAlpha = 1;
         }
-
-        if (this.moons.length > 0)
-            this.moons.forEach(moon => {
-                moon.draw();
-            });
     }
 };
 
@@ -326,7 +321,7 @@ Wormhole.prototype.draw = function() {
 function Moon(planet, chunk) {
 
     this.origin = planet;
-    this.extRadius = planet.radius + randomNumBetween(30,10);
+    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
 
     var moonCollided = true;
 
@@ -370,6 +365,8 @@ function Moon(planet, chunk) {
 
     this.color = chanceList[chance];
     this.name = 'Moon';
+
+    chunk.allAstronomicalObjects.push(this);
 }
 
 Moon.prototype = Object.create(AstronomicalObject.prototype);

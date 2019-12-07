@@ -31,5 +31,5 @@
     },
     "esversion": 6,
     "browser":true,
-    "strict":"global"
+    "strict": "global"
 }
