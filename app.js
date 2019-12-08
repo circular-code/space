@@ -9,13 +9,11 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
-//TODO: implement save/load to/from file instead of local Storage
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
-//TODO: prevent beeing generated on something and instantly dying
 //TODO: adjust amount of aO created with scale
-//TODO: cancel drawing after collision with aO
-//TODO: make it more difficult to steer ship depending on higher speed
 //TODO: change to es6 style
+//TODO: moons are loaded empty
+//TODO: fix loaded wormholes
 
 var zoom = 100;
 
@@ -172,12 +170,13 @@ var radius = 3;
 // var ship = JSON.parse(localStorage.getItem('space-ship-state'));
 var mouseX = size/2 - radius/2;
 var mouseY = size/2 - radius/2;
-var ship = new Ship(radius, mouseX, mouseY, 2500);
 
 userInterface.create();
 
 var map = new Map(size, scale);
 map.addChunk(0,0);
+
+var ship = new Ship(radius, mouseX, mouseY, size);
 
 var viewport = new Viewport(0,0);
 
@@ -212,6 +211,17 @@ function onReaderLoad(event) {
     var obj = JSON.parse(event.target.result);
     
     ship = Object.assign(new Ship(), obj.ship);
+
+    document.getElementById('storage').innerHTML = '';
+
+    var length = ship.storages.length;
+    for (let i = 0; i < length; i++) {
+        ship.storages.push(Object.assign(new Storage(true), ship.storages[i]));
+        ship.storages[i+length].createUI();
+        ship.storages[i+length].refresh();
+    }
+    ship.storages.splice(0,length);
+
     mouseX = ship.x;
     mouseY = ship.y;
 
@@ -228,16 +238,25 @@ function onReaderLoad(event) {
         for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
             switch (map.chunks[i].allAstronomicalObjects[k].name) {
                 case 'Star':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(), map.chunks[i].allAstronomicalObjects[k]);
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(true), map.chunks[i].allAstronomicalObjects[k]);
                     break;
                 case 'Planet':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(), map.chunks[i].allAstronomicalObjects[k]);
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(true), map.chunks[i].allAstronomicalObjects[k]);
+                    if (map.chunks[i].allAstronomicalObjects[k].resource) {
+                        map.chunks[i].allAstronomicalObjects[k].resource = Object.assign(new Resource(true), map.chunks[i].allAstronomicalObjects[k].resource);
+                    }
                     break;
                 case 'Nebula':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(), map.chunks[i].allAstronomicalObjects[k]);
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(true), map.chunks[i].allAstronomicalObjects[k]);
                     break;
                 case 'Asteroid':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(), map.chunks[i].allAstronomicalObjects[k]);
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(true), map.chunks[i].allAstronomicalObjects[k]);
+                    break;
+                case 'Wormhole':
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Wormhole(true), map.chunks[i].allAstronomicalObjects[k]);
+                    break;
+                case 'Moon':
+                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Moon(true), map.chunks[i].allAstronomicalObjects[k]);
                     break;
             }
         }

@@ -34,7 +34,7 @@ Chunk.prototype.populate = function() {
                 createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
 
                 this.allAstronomicalObjects.push(
-                    new Nebula(
+                    new Nebula(undefined,
                         randomNumBetween(700 * this.scale, 600 * this.scale),
                         randomNumBetween(this.size + this.x * this.size, this.x * this.size),
                         randomNumBetween(this.size + this.y * this.size, this.y * this.size)
@@ -67,7 +67,7 @@ Chunk.prototype.populate = function() {
                                 break;
                             }
 
-                    var start = new Wormhole(startRadius,startX,startY);
+                    var start = new Wormhole(undefined, startRadius,startX,startY);
 
                     if (start.checkCollision(endRadius,endX, endY))
                         collided = true;
@@ -75,7 +75,7 @@ Chunk.prototype.populate = function() {
                     if (collided)
                         wormholePairAmount++;
                     else {
-                        var otherStart = new Wormhole(endRadius,endX,endY,start);
+                        var otherStart = new Wormhole(undefined, endRadius,endX,endY,start);
 
                         this.allAstronomicalObjects.push(start, otherStart);
                     }
@@ -110,7 +110,7 @@ Chunk.prototype.generateBackground = function() {
     var bstarAmount = randomNumBetween(this.size/5 * scale, this.size/10 * scale);
     while (bstarAmount) {
 
-        var bgstar =  new BackgroundStar(
+        var bgstar =  new BackgroundStar(undefined,
             randomNumBetween(3,1),
             randomNumBetween(this.size + this.x * this.size, this.x * this.size),
             randomNumBetween(this.size + this.y * this.size, this.y * this.size)
@@ -157,7 +157,7 @@ function createAstronomicalObjects(chunk, classHolder, amountMax, amountMin, rad
         if (collided)
             planetAmount++;
         else
-            chunk.allAstronomicalObjects.push(new classHolder(planetRadius, planetX, planetY, chunk));
+            chunk.allAstronomicalObjects.push(new classHolder(undefined, planetRadius, planetX, planetY, chunk));
 
         planetAmount--;
     }

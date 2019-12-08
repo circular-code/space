@@ -6,7 +6,11 @@ function Module(level, type, builtin) {
 }
 
 // yes, this is overriding this kind of storage api access, but I really dont need it and the name is hard to replace.
-function Storage(level, type, builtin, contentType) {
+function Storage(loaded, level, type, builtin, contentType) {
+
+    if (loaded)
+        return this;
+
     Module.call(this, level, type, builtin);
     this.amount = 0;
     this.size = 100;
@@ -32,7 +36,7 @@ Storage.prototype.refresh = function() {
     var num = this.amount / 10;
     for (var i = 0; i < elements.length; i++) {
             elements[i].classList.remove('active');
-            if (i <= num)
+            if (i < num)
                 elements[i].classList.add('active');
     }
 };

@@ -1,11 +1,32 @@
 'use strict';
-function Ship (radius, x, y) {
+function Ship (radius, x, y, size) {
+
+    var collided = true;
+    var xcounter = 0;
+    while (collided) {
+
+        collided = checkAllCollisions(map.chunks[0], x, y, radius);
+
+        if (collided) {
+            x = randomNumBetween(size);
+            y = randomNumBetween(size);
+        }
+        else {
+            collided = false;
+        }
+        xcounter++;
+        if (xcounter > 100) {
+            console.error('Could not generate ship on map. Check map creation values.');
+            collided = false;
+        }
+    }
+
     this.radius = radius;
     this.x = x;
     this.y = y;
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
-    this.storages = [new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'solid'), new Storage(1, 'storage', true, 'liquid'), new Storage(1, 'storage', true, 'gas'), new Storage(1, 'storage', true, 'plasma')];
+    this.storages = [new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'liquid'), new Storage(undefined, 1, 'storage', true, 'gas'), new Storage(undefined, 1, 'storage', true, 'plasma')];
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
 
@@ -149,6 +170,15 @@ Ship.prototype.move = function(dt) {
     if (this.batteries.energy <= 0) {
         wPressed = false;
         sPressed = false;
+        aPressed = false;
+        dPressed = false;
+
+        let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
+        let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
+
+        this.x += xVelocity * dt;
+        this.y += yVelocity * dt;
+        return;
     }
 
     if (wPressed && this.engine.speed < this.engine.speedMax) {
@@ -162,25 +192,29 @@ Ship.prototype.move = function(dt) {
     if (!this.engine.angle)
         this.engine.angle = 0;
 
+    let angleSpeedMod = (this.engine.speed / this.engine.speedMax - 1) * -1;
+    if (angleSpeedMod < 0.1)
+        angleSpeedMod = 0.1;
+
     if (aPressed) {
-        if ((this.engine.angle - 0.05) < (Math.PI * -1))
+        if ((this.engine.angle - angleSpeedMod) < (Math.PI * -1))
             this.engine.angle = Math.PI;
         else
-            this.engine.angle -= 0.05 * dt * 100;
+            this.engine.angle -= angleSpeedMod * dt * 5;
 
         this.batteries.energy -= 1  * dt;
     }
     if (dPressed) {
-        if ((this.engine.angle + 0.05) > Math.PI)
+        if ((this.engine.angle + angleSpeedMod) > Math.PI)
             this.engine.angle = Math.PI * -1;
         else
-            this.engine.angle += 0.05 * dt * 100;
+            this.engine.angle += angleSpeedMod * dt * 5;
 
         this.batteries.energy -= 1 * dt;
     }
 
-    var xVelocity = this.engine.speed * Math.cos(this.engine.angle);
-    var yVelocity = this.engine.speed * Math.sin(this.engine.angle);
+    let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
+    let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
     this.x += xVelocity * dt;
     this.y += yVelocity * dt;
@@ -213,6 +247,8 @@ Ship.prototype.checkCollision = function() {
             else {
                 alert('You collided with an astronomical entity and got smashed to bits in the process.');
                 Ship.prototype.checkCollision = function(){};
+                map.draw = undefined;
+                ship.draw = undefined;
                 location.reload();
             }
         }

@@ -27,7 +27,10 @@ example: {
 
 /* how many layers can a planet have, how many resource spots will be distributed on the planet? */
 
-function Resource (name, type, amount, depthMin, depthMax) {
+function Resource (loaded, name, type, amount, depthMin, depthMax) {
+
+    if (loaded)
+        return this;
 
     // e.g. crystal
     this.name = name;

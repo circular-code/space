@@ -8,6 +8,7 @@
         "Nebula":true,
         "scale":true,
         "Wormhole": true,
+        "Moon": true,
         "BackgroundStar":true,
         "Ship":true,
         "Chunk":true,
@@ -27,7 +28,8 @@
         "dPressed":true,
         "console":true,
         "alert":true,
-        "userInterface":true
+        "userInterface":true,
+        "checkAllCollisions":true
     },
     "esversion": 6,
     "browser":true,

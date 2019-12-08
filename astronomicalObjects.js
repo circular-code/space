@@ -23,7 +23,11 @@ AstronomicalObject.prototype.checkCollision = function(radius, x, y) {
     return distance(x, y, this.x, this.y) <= radius + this.radius;
 };
 
-function Star(radius, x, y) {
+function Star(loaded, radius, x, y) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
     this.range = this.radius + randomNumBetween(50,30);
@@ -61,7 +65,11 @@ Star.prototype.draw = function() {
     }
 };
 
-function Planet(radius, x, y, chunk) {
+function Planet(loaded, radius, x, y, chunk) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.resources = {};
     this.name = 'Planet';
@@ -100,17 +108,17 @@ function Planet(radius, x, y, chunk) {
             switch (pSType) {
                 case 'gas':
                     this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
-                    this.resource = new Resource('gas', 'gas', 5000, 0, 10);
+                    this.resource = new Resource(undefined, 'gas', 'gas', 5000, 0, 10);
                     break;
 
                 case 'ice':
                     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
-                    this.resource = new Resource('crystal', 'liquid', 5000, 0, 10);
+                    this.resource = new Resource(undefined, 'crystal', 'liquid', 5000, 0, 10);
                     break;
 
                 case 'solid':
                     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-                    this.resource = new Resource('metal', 'solid', 5000, 0, 10);
+                    this.resource = new Resource(undefined, 'metal', 'solid', 5000, 0, 10);
                     break;
             }
 
@@ -171,7 +179,11 @@ Planet.prototype.draw = function() {
     }
 };
 
-function Nebula(radius, x, y) {
+function Nebula(loaded, radius, x, y) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
     this.nebulaType = getType("nebula");
@@ -274,7 +286,11 @@ Nebula.prototype.draw = function() {
     }
 };
 
-function Asteroid(radius, x, y) {
+function Asteroid(loaded, radius, x, y) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
     this.name = 'Asteroid';
@@ -283,7 +299,11 @@ function Asteroid(radius, x, y) {
 Asteroid.prototype = Object.create(AstronomicalObject.prototype);
 Asteroid.prototype.constructor = AstronomicalObject;
 
-function Wormhole(radius, x, y, partner) {
+function Wormhole(loaded, radius, x, y, partner) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(200,130,true) + randomNumBetween(10,0,true) + randomNumBetween(200, 130,true);
     this.range = this.radius + randomNumBetween(50,30);
@@ -318,7 +338,10 @@ Wormhole.prototype.draw = function() {
     }
 };
 
-function Moon(planet, chunk) {
+function Moon(loaded, planet, chunk) {
+
+    if (loaded)
+        return this;
 
     // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
     // this.origin = planet;
@@ -390,9 +413,12 @@ Moon.prototype.draw = function() {
     }
 };
 
-
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
-function BackgroundStar(radius, x, y) {
+function BackgroundStar(loaded, radius, x, y) {
+
+    if (loaded)
+        return this;
+
     AstronomicalObject.call(this, radius, x, y);
     this.color = '#' + randomNumBetween(200,0,true) + randomNumBetween(200,0,true) + randomNumBetween(200, 150,true);
     this.opacity = randomNumBetween(100);
