@@ -12,8 +12,6 @@ var angle = 0;
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of aO created with scale
 //TODO: change to es6 style
-//TODO: moons are loaded empty
-//TODO: fix loaded wormholes
 
 var zoom = 100;
 
@@ -163,7 +161,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var scale = 2;
+var scale = 1;
 var size = 3000 * scale * scale;
 var radius = 3;
 

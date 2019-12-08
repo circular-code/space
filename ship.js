@@ -220,8 +220,6 @@ Ship.prototype.move = function(dt) {
     this.y += yVelocity * dt;
 };
 
-//TODO: check collision when generating ship
-
 Ship.prototype.checkCollision = function() {
     var ship = this;
 

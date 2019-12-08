@@ -73,7 +73,6 @@ function Planet(loaded, radius, x, y, chunk) {
     AstronomicalObject.call(this, radius, x, y);
     this.resources = {};
     this.name = 'Planet';
-    this.moons = [];
 
     var pType = getType("planet");
     var pSType = getType("giantPlanet");
@@ -95,7 +94,7 @@ function Planet(loaded, radius, x, y, chunk) {
         var amount = chanceList[chance];
 
         while (amount) {
-            this.moons.push(new Moon(this, chunk));
+            new Moon(this, chunk);
             amount--;
         }
     }
@@ -310,8 +309,16 @@ function Wormhole(loaded, radius, x, y, partner) {
     this.name = 'Wormhole';
 
     if (partner) {
-        this.partner = partner;
-        partner.partner = this;
+        this.partner = {
+            x: partner.x,
+            y: partner.y,
+            radius: partner.radius
+        };
+        partner.partner = {
+            x: this.x,
+            y: this.y,
+            radius: this.radius
+        };
     }
 }
 

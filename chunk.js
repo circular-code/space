@@ -90,15 +90,15 @@ Chunk.prototype.populate = function() {
 };
 
 Chunk.prototype.getRandomType = function() {
-    var type = randomNumBetween(2);
+    var type = randomNumBetween(0);
 
     var chunkType = [
-        "starsAndPlanets",
-        "planets",
-        "stars",
-        "asteroidfield",
-        "void",
-        "nebula",
+        // "starsAndPlanets",
+        // "planets",
+        // "stars",
+        // "asteroidfield",
+        // "void",
+        // "nebula",
         "wormhole"
     ];
 
