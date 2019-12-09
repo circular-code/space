@@ -1,7 +1,7 @@
 'use strict';
 
 function Chunk (x, y, size, scale) {
-    this.allAstronomicalObjects = [];
+    this.allAstrobjects = [];
     this.backgroundStars = [];
     this.size = size;
     this.x = x;
@@ -14,26 +14,26 @@ Chunk.prototype.populate = function() {
 
     switch (this.type) {
         case 'starsAndPlanets':
-                createAstronomicalObjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
-                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
+                createAstrobjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
+                createAstrobjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
             break;
 
         case 'planets':
-                createAstronomicalObjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
+                createAstrobjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);
             break;
         case "stars":
-                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
+                createAstrobjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
             break;
 
         case "asteroidfield":
-                createAstronomicalObjects(this, Star, this.size/640, this.size/1280, 100 * this.scale, 20 * this.scale);
-                createAstronomicalObjects(this, Asteroid, this.size/10, this.size/20, 15 * this.scale/2,  7 * this.scale/2);
+                createAstrobjects(this, Star, this.size/640, this.size/1280, 100 * this.scale, 20 * this.scale);
+                createAstrobjects(this, Asteroid, this.size/10, this.size/20, 15 * this.scale/2,  7 * this.scale/2);
             break;
 
         case "nebula":
-                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
+                createAstrobjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
 
-                this.allAstronomicalObjects.push(
+                this.allAstrobjects.push(
                     new Nebula(undefined,
                         randomNumBetween(700 * this.scale, 600 * this.scale),
                         randomNumBetween(this.size + this.x * this.size, this.x * this.size),
@@ -44,7 +44,7 @@ Chunk.prototype.populate = function() {
 
         case "wormhole":
             {
-                createAstronomicalObjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
+                createAstrobjects(this, Star, this.size/320, this.size/640, 100 * this.scale, 20 * this.scale);
 
                 let wormholePairAmount = 1;
 
@@ -60,9 +60,9 @@ Chunk.prototype.populate = function() {
 
                     let collided = false;
 
-                    for (let i = 0; i < this.allAstronomicalObjects.length; i++)
-                        if (this.allAstronomicalObjects[i].type !== 'nebula')
-                            if (this.allAstronomicalObjects[i].checkCollision(startRadius,startX, startY) || this.allAstronomicalObjects[i].checkCollision(endRadius,endX,endY)) {
+                    for (let i = 0; i < this.allAstrobjects.length; i++)
+                        if (this.allAstrobjects[i].type !== 'nebula')
+                            if (this.allAstrobjects[i].checkCollision(startRadius,startX, startY) || this.allAstrobjects[i].checkCollision(endRadius,endX,endY)) {
                                 collided = true;
                                 break;
                             }
@@ -77,7 +77,7 @@ Chunk.prototype.populate = function() {
                     else {
                         var otherStart = new Wormhole(undefined, endRadius,endX,endY,start);
 
-                        this.allAstronomicalObjects.push(start, otherStart);
+                        this.allAstrobjects.push(start, otherStart);
                     }
 
                     wormholePairAmount--;
@@ -122,21 +122,11 @@ Chunk.prototype.generateBackground = function() {
     }
 };
 
-Chunk.prototype.draw = function() {
-    for (var j = 0; j < this.backgroundStars.length; j++) {
-        this.backgroundStars[j].draw();
-    }
-
-    for (var i = 0; i < this.allAstronomicalObjects.length; i++) {
-        this.allAstronomicalObjects[i].draw();
-    }
-};
-
 function checkAllCollisions(chunk, x, y, radius) {
     var collided = false;
-    for (let i = 0; i < chunk.allAstronomicalObjects.length; i++)
-        if (chunk.allAstronomicalObjects[i].type !== 'nebula')
-            if (chunk.allAstronomicalObjects[i].checkCollision(radius, x, y)) {
+    for (let i = 0; i < chunk.allAstrobjects.length; i++)
+        if (chunk.allAstrobjects[i].type !== 'nebula')
+            if (chunk.allAstrobjects[i].checkCollision(radius, x, y)) {
                 collided = true;
                 break;
             }
@@ -144,7 +134,7 @@ function checkAllCollisions(chunk, x, y, radius) {
     return collided;
 }
 
-function createAstronomicalObjects(chunk, classHolder, amountMax, amountMin, radiusMax, radiusMin) {
+function createAstrobjects(chunk, classHolder, amountMax, amountMin, radiusMax, radiusMin) {
     let planetAmount = randomNumBetween(amountMax, amountMin);
     while (planetAmount > 0) {
 
@@ -157,7 +147,7 @@ function createAstronomicalObjects(chunk, classHolder, amountMax, amountMin, rad
         if (collided)
             planetAmount++;
         else
-            chunk.allAstronomicalObjects.push(new classHolder(undefined, planetRadius, planetX, planetY, chunk));
+            chunk.allAstrobjects.push(new classHolder(undefined, planetRadius, planetX, planetY, chunk));
 
         planetAmount--;
     }

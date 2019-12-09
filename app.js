@@ -10,14 +10,14 @@ var dPressed = false;
 var angle = 0;
 
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
-//TODO: adjust amount of aO created with scale
+//TODO: adjust amount of astrobject created with scale
 //TODO: change to es6 style
 //TODO: fade nebulae borders
 //TODO: implement showing resources (resource angle start, angle finish, level (depending on availiable on planet))
 //TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 //TODO: make empty energy blink red
 //TODO: leave chemtrails when flying
-//TODO: make fuelcolor orange
+
 var zoom = 100;
 
 var ui = {
@@ -125,7 +125,7 @@ function distance (x1, y1, x2, y2) {
 
 var time = Date.now();
 
-function draw() {
+function renderLoop() {
 
     var now = Date.now(),
     dt = (now - time) / 1000.0;
@@ -151,8 +151,8 @@ function draw() {
     ctx.translate(-viewport.x, -viewport.y);
     viewport.focus();
 
-    map.draw();
-    ship.draw();
+    Renderer.renderMap(map);
+    Renderer.renderShip(ship);
     ship.checkCollision();
 
     if (dt)
@@ -163,7 +163,7 @@ function draw() {
     time = now;
 
     //returns a DomHighResTimestamp, use maybe instead of Date.now() ?
-    requestAnimationFrame(draw);
+    requestAnimationFrame(renderLoop);
 }
 
 var scale = 2;
@@ -183,7 +183,7 @@ var ship = new Ship(radius, mouseX, mouseY, size);
 
 var viewport = new Viewport(0,0);
 
-draw();
+renderLoop();
 
 function download(data, filename, type) {
     var file = new Blob([data], {type: type});
@@ -238,35 +238,35 @@ function onReaderLoad(event) {
             map.chunks[i].backgroundStars[j] = Object.assign(new BackgroundStar(), map.chunks[i].backgroundStars[j]);
         }
 
-        for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
+        for (var k = 0; k < map.chunks[i].allAstrobjects.length; k++) {
 
-            let aO = map.chunks[i].allAstronomicalObjects[k];
+            let astrobject = map.chunks[i].allAstrobjects[k];
 
-            switch (aO.name) {
+            switch (astrobject.name) {
                 case 'Star':
-                    aO = Object.assign(new Star(true), aO);
+                    astrobject = Object.assign(new Star(true), astrobject);
                     break;
                 case 'Planet':
                     let length = ship.storages.length;
-                    aO = Object.assign(new Planet(true), aO);
-                    if (aO.resources) {
-                        for (let i = 0; i < aO.resources.length; i++) {
-                            aO.resources.push(Object.assign(new Resource(true), aO.resources[i]));
+                    astrobject = Object.assign(new Planet(true), astrobject);
+                    if (astrobject.resources) {
+                        for (let i = 0; i < astrobject.resources.length; i++) {
+                            astrobject.resources.push(Object.assign(new Resource(true), astrobject.resources[i]));
                         }
-                        aO.resources.splice(0,length);
+                        astrobject.resources.splice(0,length);
                     }
                     break;
                 case 'Nebula':
-                    aO = Object.assign(new Nebula(true), aO);
+                    astrobject = Object.assign(new Nebula(true), astrobject);
                     break;
                 case 'Asteroid':
-                    aO = Object.assign(new Asteroid(true), aO);
+                    astrobject = Object.assign(new Asteroid(true), astrobject);
                     break;
                 case 'Wormhole':
-                    aO = Object.assign(new Wormhole(true), aO);
+                    astrobject = Object.assign(new Wormhole(true), astrobject);
                     break;
                 case 'Moon':
-                    aO = Object.assign(new Moon(true), aO);
+                    astrobject = Object.assign(new Moon(true), astrobject);
                     break;
             }
         }

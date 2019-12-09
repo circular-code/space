@@ -28,6 +28,7 @@
         "dPressed":true,
         "console":true,
         "alert":true,
+        "Renderer": true,
         "userInterface":true,
         "checkAllCollisions":true
     },

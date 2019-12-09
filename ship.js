@@ -29,48 +29,12 @@ function Ship (radius, x, y, size) {
     this.storages = [new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'liquid'), new Storage(undefined, 1, 'storage', true, 'gas'), new Storage(undefined, 1, 'storage', true, 'plasma')];
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
+    this.history = [];
 
     this.storages.forEach(storage => {
         storage.createUI();
     });
 }
-
-Ship.prototype.draw = function() {
-
-    //hull
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-    ctx.fillStyle = "#eeeeee";
-    ctx.fill();
-    ctx.closePath();
-
-    //energyContainer
-    ctx.beginPath();
-    ctx.rect(this.x + 15, this.y + 16, 0.5, 3);
-    ctx.strokeStyle = '#FFFFFF';
-    ctx.stroke();
-    ctx.closePath();
-
-    //energyAmount
-    ctx.beginPath();
-    ctx.rect(this.x - 15, this.y + 15, (this.batteries.energy / this.batteries.energyCapacity) * 30, 5);
-    ctx.globalAlpha = 0.7;
-    ctx.fillStyle = "#00FF00";
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.closePath();
-
-    //shield
-    ctx.globalAlpha = 0.3;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI*2);
-    ctx.strokeStyle = '#05C7F2';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.closePath();
-    ctx.lineWidth = 1;
-    ctx.globalAlpha = 1;
-};
 
 Ship.prototype.checkActiveChunk = function() {
     var activeChunk = map.chunks.filter(function(chunk){
@@ -157,9 +121,9 @@ Ship.prototype.mine = function(resource, amount) {
         });
 
         if (collidedObjects.length > 0) {
-            var aO = collidedObjects[0];
-            if (aO.name === 'Planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )) {
-                ship.store(aO.resources[0].retain(1), aO.resources[0].type);
+            var astrobject = collidedObjects[0];
+            if (astrobject.name === 'Planet' &&  astrobject.planetType === 'giant' && (astrobject.planetSubType === 'gas' || astrobject.planetSubType === 'ice' || astrobject.planetSubType === 'solid' )) {
+                ship.store(astrobject.resources[0].retain(1), astrobject.resources[0].type);
             }
         }
     }
@@ -175,6 +139,11 @@ Ship.prototype.move = function(dt) {
 
         let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
         let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
+
+        if (this.history.length > 30)
+            this.history.shift();
+
+        this.history.push({x:this.x, y: this.y});
 
         this.x += xVelocity * dt;
         this.y += yVelocity * dt;
@@ -216,6 +185,11 @@ Ship.prototype.move = function(dt) {
     let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
     let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
+    if (this.history.length > 30)
+        this.history.shift();
+
+    this.history.push({x:this.x, y: this.y});
+
     this.x += xVelocity * dt;
     this.y += yVelocity * dt;
 };
@@ -245,16 +219,15 @@ Ship.prototype.checkCollision = function() {
             else {
                 alert('You collided with an astronomical entity and got smashed to bits in the process.');
                 Ship.prototype.checkCollision = function(){};
-                map.draw = undefined;
-                ship.draw = undefined;
+                Renderer = undefined;
                 location.reload();
             }
         }
     }
 };
 
-Ship.prototype.scan = function(aO, depth) {
-    return aO.slice(0, depth);
+Ship.prototype.scan = function(astrobject, depth) {
+    return astrobject.slice(0, depth);
 };
 
 Ship.prototype.store = function(amount, type) {
@@ -284,7 +257,7 @@ Ship.prototype.store = function(amount, type) {
 
 function getClosestObjects(chunk) {
 
-    var all = chunk.allAstronomicalObjects || [];
+    var all = chunk.allAstrobjects || [];
 
     for (var i = 0; i < map.chunks.length; i++) {
         var c = map.chunks[i];
@@ -296,7 +269,7 @@ function getClosestObjects(chunk) {
             (c.x === chunk.x+1 && c.y === chunk.y+1) ||
             (c.x === chunk.x && c.y === chunk.y+1) ||
             (c.x === chunk.x-1 && c.y === chunk.y-1)) {
-            all = all.concat(map.chunks[i].allAstronomicalObjects);
+            all = all.concat(map.chunks[i].allAstrobjects);
         }
     }
 

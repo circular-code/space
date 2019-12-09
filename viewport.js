@@ -12,17 +12,3 @@ Viewport.prototype.focus = function() {
 Viewport.prototype.isInside = function(x, y) {
     return x > this.x - 700 && x < (this.x + canvas.width + 700) && y > this.y - 700 && y < (this.y + canvas.height + 700);
 };
-
-// Viewport.prototype.draw = function() {
-//     ctx.beginPath();
-//     ctx.arc(this.x, this.y, 30, 0, Math.PI*2);
-//     ctx.fillStyle = "#ff0000";
-//     ctx.fill();
-//     ctx.closePath();
-
-//     ctx.beginPath();
-//     ctx.arc(this.x, this.y + canvas.height, 30, 0, Math.PI*2);
-//     ctx.fillStyle = "#ff0000";
-//     ctx.fill();
-//     ctx.closePath();
-// }
