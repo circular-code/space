@@ -16,7 +16,7 @@ var angle = 0;
 //TODO: implement showing resources (resource angle start, angle finish, level (depending on availiable on planet))
 //TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 //TODO: make empty energy blink red
-//TODO: leave trace of fuel when flying
+//TODO: leave chemtrails when flying
 
 var zoom = 100;
 
