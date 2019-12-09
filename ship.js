@@ -159,7 +159,7 @@ Ship.prototype.mine = function(resource, amount) {
         if (collidedObjects.length > 0) {
             var aO = collidedObjects[0];
             if (aO.name === 'Planet' &&  aO.planetType === 'giant' && (aO.planetSubType === 'gas' || aO.planetSubType === 'ice' || aO.planetSubType === 'solid' )) {
-                ship.store(aO.resource.retain(1), aO.resource.type);
+                ship.store(aO.resources[0].retain(1), aO.resources[0].type);
             }
         }
     }

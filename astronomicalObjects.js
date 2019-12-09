@@ -71,7 +71,7 @@ function Planet(loaded, radius, x, y, chunk) {
         return this;
 
     AstronomicalObject.call(this, radius, x, y);
-    this.resources = {};
+    this.resources = [];
     this.name = 'Planet';
 
     var pType = getType("planet");
@@ -99,6 +99,18 @@ function Planet(loaded, radius, x, y, chunk) {
         }
     }
 
+    this.resourceRanges = [];
+    var restRange = radius - 10;
+    for (let i = 0; i < radius/10; i++) {
+        if (restRange > 10) {
+            this.resourceRanges.push(restRange);
+            restRange -= 10;
+        }
+        else {
+            break;
+        }
+    }
+
     switch (pType) {
         case 'giant':
 
@@ -107,17 +119,17 @@ function Planet(loaded, radius, x, y, chunk) {
             switch (pSType) {
                 case 'gas':
                     this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
-                    this.resource = new Resource(undefined, 'gas', 'gas', 5000, 0, 10);
+                    this.resources.push(new Resource(undefined, 'gas', 'gas', 5000, 0, 10));
                     break;
 
                 case 'ice':
                     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
-                    this.resource = new Resource(undefined, 'crystal', 'liquid', 5000, 0, 10);
+                    this.resources.push(new Resource(undefined, 'crystal', 'liquid', 5000, 0, 10));
                     break;
 
                 case 'solid':
                     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-                    this.resource = new Resource(undefined, 'metal', 'solid', 5000, 0, 10);
+                    this.resources.push(new Resource(undefined, 'metal', 'solid', 5000, 0, 10));
                     break;
             }
 
@@ -174,6 +186,19 @@ Planet.prototype.draw = function() {
             ctx.closePath();
             ctx.lineWidth = 1;
             ctx.globalAlpha = 1;
+        }
+
+        if (this.resourceRanges instanceof Array) {
+            for (let i = 0; i < this.resourceRanges.length; i++) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.resourceRanges[i], 0, Math.PI*2);
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = 'gray';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.closePath();
+                ctx.globalAlpha = 1;
+            }
         }
     }
 };

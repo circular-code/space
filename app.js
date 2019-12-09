@@ -12,6 +12,9 @@ var angle = 0;
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of aO created with scale
 //TODO: change to es6 style
+//TODO: fade nebulae borders
+//TODO: implement showing resources (resource angle start, angle finish, level (depending on availiable on planet))
+//TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 
 var zoom = 100;
 
@@ -24,7 +27,7 @@ var ui = {
     },
     setResource: function(resource, value) {
         this[resource].innerText = value;
-    },
+    }
 };
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -161,7 +164,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-var scale = 1;
+var scale = 2;
 var size = 3000 * scale * scale;
 var radius = 3;
 
@@ -234,27 +237,34 @@ function onReaderLoad(event) {
         }
 
         for (var k = 0; k < map.chunks[i].allAstronomicalObjects.length; k++) {
-            switch (map.chunks[i].allAstronomicalObjects[k].name) {
+
+            let aO = map.chunks[i].allAstronomicalObjects[k];
+
+            switch (aO.name) {
                 case 'Star':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Star(true), map.chunks[i].allAstronomicalObjects[k]);
+                    aO = Object.assign(new Star(true), aO);
                     break;
                 case 'Planet':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Planet(true), map.chunks[i].allAstronomicalObjects[k]);
-                    if (map.chunks[i].allAstronomicalObjects[k].resource) {
-                        map.chunks[i].allAstronomicalObjects[k].resource = Object.assign(new Resource(true), map.chunks[i].allAstronomicalObjects[k].resource);
+                    let length = ship.storages.length;
+                    aO = Object.assign(new Planet(true), aO);
+                    if (aO.resources) {
+                        for (let i = 0; i < aO.resources.length; i++) {
+                            aO.resources.push(Object.assign(new Resource(true), aO.resources[i]));
+                        }
+                        aO.resources.splice(0,length);
                     }
                     break;
                 case 'Nebula':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Nebula(true), map.chunks[i].allAstronomicalObjects[k]);
+                    aO = Object.assign(new Nebula(true), aO);
                     break;
                 case 'Asteroid':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Asteroid(true), map.chunks[i].allAstronomicalObjects[k]);
+                    aO = Object.assign(new Asteroid(true), aO);
                     break;
                 case 'Wormhole':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Wormhole(true), map.chunks[i].allAstronomicalObjects[k]);
+                    aO = Object.assign(new Wormhole(true), aO);
                     break;
                 case 'Moon':
-                    map.chunks[i].allAstronomicalObjects[k] = Object.assign(new Moon(true), map.chunks[i].allAstronomicalObjects[k]);
+                    aO = Object.assign(new Moon(true), aO);
                     break;
             }
         }
