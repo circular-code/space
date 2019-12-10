@@ -17,6 +17,7 @@ var angle = 0;
 //TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 //TODO: make empty energy blink red
 //TODO: leave chemtrails when flying
+//TODO: show speed
 
 var zoom = 100;
 
