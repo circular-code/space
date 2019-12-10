@@ -8,38 +8,57 @@ var Renderer = (function() {
     }
 
     return {
-        renderMap: function(obj) {
-            for (var i = 0; i< obj.chunks.length; i++) {
-                Renderer.renderChunk(obj.chunks[i]);
+        renderMap: function(map) {
+            for (var i = 0; i< map.chunks.length; i++) {
+                Renderer.renderChunk(map.chunks[i]);
             }
         },
-        renderChunk: function(obj) {
-            for (var j = 0; j < obj.backgroundStars.length; j++) {
-                Renderer.renderAstrobject(obj.backgroundStars[j]);
+        renderChunk: function(chunk) {
+            for (var j = 0; j < chunk.backgroundStars.length; j++) {
+                Renderer.renderAstrobject(chunk.backgroundStars[j]);
             }
         
-            for (var i = 0; i < obj.allAstrobjects.length; i++) {
-                Renderer.renderAstrobject(obj.allAstrobjects[i]);
+            for (var i = 0; i < chunk.allAstrobjects.length; i++) {
+                Renderer.renderAstrobject(chunk.allAstrobjects[i]);
             }
         },
-        renderShip: function(obj)  {
+        renderShip: function(ship)  {
+
+            //particles
+            ctx.shadowColor = 'yellow';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = "#83E8EB";
+            ctx.globalAlpha = 1;
+
+            for (let i = 0; i < ship.history.length; i++) {
+                if (i < 10 && i > 5) {
+                    ctx.beginPath();
+                    ctx.arc(ship.history[i].x, ship.history[i].y, 0.25*i, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+            ctx.globalAlpha = 1;
+            ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+
             //hull
             ctx.beginPath();
-            ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+            ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI*2);
             ctx.fillStyle = "#eeeeee";
             ctx.fill();
             ctx.closePath();
 
             //energyContainer
             ctx.beginPath();
-            ctx.rect(obj.x + 15, obj.y + 16, 0.5, 1);
+            ctx.rect(ship.x + 15, ship.y + 16, 0.5, 1);
             ctx.strokeStyle = '#FFFFFF';
             ctx.stroke();
             ctx.closePath();
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(obj.x - 15, obj.y + 15, (obj.batteries.energy / obj.batteries.energyCapacity) * 30, 3);
+            ctx.rect(ship.x - 15, ship.y + 15, (ship.batteries.energy / ship.batteries.energyCapacity) * 30, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -49,29 +68,23 @@ var Renderer = (function() {
             //shield
             ctx.globalAlpha = 0.3;
             ctx.beginPath();
-            ctx.arc(obj.x, obj.y, obj.radius + 5, 0, Math.PI*2);
+            ctx.arc(ship.x, ship.y, ship.radius + 5, 0, Math.PI*2);
             ctx.strokeStyle = '#05C7F2';
             ctx.lineWidth = 1;
             ctx.stroke();
             ctx.closePath();
             ctx.globalAlpha = 1;
-
-            //particles
-            ctx.shadowColor = 'red';
-            ctx.shadowBlur = 5;
-            ctx.fillStyle = "red";
-
-            for (let i = 0; i < obj.history.length; i++) {
-                if (i > 10) {
-                    ctx.beginPath();
-                    ctx.arc(obj.history[i].x, obj.history[i].y, 3, 0, Math.PI*2);
-                    ctx.fill();
-                    ctx.closePath();
-                }
-            }
-
-            ctx.shadowColor = "transparent";
-            ctx.shadowBlur = 0;
+        },
+        renderResource: function(planet, resource) {
+            ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.arc(planet.x, planet.y, planet.resourceRanges[resource.depth] + 5, resource.angleStart, resource.angleEnd);
+            ctx.strokeStyle = 'aqua';
+            ctx.lineWidth = 10;
+            ctx.stroke();
+            ctx.closePath();
+            ctx.globalAlpha = 1;
+            ctx.lineWidth = 1;
         },
         renderAstrobject: function (obj) {
 
@@ -144,6 +157,13 @@ var Renderer = (function() {
                                 ctx.globalAlpha = 1;
                             }
                         }
+
+                        if (obj.resources instanceof Array) {
+                            for (let i = 0; i < obj.resources.length; i++) {
+                                Renderer.renderResource(obj,obj.resources[i]);
+                            }
+                        }
+                        
                     break;
                         
                 case 'Nebula':

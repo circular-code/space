@@ -185,7 +185,7 @@ Ship.prototype.move = function(dt) {
     let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
     let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
-    if (this.history.length > 30)
+    if (this.history.length > 10)
         this.history.shift();
 
     this.history.push({x:this.x, y: this.y});

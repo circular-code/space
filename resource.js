@@ -47,6 +47,10 @@ function Resource (loaded, name, type, amount, depthMin, depthMax) {
     // random value inside depth range
     this.depth = randomNumBetween(depthMax, depthMin);
 
+    // random value inside depth range
+    this.angleStart = randomNumBetween(0,0);
+    this.angleEnd = randomNumBetween(0.5, 2 * Math.PI);
+
     // depletion flag
     this.depleted = false;
 }
