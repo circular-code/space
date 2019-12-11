@@ -79,7 +79,7 @@ var Renderer = (function() {
             ctx.globalAlpha = 0.5;
             ctx.beginPath();
             ctx.arc(planet.x, planet.y, planet.resourceRanges[resource.depth] + 5, resource.angleStart, resource.angleEnd);
-            ctx.strokeStyle = 'aqua';
+            ctx.strokeStyle = resource.color;
             ctx.lineWidth = 10;
             ctx.stroke();
             ctx.closePath();

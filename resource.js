@@ -38,6 +38,21 @@ function Resource (loaded, name, type, amount, depthMin, depthMax) {
     // solid, fluid, gas
     this.type = type;
 
+    switch(name) {
+
+        case 'gas':
+            this.color = 'green';
+            break;
+
+        case 'crystal':
+            this.color = 'blue';
+            break;
+
+        case 'metal':
+            this.color = 'orange';
+            break;
+    }
+
     //positive integer
     this.amount = amount;
 
@@ -47,9 +62,10 @@ function Resource (loaded, name, type, amount, depthMin, depthMax) {
     // random value inside depth range
     this.depth = randomNumBetween(depthMax, depthMin);
 
+    var x;
     // random value inside depth range
-    this.angleStart = randomNumBetween(0,0);
-    this.angleEnd = randomNumBetween(0.5, 2 * Math.PI);
+    this.angleStart = x = randomNumBetween(0, 2 * Math.PI);
+    this.angleEnd = x + randomNumBetween(40) / 10;
 
     // depletion flag
     this.depleted = false;
