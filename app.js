@@ -74,12 +74,33 @@ document.getElementById('saveButton').addEventListener('click', function() {
     download(JSON.stringify(obj), 'space-game', 'application/json');
 });
 
-canvas.addEventListener('contextmenu', function(e) {
-    if (e.button === 2) {
-      e.preventDefault();
-      //TODO: implement custom contextmenu
-    }
-  });
+const menu = document.getElementById("menu");
+let menuVisible = false;
+
+const toggleMenu = command => {
+    menu.style.display = command === "show" ? "block" : "none";
+    menuVisible = !menuVisible;
+};
+
+const setPosition = ({ top, left }) => {
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+    toggleMenu("show");
+};
+
+canvas.addEventListener("click", e => {
+    if (menuVisible)toggleMenu("hide");
+});
+
+canvas.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    const origin = {
+        left: e.pageX,
+        top: e.pageY
+    };
+    setPosition(origin);
+    return false;
+});
 
 function randomNumBetween(max, min, convertToHex) {
     if (typeof max === 'undefined'){
