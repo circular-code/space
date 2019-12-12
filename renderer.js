@@ -311,7 +311,7 @@ var Renderer = (function() {
 
                     //draw range line of post
                     ctx.beginPath();
-                    ctx.arc(obj.originX, obj.originY, obj.radius + 20, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.radius + 20, 0, Math.PI*2);
                     ctx.globalAlpha = 0.1;
                     ctx.strokeStyle = 'purple';
                     ctx.lineWidth = 1;
