@@ -17,6 +17,11 @@ var angle = 0;
 //TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 //TODO: make empty energy blink red
 //TODO: show speed
+//TODO: replace history with ellipse or triangle
+//TODO: show coordinates/
+//TODO: implement trading posts
+//TODO: implement shipyards
+//TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 
 var zoom = 100;
 
@@ -166,7 +171,7 @@ function renderLoop() {
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 2;
+var scale = 1;
 var size = 3000 * scale * scale;
 var radius = 3;
 

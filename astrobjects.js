@@ -51,12 +51,22 @@ function Planet(loaded, radius, x, y, chunk) {
 
     var hasMoon = this.hasMoon = !randomNumBetween(5);
     if (hasMoon) {
-        var chance = randomNumBetween(9);
-        var chanceList = [1,1,1,1,2,2,2,3,4,5];
-        var amount = chanceList[chance];
+        let chance = randomNumBetween(9);
+        let chanceList = [1,1,1,1,2,2,2,3,4,5];
+        let amount = chanceList[chance];
 
         while (amount) {
-            new Moon(this, chunk);
+            new Moon(undefined, this, chunk);
+            amount--;
+        }
+    }
+
+    var hasTradingPost = this.hasTradingPost = !randomNumBetween(9);
+    if (hasTradingPost) {
+        let amount = 1;
+
+        while (amount) {
+            new TradingPost(undefined, this, chunk);
             amount--;
         }
     }
@@ -239,6 +249,58 @@ function Moon(loaded, planet, chunk) {
 
 Moon.prototype = Object.create(Astrobject.prototype);
 Moon.prototype.constructor = Astrobject;
+
+function TradingPost(loaded, planet, chunk) {
+
+    if (loaded)
+        return this;
+
+    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+    // this.origin = planet;
+    this.originX = planet.x;
+    this.originY = planet.y;
+    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
+
+    var postCollided = true;
+
+    while (postCollided) {
+
+        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+        this.radius = planet.radius * (randomNumBetween(5,1)/10);
+
+        this.x = planet.x + this.extRadius * Math.cos(this.angle);
+        this.y = planet.y + this.extRadius * Math.sin(this.angle);
+
+        var all = chunk.allAstrobjects;
+
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].type !== 'nebula') {
+                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                    postCollided = true;
+                    break;
+                }
+
+                postCollided = false;
+            }
+            else {
+                postCollided = false;
+            }
+        }
+
+        if (all.length === 0)
+            postCollided = false;
+    }
+
+    Astrobject.call(this, this.radius, this.x, this.y);
+
+    this.color = 'purple';
+    this.name = 'TradingPost';
+
+    chunk.allAstrobjects.push(this);
+}
+
+TradingPost.prototype = Object.create(Astrobject.prototype);
+TradingPost.prototype.constructor = Astrobject;
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(loaded, radius, x, y) {
