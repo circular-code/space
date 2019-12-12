@@ -71,6 +71,16 @@ function Planet(loaded, radius, x, y, chunk) {
         }
     }
 
+    var hasShipYard = this.hasShipYard = !randomNumBetween(9);
+    if (hasShipYard) {
+        let amount = 1;
+
+        while (amount) {
+            new ShipYard(undefined, this, chunk);
+            amount--;
+        }
+    }
+
     this.resourceRanges = [];
     var restRange = radius - 10;
     for (let i = 0; i < radius/10; i++) {
@@ -92,7 +102,7 @@ function Planet(loaded, radius, x, y, chunk) {
                 case 'gas':
                     this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
                     this.resources.push(new Resource(undefined, 'gas', 'gas', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'crystal', 'liquid', 5000, 0, this.resourceRanges.length));
-                    
+
                     break;
 
                 case 'ice':
@@ -195,6 +205,7 @@ function Wormhole(loaded, radius, x, y, partner) {
 Wormhole.prototype = Object.create(Astrobject.prototype);
 Wormhole.prototype.constructor = Astrobject;
 
+//TODO: refactor trading posts, moons and shipyards into one function?
 function Moon(loaded, planet, chunk) {
 
     if (loaded)
@@ -302,6 +313,58 @@ function TradingPost(loaded, planet, chunk) {
 TradingPost.prototype = Object.create(Astrobject.prototype);
 TradingPost.prototype.constructor = Astrobject;
 
+function ShipYard(loaded, planet, chunk) {
+
+    if (loaded)
+        return this;
+
+    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+    // this.origin = planet;
+    this.originX = planet.x;
+    this.originY = planet.y;
+    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
+
+    var postCollided = true;
+
+    while (postCollided) {
+
+        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+        this.radius = planet.radius * (randomNumBetween(5,1)/10);
+
+        this.x = planet.x + this.extRadius * Math.cos(this.angle);
+        this.y = planet.y + this.extRadius * Math.sin(this.angle);
+
+        var all = chunk.allAstrobjects;
+
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].type !== 'nebula') {
+                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                    postCollided = true;
+                    break;
+                }
+
+                postCollided = false;
+            }
+            else {
+                postCollided = false;
+            }
+        }
+
+        if (all.length === 0)
+            postCollided = false;
+    }
+
+    Astrobject.call(this, this.radius, this.x, this.y);
+
+    this.color = 'yellow';
+    this.name = 'ShipYard';
+
+    chunk.allAstrobjects.push(this);
+}
+
+ShipYard.prototype = Object.create(Astrobject.prototype);
+ShipYard.prototype.constructor = Astrobject;
+
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(loaded, radius, x, y) {
 
@@ -309,7 +372,7 @@ function BackgroundStar(loaded, radius, x, y) {
         return this;
 
     Astrobject.call(this, radius, x, y);
-    this.color = '#' + randomNumBetween(200,0,true) + randomNumBetween(200,0,true) + randomNumBetween(200, 150,true);
+    this.color = '#' + randomNumBetween(150,100,true) + randomNumBetween(150,100,true) + randomNumBetween(150, 100,true);
     this.opacity = randomNumBetween(100);
     this.name = 'BackgroundStar';
 }

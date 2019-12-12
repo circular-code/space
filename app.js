@@ -22,6 +22,10 @@ var angle = 0;
 //TODO: implement trading posts
 //TODO: implement shipyards
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
+//TODO: name astrobjects, colonized planets/moons? fractions/reputation?
+//TODO: ability to place markers, will show on the screen borders
+//TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
+//TODO: custom context menu
 
 var zoom = 100;
 
@@ -69,6 +73,13 @@ document.getElementById('saveButton').addEventListener('click', function() {
 
     download(JSON.stringify(obj), 'space-game', 'application/json');
 });
+
+canvas.addEventListener('contextmenu', function(e) {
+    if (e.button === 2) {
+      e.preventDefault();
+      //TODO: implement custom contextmenu
+    }
+  });
 
 function randomNumBetween(max, min, convertToHex) {
     if (typeof max === 'undefined'){

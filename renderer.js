@@ -17,30 +17,30 @@ var Renderer = (function() {
             for (var j = 0; j < chunk.backgroundStars.length; j++) {
                 Renderer.renderAstrobject(chunk.backgroundStars[j]);
             }
-        
+
             for (var i = 0; i < chunk.allAstrobjects.length; i++) {
                 Renderer.renderAstrobject(chunk.allAstrobjects[i]);
             }
         },
         renderShip: function(ship)  {
 
-            //particles
-            ctx.shadowColor = 'yellow';
-            ctx.shadowBlur = 10;
-            ctx.fillStyle = "#83E8EB";
-            ctx.globalAlpha = 1;
+            // //particles
+            // ctx.shadowColor = 'yellow';
+            // ctx.shadowBlur = 10;
+            // ctx.fillStyle = "#83E8EB";
+            // ctx.globalAlpha = 1;
 
-            for (let i = 0; i < ship.history.length; i++) {
-                if (i < 10 && i > 5) {
-                    ctx.beginPath();
-                    ctx.arc(ship.history[i].x, ship.history[i].y, 0.25*i, 0, Math.PI*2);
-                    ctx.fill();
-                    ctx.closePath();
-                }
-            }
-            ctx.globalAlpha = 1;
-            ctx.shadowColor = "transparent";
-            ctx.shadowBlur = 0;
+            // for (let i = 0; i < ship.history.length; i++) {
+            //     if (i < 10 && i > 5) {
+            //         ctx.beginPath();
+            //         ctx.arc(ship.history[i].x, ship.history[i].y, 0.25*i, 0, Math.PI*2);
+            //         ctx.fill();
+            //         ctx.closePath();
+            //     }
+            // }
+            // ctx.globalAlpha = 1;
+            // ctx.shadowColor = "transparent";
+            // ctx.shadowBlur = 0;
 
             //hull
             ctx.beginPath();
@@ -100,21 +100,21 @@ var Renderer = (function() {
                     ctx.fill();
                     ctx.closePath();
                     break;
-                
+
                 case 'Star':
                     ctx.shadowColor = obj.color;
                     ctx.shadowBlur = obj.range/2;
-            
+
                     // hull
                     ctx.beginPath();
                     ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
-            
+
                     ctx.shadowColor = "transparent";
                     ctx.shadowBlur = 0;
-            
+
                     //draw range line
                     ctx.beginPath();
                     ctx.arc(obj.x, obj.y, obj.range, 0, Math.PI*2);
@@ -132,7 +132,7 @@ var Renderer = (function() {
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
-            
+
                     if (obj.hasBelt) {
                         ctx.globalAlpha = 0.3;
                         ctx.beginPath();
@@ -144,7 +144,7 @@ var Renderer = (function() {
                         ctx.lineWidth = 1;
                         ctx.globalAlpha = 1;
                     }
-            
+
                     if (obj.resourceRanges instanceof Array) {
                         for (let i = 0; i < obj.resourceRanges.length; i++) {
                             ctx.beginPath();
@@ -163,11 +163,11 @@ var Renderer = (function() {
                             Renderer.renderResource(obj,obj.resources[i]);
                         }
                     }
-                        
+
                     break;
-                        
+
                 case 'Nebula':
-                       
+
                     var innerRadius, outerRadius, gradient;
 
                     switch (obj.nebulaType) {
@@ -177,7 +177,7 @@ var Renderer = (function() {
                             outerRadius = obj.radius;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.2;
-            
+
                             gradient = ctx.createRadialGradient(obj.x, obj.y, innerRadius, obj.x, obj.y, outerRadius);
                             gradient.addColorStop(0, 'purple');
                             gradient.addColorStop(0.3, 'blue');
@@ -185,70 +185,70 @@ var Renderer = (function() {
                             gradient.addColorStop(0.5, 'orange');
                             gradient.addColorStop(0.8, '#652323');
                             gradient.addColorStop(1, '#000000');
-            
+
                             ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
-            
+
                             ctx.fillStyle = gradient;
                             ctx.fill();
                             ctx.closePath();
                             ctx.globalAlpha = 1;
                             break;
-            
+
                         case 'reflection':
                             ctx.beginPath();
                             innerRadius = obj.radius/3;
                             outerRadius = obj.radius;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
-            
+
                             gradient = ctx.createRadialGradient(obj.x, obj.y, innerRadius, obj.x, obj.y, outerRadius);
                             gradient.addColorStop(0, '#51FFD6');
                             gradient.addColorStop(1, 'white');
-            
+
                             ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
-            
+
                             ctx.fillStyle = gradient;
                             ctx.fill();
                             ctx.closePath();
                             ctx.globalAlpha = 1;
                             break;
-            
+
                         case 'dark':
                             ctx.beginPath();
                             innerRadius = obj.radius/3;
                             outerRadius = obj.radius;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
-            
+
                             gradient = ctx.createRadialGradient(obj.x, obj.y, innerRadius, obj.x, obj.y, outerRadius);
                             gradient.addColorStop(0, '#582335');
                             gradient.addColorStop(0.3, '#6F274C');
                             gradient.addColorStop(0.6, '#652323');
                             gradient.addColorStop(1, '#000000');
-            
+
                             ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
-            
+
                             ctx.fillStyle = gradient;
                             ctx.fill();
                             ctx.closePath();
                             ctx.globalAlpha = 1;
                             break;
-            
+
                         case 'supernova':
                             ctx.beginPath();
                             innerRadius = obj.radius/4;
                             outerRadius = obj.radius/2;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
-            
+
                             gradient = ctx.createRadialGradient(obj.x, obj.y, innerRadius, obj.x, obj.y, outerRadius);
                             gradient.addColorStop(0, 'white');
                             gradient.addColorStop(0.3, 'purple');
                             gradient.addColorStop(0.6, 'white');
                             gradient.addColorStop(1, 'purple');
-            
+
                             ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
-            
+
                             ctx.fillStyle = gradient;
                             ctx.fill();
                             ctx.closePath();
@@ -261,14 +261,14 @@ var Renderer = (function() {
                     ctx.shadowColor = obj.color;
                     ctx.shadowBlur = obj.range;
                     ctx.globalAlpha = 1;
-            
+
                     // hull
                     ctx.beginPath();
                     ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
-            
+
                     ctx.shadowColor = "transparent";
                     ctx.shadowBlur = 0;
                     break;
@@ -279,7 +279,7 @@ var Renderer = (function() {
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
-            
+
                     //draw range line
                     ctx.beginPath();
                     ctx.arc(obj.originX, obj.originY, obj.extRadius, 0, Math.PI*2);
@@ -298,7 +298,7 @@ var Renderer = (function() {
                     // ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
                     ctx.fill();
                     ctx.closePath();
-            
+
                     //draw range line of planet
                     ctx.beginPath();
                     ctx.arc(obj.originX, obj.originY, obj.extRadius, 0, Math.PI*2);
@@ -313,7 +313,36 @@ var Renderer = (function() {
                     ctx.beginPath();
                     ctx.arc(obj.x, obj.y, obj.radius + 20, 0, Math.PI*2);
                     ctx.globalAlpha = 0.5;
-                    ctx.strokeStyle = 'purple';
+                    ctx.strokeStyle = obj.color;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.closePath();
+                    ctx.globalAlpha = 1;
+                    break;
+
+                case 'ShipYard':
+                    ctx.beginPath();
+                    ctx.fillStyle = obj.color;
+                    ctx.fillRect(obj.x - obj.radius/2, obj.y - obj.radius/2, obj.radius, obj.radius);
+                    // ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    //draw range line of planet
+                    ctx.beginPath();
+                    ctx.arc(obj.originX, obj.originY, obj.extRadius, 0, Math.PI*2);
+                    ctx.globalAlpha = 0.1;
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.closePath();
+                    ctx.globalAlpha = 1;
+
+                    //draw range line of post
+                    ctx.beginPath();
+                    ctx.arc(obj.x, obj.y, obj.radius + 20, 0, Math.PI*2);
+                    ctx.globalAlpha = 0.2;
+                    ctx.strokeStyle = obj.color;
                     ctx.lineWidth = 1;
                     ctx.stroke();
                     ctx.closePath();
