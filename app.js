@@ -26,6 +26,7 @@ var angle = 0;
 //TODO: ability to place markers, will show on the screen borders
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
 //TODO: custom context menu
+//TODO: space nyan cat
 
 var zoom = 100;
 
@@ -94,11 +95,41 @@ canvas.addEventListener("click", e => {
 
 canvas.addEventListener("contextmenu", e => {
     e.preventDefault();
-    const origin = {
-        left: e.pageX,
-        top: e.pageY
-    };
-    setPosition(origin);
+
+    var translatedX = e.pageX + viewport.x;
+    var tranlatedY = e.pageY + viewport.y;
+
+    var activeChunk = map.chunks.filter(function(chunk){
+        return chunk.active === true;
+    })[0];
+
+    if (activeChunk) {
+
+        var all = activeChunk.allAstrobjects;
+
+        var astrobject;
+        
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].type !== 'nebula') {
+                if (all[i].checkCollision(1, translatedX, tranlatedY)) {
+                    astrobject = all[i];
+                    break;
+                }
+            }
+        }
+
+        if (astrobject) { 
+            var origin = {
+                left: e.pageX,
+                top: e.pageY
+            };
+            setPosition(origin);
+        }
+        else {
+            if (menuVisible)toggleMenu("hide");
+        }
+    }
+
     return false;
 });
 
@@ -203,7 +234,7 @@ function renderLoop() {
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 1;
+var scale = 4;
 var size = 3000 * scale * scale;
 var radius = 3;
 
@@ -305,7 +336,13 @@ function onReaderLoad(event) {
                 case 'Moon':
                     astrobject = Object.assign(new Moon(true), astrobject);
                     break;
-            }
+                case 'TradingPost':
+                    astrobject = Object.assign(new TradingPost(true), astrobject);
+                    break;
+                case 'ShipYard':
+                    astrobject = Object.assign(new ShipYard(true), astrobject);
+                    break;
+        }
         }
     }
 

@@ -6,6 +6,8 @@
         "Star": true,
         "Asteroid":true,
         "Nebula":true,
+        "TradingPost": true,
+        "ShipYard": true,
         "scale":true,
         "Wormhole": true,
         "Moon": true,

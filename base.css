@@ -205,24 +205,26 @@ body {
 }
 
 #menu {
-	width: 120px;
+    width: 146px;
     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
     position: absolute;
     display: none;
+    color: #34c7c1;
     z-index: 4;
-	background: rgba(255,255,255,0.9);
-	border-radius: 4px;
+    border: 1px solid #34c7c1;
+    background: rgba(255, 255, 255, 0.11);
+    border-radius: 2px;
 }
 #menu .menu-options {
 	list-style: none;
 }
 #menu .menu-options .menu-option {
 	font-weight: 500;
-	font-size: 14px;
-	padding: 10px 40px 10px 20px;
-	cursor: pointer;
-	font-family: sans-serif;
-	border-bottom: 1px solid gray;
+    font-size: 14px;
+    padding: 10px 20px 10px 20px;
+    cursor: pointer;
+    font-family: sans-serif;
+    border-bottom: 1px solid #4d6967;
 }
 #menu .menu-options .menu-option:last-child {
 	border: none;
