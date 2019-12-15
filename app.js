@@ -234,7 +234,7 @@ function renderLoop() {
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 4;
+var scale = 1;
 var size = 3000 * scale * scale;
 var radius = 3;
 
