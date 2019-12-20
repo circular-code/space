@@ -9,6 +9,19 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
+if (document.body.requestFullscreen) {
+    document.body.requestFullscreen();
+}
+else if (document.body.mozRequestFullScreen) { /* Firefox */
+    document.body.mozRequestFullScreen();
+}
+else if (document.body.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    document.body.webkitRequestFullscreen();
+}
+else if (document.body.msRequestFullscreen) { /* IE/Edge */
+    document.body.msRequestFullscreen();
+}
+
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of astrobject created with scale
 //TODO: change to es6 style
