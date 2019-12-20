@@ -14,22 +14,19 @@ document.onclick = function () {
     if (requestedFullscreen)
         return false;
 
-    if (confirm("Enter Fullscreen mode?")) {
-        
-        requestedFullscreen = true;
-        
-        if (canvas.requestFullscreen) {
-            canvas.requestFullscreen();
-        }
-        else if (canvas.mozRequestFullScreen) { /* Firefox */
-            canvas.mozRequestFullScreen();
-        }
-        else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-            canvas.webkitRequestFullscreen();
-        }
-        else if (canvas.msRequestFullscreen) { /* IE/Edge */
-            canvas.msRequestFullscreen();
-        }
+    requestedFullscreen = true;
+
+    if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+    }
+    else if (canvas.mozRequestFullScreen) { /* Firefox */
+        canvas.mozRequestFullScreen();
+    }
+    else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        canvas.webkitRequestFullscreen();
+    }
+    else if (canvas.msRequestFullscreen) { /* IE/Edge */
+        canvas.msRequestFullscreen();
     }
 }
 
