@@ -10,26 +10,26 @@ var dPressed = false;
 var angle = 0;
 
 //TODO: enter/exit fullscreen buttons
-var requestedFullscreen = false;
-document.onclick = function () {
-    if (requestedFullscreen)
-        return false;
-
-    requestedFullscreen = true;
-
-    if (canvas.requestFullscreen) {
-        canvas.requestFullscreen();
-    }
-    else if (canvas.mozRequestFullScreen) { /* Firefox */
-        canvas.mozRequestFullScreen();
-    }
-    else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-        canvas.webkitRequestFullscreen();
-    }
-    else if (canvas.msRequestFullscreen) { /* IE/Edge */
-        canvas.msRequestFullscreen();
-    }
-}
+//var requestedFullscreen = false;
+//document.onclick = function () {
+//    if (requestedFullscreen)
+//        return false;
+//
+//    requestedFullscreen = true;
+//
+//    if (canvas.requestFullscreen) {
+//        canvas.requestFullscreen();
+//    }
+//    else if (canvas.mozRequestFullScreen) { /* Firefox */
+//        canvas.mozRequestFullScreen();
+//    }
+//    else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+//        canvas.webkitRequestFullscreen();
+//    }
+//    else if (canvas.msRequestFullscreen) { /* IE/Edge */
+//        canvas.msRequestFullscreen();
+//    }
+//}
 
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of astrobject created with scale
@@ -49,6 +49,8 @@ document.onclick = function () {
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
 //TODO: custom context menu
 //TODO: space nyan cat
+//TODO: stop backwards acceleration at 0
+//TODO: draw basic ship models instead of circle
 
 var zoom = 100;
 
@@ -256,7 +258,7 @@ function renderLoop() {
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 1;
+var scale = 2;
 var size = 3000 * scale * scale;
 var radius = 3;
 
