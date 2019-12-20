@@ -9,17 +9,28 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
-if (canvas.requestFullscreen) {
-    canvas.requestFullscreen();
-}
-else if (canvas.mozRequestFullScreen) { /* Firefox */
-    canvas.mozRequestFullScreen();
-}
-else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-    canvas.webkitRequestFullscreen();
-}
-else if (canvas.msRequestFullscreen) { /* IE/Edge */
-    canvas.msRequestFullscreen();
+var requestedFullscreen = false;
+document.onclick = function () {
+    if (requestedFullscreen)
+        return false;
+
+    if (confirm("Enter Fullscreen mode?")) {
+        
+        requestedFullscreen = true;
+        
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        }
+        else if (canvas.mozRequestFullScreen) { /* Firefox */
+            canvas.mozRequestFullScreen();
+        }
+        else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            canvas.webkitRequestFullscreen();
+        }
+        else if (canvas.msRequestFullscreen) { /* IE/Edge */
+            canvas.msRequestFullscreen();
+        }
+    }
 }
 
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
