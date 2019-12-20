@@ -9,6 +9,7 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
+//TODO: enter/exit fullscreen buttons
 var requestedFullscreen = false;
 document.onclick = function () {
     if (requestedFullscreen)
