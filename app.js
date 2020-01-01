@@ -36,35 +36,19 @@ var angle = 0;
 //TODO: change to es6 style
 //TODO: fade nebulae borders
 //TODO: implement showing resources (resource angle start, angle finish, level (depending on availiable on planet))
-//TODO: dont save backgroundstars, seperate them from map? delete entities outside closest junks
 //TODO: make empty energy blink red
 //TODO: show speed
-//TODO: replace history with ellipse or triangle
 //TODO: show coordinates/
-//TODO: implement trading posts
-//TODO: implement shipyards
+//TODO: populate trading posts
+//TODO: populate shipyards
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
 //TODO: ability to place markers, will show on the screen borders
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
-//TODO: custom context menu
 //TODO: space nyan cat
-//TODO: stop backwards acceleration at 0
 //TODO: draw basic ship models instead of circle
 
 var zoom = 100;
-
-var ui = {
-    crystal: document.getElementById('crystal'),
-    gas: document.getElementById('gas'),
-    metal: document.getElementById('metal'),
-    getResource: function(resource) {
-        return this[resource].innerText;
-    },
-    setResource: function(resource, value) {
-        this[resource].innerText = value;
-    }
-};
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -107,9 +91,9 @@ const toggleMenu = command => {
     menuVisible = !menuVisible;
 };
 
-const setPosition = ({ top, left }) => {
-    menu.style.left = `${left}px`;
-    menu.style.top = `${top}px`;
+const setPosition = (top, left ) => {
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
     toggleMenu("show");
 };
 
@@ -123,13 +107,9 @@ canvas.addEventListener("contextmenu", e => {
     var translatedX = e.pageX + viewport.x;
     var tranlatedY = e.pageY + viewport.y;
 
-    var activeChunk = map.chunks.filter(function(chunk){
-        return chunk.active === true;
-    })[0];
+    if (map.activeChunk) {
 
-    if (activeChunk) {
-
-        var all = activeChunk.allAstrobjects;
+        var all = map.activeChunk.allAstrobjects;
 
         var astrobject;
         
@@ -142,16 +122,10 @@ canvas.addEventListener("contextmenu", e => {
             }
         }
 
-        if (astrobject) { 
-            var origin = {
-                left: e.pageX,
-                top: e.pageY
-            };
-            setPosition(origin);
-        }
-        else {
+        if (astrobject)
+            setPosition(e.pageX, e.pageY);
+        else
             if (menuVisible)toggleMenu("hide");
-        }
     }
 
     return false;
@@ -217,24 +191,24 @@ function distance (x1, y1, x2, y2) {
 
 var time = Date.now();
 
-function renderLoop() {
+function renderLoop(now) {
 
-    var now = Date.now(),
-    dt = (now - time) / 1000.0;
+    var timeDelta = (now - time) / 1000;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
-
-    // ctx.translate(viewport.x, viewport.y);
-
-    // ctx.translate(-viewport.x,- viewport.y);
 
     ctx.rect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#08050C";
     ctx.fill();
 
-    if (dt)
-        ship.move(dt);
+    //render static background stars
+    for (var j = 0; j < map.backgroundStars.length; j++) {
+        Renderer.renderAstrobject(map.backgroundStars[j], true);
+    }
+
+    if (timeDelta)
+        ship.move(timeDelta);
 
     ship.checkActiveChunk();
 
@@ -247,31 +221,43 @@ function renderLoop() {
     Renderer.renderShip(ship);
     ship.checkCollision();
 
-    if (dt)
-        ship.refuelEnergy(dt);
+    if (timeDelta)
+        ship.refuelEnergy(timeDelta);
 
     ship.mine();
 
     time = now;
 
+    if (typeof userInterface !== 'undefined') {
+        if (userInterface.speed && ship.engine) {
+            userInterface.speed.textContent = ship.engine.speed;
+        }
+        if (userInterface.xCoordinate) {
+            userInterface.xCoordinate.textContent = Math.round(ship.x) / 1000;
+        }
+        if (userInterface.yCoordinate) {
+            userInterface.yCoordinate.textContent = Math.round(ship.y) / 1000;
+        }
+    }
     //returns a DomHighResTimestamp, use maybe instead of Date.now() ?
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 2;
+var scale = 1;
 var size = 3000 * scale * scale;
-var radius = 3;
+var r = 3;
 
 // var ship = JSON.parse(localStorage.getItem('space-ship-state'));
-var mouseX = size/2 - radius/2;
-var mouseY = size/2 - radius/2;
+var mouseX = size/2 - r/2;
+var mouseY = size/2 - r/2;
 
 userInterface.create();
 
 var map = new Map(size, scale);
 map.addChunk(0,0);
+map.generateBackground();
 
-var ship = new Ship(radius, mouseX, mouseY, size);
+var ship = new Ship(r, mouseX, mouseY, size);
 
 var viewport = new Viewport(0,0);
 

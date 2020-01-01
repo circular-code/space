@@ -3,14 +3,31 @@ function Map (size, scale) {
     this.chunks = [];
     this.chunkSize = size;
     this.scale = scale;
+    this.backgroundStars = [];
 }
 
 Map.prototype.generateChunk = function(x, y) {
     var chunk = new Chunk(x, y, this.chunkSize, this.scale);
     chunk.getRandomType();
     chunk.populate();
-    chunk.generateBackground();
     return chunk;
+};
+
+//TODO: add a second/third layer of stars, to create a feeling of depth, second layer needs to move
+Map.prototype.generateBackground = function() {
+    var bstarAmount = 60;
+    while (bstarAmount) {
+
+        var bgstar =  new BackgroundStar(undefined,
+            randomNumBetween(3,1),
+            randomNumBetween(canvas.width),
+            randomNumBetween(canvas.height)
+        );
+
+        this.backgroundStars.push(bgstar);
+
+        bstarAmount--;
+    }
 };
 
 Map.prototype.generateChunksAroundChunk = function(x,y) {

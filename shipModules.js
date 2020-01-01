@@ -60,7 +60,7 @@ function Engine(level, type, builtin) {
     Module.call(this, level, type, builtin);
     this.speed = 0;
     this.speedMax = 350;
-    this.speedMin = -50;
+    this.speedMin = 0;
     this.acceleration = 1;
 }
 

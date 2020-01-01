@@ -1,38 +1,38 @@
 'use strict';
 // Stars, Planets, Dwarf planets, minor planets, exoplanets, brown dwarfs, galaxies, discs, nebulae, void
 
-function Astrobject(radius, x, y) {
-    this.radius = radius;
+function Astrobject(r, x, y) {
+    this.r = r;
     this.x = x;
     this.y = y;
     this.color = '#0000ff';
     this.name = 'Astrobject';
 }
 
-Astrobject.prototype.checkCollision = function(radius, x, y) {
-    return distance(x, y, this.x, this.y) <= radius + this.radius;
+Astrobject.prototype.checkCollision = function(r, x, y) {
+    return distance(x, y, this.x, this.y) <= r + this.r;
 };
 
-function Star(loaded, radius, x, y) {
+function Star(loaded, r, x, y) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
-    this.range = this.radius + randomNumBetween(50,30);
+    this.range = this.r + randomNumBetween(50,30);
     this.name = 'Star';
 }
 
 Star.prototype = Object.create(Astrobject.prototype);
 Star.prototype.constructor = Astrobject;
 
-function Planet(loaded, radius, x, y, chunk) {
+function Planet(loaded, r, x, y, chunk) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.resources = [];
     this.name = 'Planet';
 
@@ -44,7 +44,7 @@ function Planet(loaded, radius, x, y, chunk) {
 
     var hasBelt = this.hasBelt = !randomNumBetween(9);
     if (hasBelt) {
-        this.beltRadius = radius + randomNumBetween(30,20);
+        this.beltRadius = r + randomNumBetween(30,20);
         this.beltColor = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
         this.beltWidth = randomNumBetween(15,10);
     }
@@ -82,8 +82,8 @@ function Planet(loaded, radius, x, y, chunk) {
     }
 
     this.resourceRanges = [];
-    var restRange = radius - 10;
-    for (let i = 0; i < radius/10; i++) {
+    var restRange = r - 10;
+    for (let i = 0; i < r/10; i++) {
         if (restRange > 10) {
             this.resourceRanges.push(restRange);
             restRange -= 10;
@@ -96,7 +96,7 @@ function Planet(loaded, radius, x, y, chunk) {
     switch (pType) {
         case 'giant':
 
-            this.range = this.radius + randomNumBetween(50,30);
+            this.range = this.r + randomNumBetween(50,30);
 
             switch (pSType) {
                 case 'gas':
@@ -151,12 +151,12 @@ function Planet(loaded, radius, x, y, chunk) {
 Planet.prototype = Object.create(Astrobject.prototype);
 Planet.prototype.constructor = Astrobject;
 
-function Nebula(loaded, radius, x, y) {
+function Nebula(loaded, r, x, y) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
     this.nebulaType = getType("nebula");
     this.name = 'Nebula';
@@ -165,12 +165,12 @@ function Nebula(loaded, radius, x, y) {
 Nebula.prototype = Object.create(Astrobject.prototype);
 Nebula.prototype.constructor = Astrobject;
 
-function Asteroid(loaded, radius, x, y) {
+function Asteroid(loaded, r, x, y) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
     this.name = 'Asteroid';
 }
@@ -178,26 +178,26 @@ function Asteroid(loaded, radius, x, y) {
 Asteroid.prototype = Object.create(Astrobject.prototype);
 Asteroid.prototype.constructor = Astrobject;
 
-function Wormhole(loaded, radius, x, y, partner) {
+function Wormhole(loaded, r, x, y, partner) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(200,130,true) + randomNumBetween(10,0,true) + randomNumBetween(200, 130,true);
-    this.range = this.radius + randomNumBetween(50,30);
+    this.range = this.r + randomNumBetween(50,30);
     this.name = 'Wormhole';
 
     if (partner) {
         this.partner = {
             x: partner.x,
             y: partner.y,
-            radius: partner.radius
+            r: partner.r
         };
         partner.partner = {
             x: this.x,
             y: this.y,
-            radius: this.radius
+            r: this.r
         };
     }
 }
@@ -215,14 +215,14 @@ function Moon(loaded, planet, chunk) {
     // this.origin = planet;
     this.originX = planet.x;
     this.originY = planet.y;
-    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
+    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
 
     var moonCollided = true;
 
     while (moonCollided) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.radius = planet.radius * (randomNumBetween(5,1)/10);
+        this.r = planet.r * (randomNumBetween(5,1)/10);
 
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
@@ -231,7 +231,7 @@ function Moon(loaded, planet, chunk) {
 
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                if (all[i].checkCollision(this.r, this.x, this.y)) {
                     moonCollided = true;
                     break;
                 }
@@ -247,7 +247,7 @@ function Moon(loaded, planet, chunk) {
             moonCollided = false;
     }
 
-    Astrobject.call(this, this.radius, this.x, this.y);
+    Astrobject.call(this, this.r, this.x, this.y);
 
     var chance = randomNumBetween(3);
     var chanceList = ['#eeeeee', '#eeeeee', '#ee5533', '#ee3355'];
@@ -270,14 +270,14 @@ function TradingPost(loaded, planet, chunk) {
     // this.origin = planet;
     this.originX = planet.x;
     this.originY = planet.y;
-    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
+    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
 
     var postCollided = true;
 
     while (postCollided) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.radius = planet.radius * (randomNumBetween(5,1)/10);
+        this.r = planet.r * (randomNumBetween(5,1)/10);
 
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
@@ -286,7 +286,7 @@ function TradingPost(loaded, planet, chunk) {
 
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                if (all[i].checkCollision(this.r, this.x, this.y)) {
                     postCollided = true;
                     break;
                 }
@@ -302,7 +302,7 @@ function TradingPost(loaded, planet, chunk) {
             postCollided = false;
     }
 
-    Astrobject.call(this, this.radius, this.x, this.y);
+    Astrobject.call(this, this.r, this.x, this.y);
 
     this.color = 'purple';
     this.name = 'TradingPost';
@@ -322,14 +322,14 @@ function ShipYard(loaded, planet, chunk) {
     // this.origin = planet;
     this.originX = planet.x;
     this.originY = planet.y;
-    this.extRadius = planet.radius + planet.radius / 2 + randomNumBetween(60,10);
+    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
 
     var postCollided = true;
 
     while (postCollided) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.radius = planet.radius * (randomNumBetween(5,1)/10);
+        this.r = planet.r * (randomNumBetween(5,1)/10);
 
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
@@ -338,7 +338,7 @@ function ShipYard(loaded, planet, chunk) {
 
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.radius, this.x, this.y)) {
+                if (all[i].checkCollision(this.r, this.x, this.y)) {
                     postCollided = true;
                     break;
                 }
@@ -354,7 +354,7 @@ function ShipYard(loaded, planet, chunk) {
             postCollided = false;
     }
 
-    Astrobject.call(this, this.radius, this.x, this.y);
+    Astrobject.call(this, this.r, this.x, this.y);
 
     this.color = 'yellow';
     this.name = 'ShipYard';
@@ -366,12 +366,12 @@ ShipYard.prototype = Object.create(Astrobject.prototype);
 ShipYard.prototype.constructor = Astrobject;
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
-function BackgroundStar(loaded, radius, x, y) {
+function BackgroundStar(loaded, r, x, y) {
 
     if (loaded)
         return this;
 
-    Astrobject.call(this, radius, x, y);
+    Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(150,100,true) + randomNumBetween(150,100,true) + randomNumBetween(150, 100,true);
     this.opacity = randomNumBetween(100);
     this.name = 'BackgroundStar';

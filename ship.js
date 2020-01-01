@@ -1,11 +1,11 @@
 'use strict';
-function Ship (radius, x, y, size) {
+function Ship (r, x, y, size) {
 
     var collided = true;
     var xcounter = 0;
     while (collided) {
 
-        collided = checkAllCollisions(map.chunks[0], x, y, radius);
+        collided = checkAllCollisions(map.chunks[0], x, y, r);
 
         if (collided) {
             x = randomNumBetween(size);
@@ -21,7 +21,7 @@ function Ship (radius, x, y, size) {
         }
     }
 
-    this.radius = radius;
+    this.r = r;
     this.x = x;
     this.y = y;
     this.level = 1;
@@ -29,7 +29,6 @@ function Ship (radius, x, y, size) {
     this.storages = [new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'liquid'), new Storage(undefined, 1, 'storage', true, 'gas'), new Storage(undefined, 1, 'storage', true, 'plasma')];
     this.batteries = new Batteries(1, 'batteries', true);
     this.capacity = 5;
-    this.history = [];
 
     this.storages.forEach(storage => {
         storage.createUI();
@@ -37,40 +36,30 @@ function Ship (radius, x, y, size) {
 }
 
 Ship.prototype.checkActiveChunk = function() {
-    var activeChunk = map.chunks.filter(function(chunk){
-        return chunk.active === true;
-    })[0];
 
-    if (activeChunk) {
+    if (map.activeChunk && map.activeChunk.active === true) {
         // if ship not inside chunk
-        if (ship.x < activeChunk.x * activeChunk.size ||
-            ship.x > (activeChunk.x * activeChunk.size + activeChunk.size) ||
-            ship.y < activeChunk.y * activeChunk.size ||
-            ship.y > (activeChunk.y * activeChunk.size + activeChunk.size)) {
+        if (ship.x < map.activeChunk.x * map.activeChunk.size ||
+            ship.x > (map.activeChunk.x * map.activeChunk.size + map.activeChunk.size) ||
+            ship.y < map.activeChunk.y * map.activeChunk.size ||
+            ship.y > (map.activeChunk.y * map.activeChunk.size + map.activeChunk.size)) {
 
-            activeChunk.active = false;
+                map.activeChunk.active = false;
             this.checkActiveChunk();
         }
     }
     else {
-        activeChunk = map.chunks.filter(function(chunk){
+        map.activeChunk = map.chunks.filter(function(chunk){
             return ship.x > chunk.x * chunk.size &&
             ship.x < (chunk.x * chunk.size + chunk.size) &&
             ship.y > chunk.y * chunk.size &&
             ship.y < (chunk.y * chunk.size + chunk.size);
         })[0];
 
-        if (activeChunk) {
-            activeChunk.active = true;
+        if (map.activeChunk) {
+            map.activeChunk.active = true;
 
-            if (map.chunks.length > 1)
-                map.chunks.splice(map.chunks.indexOf(activeChunk),1);
-
-            var swappedChunk = map.chunks.splice(0,1,activeChunk);
-            if (swappedChunk[0] !== activeChunk) {
-                map.chunks.push(swappedChunk[0]);
-            }
-            map.generateChunksAroundChunk(activeChunk.x, activeChunk.y);
+            map.generateChunksAroundChunk(map.activeChunk.x, map.activeChunk.y);
         }
         else {
             console.error('ship out of bounds');
@@ -78,24 +67,20 @@ Ship.prototype.checkActiveChunk = function() {
     }
 };
 
-Ship.prototype.refuelEnergy = function(dt) {
+Ship.prototype.refuelEnergy = function(timeDelta) {
     var ship = this;
 
-    var activeChunk = map.chunks.filter(function(chunk){
-        return chunk.active === true;
-    })[0];
+    if (map.activeChunk) {
 
-    if (activeChunk) {
-
-        var all = getClosestObjects(activeChunk);
+        var all = getClosestObjects(map.activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.range : false;
+            return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
         });
 
         //TODO: load twice as fast when in range of two suns
         if (collidedObjects.length > 0 && this.batteries.energyCapacity > (this.batteries.energy + this.batteries.energyRegenerationAmount)) {
-            this.batteries.energy += this.batteries.energyRegenerationAmount * dt;
+            this.batteries.energy += this.batteries.energyRegenerationAmount * timeDelta;
         }
     }
 };
@@ -108,16 +93,12 @@ Ship.prototype.mine = function(resource, amount) {
 
     var ship = this;
 
-    var activeChunk = map.chunks.filter(function(chunk){
-        return chunk.active === true;
-    })[0];
+    if (map.activeChunk) {
 
-    if (activeChunk) {
-
-        var all = getClosestObjects(activeChunk);
+        var all = getClosestObjects(map.activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return object.radius ? distance(ship.x, ship.y, object.x, object.y) <= object.radius + 20 : false;
+            return object.r ? distance(ship.x, ship.y, object.x, object.y) <= object.r + 20 : false;
         });
 
         if (collidedObjects.length > 0) {
@@ -129,7 +110,7 @@ Ship.prototype.mine = function(resource, amount) {
     }
 };
 
-Ship.prototype.move = function(dt) {
+Ship.prototype.move = function(timeDelta) {
 
     if (this.batteries.energy <= 0) {
         wPressed = false;
@@ -140,23 +121,18 @@ Ship.prototype.move = function(dt) {
         let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
         let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
-        if (this.history.length > 30)
-            this.history.shift();
-
-        this.history.push({x:this.x, y: this.y});
-
-        this.x += xVelocity * dt;
-        this.y += yVelocity * dt;
+        this.x += xVelocity * timeDelta;
+        this.y += yVelocity * timeDelta;
         return;
     }
 
     if (wPressed && this.engine.speed < this.engine.speedMax) {
         this.engine.speed += this.engine.acceleration;
-        this.batteries.energy -= 1 * dt;
+        this.batteries.energy -= 1 * timeDelta;
     }
     if (sPressed && this.engine.speed > this.engine.speedMin) {
         this.engine.speed -= this.engine.acceleration;
-        this.batteries.energy -= 1 * dt;
+        this.batteries.energy -= 1 * timeDelta;
     }
     if (!this.engine.angle)
         this.engine.angle = 0;
@@ -169,51 +145,42 @@ Ship.prototype.move = function(dt) {
         if ((this.engine.angle - angleSpeedMod) < (Math.PI * -1))
             this.engine.angle = Math.PI;
         else
-            this.engine.angle -= angleSpeedMod * dt * 5;
+            this.engine.angle -= angleSpeedMod * timeDelta * 5;
 
-        this.batteries.energy -= 1  * dt;
+        this.batteries.energy -= 1  * timeDelta;
     }
     if (dPressed) {
         if ((this.engine.angle + angleSpeedMod) > Math.PI)
             this.engine.angle = Math.PI * -1;
         else
-            this.engine.angle += angleSpeedMod * dt * 5;
+            this.engine.angle += angleSpeedMod * timeDelta * 5;
 
-        this.batteries.energy -= 1 * dt;
+        this.batteries.energy -= 1 * timeDelta;
     }
 
     let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
     let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
 
-    if (this.history.length > 10)
-        this.history.shift();
-
-    this.history.push({x:this.x, y: this.y});
-
-    this.x += xVelocity * dt;
-    this.y += yVelocity * dt;
+    this.x += xVelocity * timeDelta;
+    this.y += yVelocity * timeDelta;
 };
 
 Ship.prototype.checkCollision = function() {
     var ship = this;
 
-    var activeChunk = map.chunks.filter(function(chunk){
-        return chunk.active === true;
-    })[0];
+    if (map.activeChunk) {
 
-    if (activeChunk) {
-
-        var all = getClosestObjects(activeChunk);
+        var all = getClosestObjects(map.activeChunk);
 
         var collidedObjects = all.filter(function(object) {
-            return distance(ship.x, ship.y, object.x, object.y) <= ship.radius + object.radius && object.name !== 'Nebula';
+            return distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.r && object.name !== 'Nebula';
         });
 
         if (collidedObjects.length > 0) {
 
             if (collidedObjects[0].name === 'Wormhole' && collidedObjects[0].partner) {
-                ship.x = collidedObjects[0].partner.x + collidedObjects[0].partner.radius + 30;
-                ship.y = collidedObjects[0].partner.y + collidedObjects[0].partner.radius + 30;
+                ship.x = collidedObjects[0].partner.x + collidedObjects[0].partner.r + 30;
+                ship.y = collidedObjects[0].partner.y + collidedObjects[0].partner.r + 30;
                 ship.engine.angle = randomNumBetween(Math.PI, -Math.PI);
             }
             else {

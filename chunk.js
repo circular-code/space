@@ -2,7 +2,6 @@
 
 function Chunk (x, y, size, scale) {
     this.allAstrobjects = [];
-    this.backgroundStars = [];
     this.size = size;
     this.x = x;
     this.y = y;
@@ -105,28 +104,11 @@ Chunk.prototype.getRandomType = function() {
     this.type = chunkType[type];
 };
 
-//TODO: add a second layer of stars, to create a feeling of depth, second layer needs to move
-Chunk.prototype.generateBackground = function() {
-    var bstarAmount = randomNumBetween(this.size/5 * scale, this.size/10 * scale);
-    while (bstarAmount) {
-
-        var bgstar =  new BackgroundStar(undefined,
-            randomNumBetween(3,1),
-            randomNumBetween(this.size + this.x * this.size, this.x * this.size),
-            randomNumBetween(this.size + this.y * this.size, this.y * this.size)
-        );
-
-        this.backgroundStars.push(bgstar);
-
-        bstarAmount--;
-    }
-};
-
-function checkAllCollisions(chunk, x, y, radius) {
+function checkAllCollisions(chunk, x, y, r) {
     var collided = false;
     for (let i = 0; i < chunk.allAstrobjects.length; i++)
         if (chunk.allAstrobjects[i].type !== 'nebula')
-            if (chunk.allAstrobjects[i].checkCollision(radius, x, y)) {
+            if (chunk.allAstrobjects[i].checkCollision(r, x, y)) {
                 collided = true;
                 break;
             }
@@ -134,11 +116,11 @@ function checkAllCollisions(chunk, x, y, radius) {
     return collided;
 }
 
-function createAstrobjects(chunk, classHolder, amountMax, amountMin, radiusMax, radiusMin) {
+function createAstrobjects(chunk, classHolder, amountMax, amountMin, rMax, rMin) {
     let planetAmount = randomNumBetween(amountMax, amountMin);
     while (planetAmount > 0) {
 
-        let planetRadius = randomNumBetween(radiusMax, radiusMin);
+        let planetRadius = randomNumBetween(rMax, rMin);
         let planetX = randomNumBetween(chunk.size + chunk.x * chunk.size, chunk.x * chunk.size);
         let planetY = randomNumBetween(chunk.size + chunk.y * chunk.size, chunk.y * chunk.size);
 

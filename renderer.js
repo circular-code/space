@@ -14,10 +14,6 @@ var Renderer = (function() {
             }
         },
         renderChunk: function(chunk) {
-            for (var j = 0; j < chunk.backgroundStars.length; j++) {
-                Renderer.renderAstrobject(chunk.backgroundStars[j]);
-            }
-
             for (var i = 0; i < chunk.allAstrobjects.length; i++) {
                 Renderer.renderAstrobject(chunk.allAstrobjects[i]);
             }
@@ -42,12 +38,24 @@ var Renderer = (function() {
             // ctx.shadowColor = "transparent";
             // ctx.shadowBlur = 0;
 
+            if(ship.engine.speed > 0) {
+                ctx.beginPath();
+                ctx.moveTo(Math.cos(ship.engine.angle - Math.PI) * 4 + ship.x, Math.sin(ship.engine.angle - Math.PI) + ship.y);
+                ctx.lineTo(Math.cos(ship.engine.angle - Math.PI) * (4 +  ship.engine.speed / 15) + ship.x, Math.sin(ship.engine.angle - Math.PI) * (4 +  ship.engine.speed / 15) + ship.y);
+                ctx.lineTo(Math.cos(ship.engine.angle - Math.PI) + ship.x, Math.sin(ship.engine.angle - Math.PI) * 4 + ship.y);
+                ctx.lineTo(ship.x, ship.y);
+                ctx.closePath();
+                ctx.fillStyle = "orange";
+                ctx.fill();
+            }
+            ctx.restore();
+
             //hull
             ctx.beginPath();
-            ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI*2);
+            ctx.arc(ship.x, ship.y, ship.r, 0, Math.PI*2);
+            ctx.closePath();
             ctx.fillStyle = "#eeeeee";
             ctx.fill();
-            ctx.closePath();
 
             //energyContainer
             ctx.beginPath();
@@ -68,7 +76,7 @@ var Renderer = (function() {
             //shield
             ctx.globalAlpha = 0.3;
             ctx.beginPath();
-            ctx.arc(ship.x, ship.y, ship.radius + 5, 0, Math.PI*2);
+            ctx.arc(ship.x, ship.y, ship.r + 5, 0, Math.PI*2);
             ctx.strokeStyle = '#05C7F2';
             ctx.lineWidth = 1;
             ctx.stroke();
@@ -86,16 +94,16 @@ var Renderer = (function() {
             ctx.globalAlpha = 1;
             ctx.lineWidth = 1;
         },
-        renderAstrobject: function (obj) {
+        renderAstrobject: function (obj, backgroundStar) {
 
-            if (viewport.isInside(obj.x, obj.y)) {
+            if (backgroundStar || viewport.isInside(obj.x, obj.y)) {
 
                 switch(obj.name) {
 
                 case 'Astrobject':
                 case 'Asteroid':
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
@@ -107,7 +115,7 @@ var Renderer = (function() {
 
                     // hull
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
@@ -128,7 +136,7 @@ var Renderer = (function() {
 
                 case 'Planet':
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
@@ -173,8 +181,8 @@ var Renderer = (function() {
                     switch (obj.nebulaType) {
                         case 'emission':
                             ctx.beginPath();
-                            innerRadius = obj.radius/4;
-                            outerRadius = obj.radius;
+                            innerRadius = obj.r/4;
+                            outerRadius = obj.r;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.2;
 
@@ -186,7 +194,7 @@ var Renderer = (function() {
                             gradient.addColorStop(0.8, '#652323');
                             gradient.addColorStop(1, '#000000');
 
-                            ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
+                            ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
                             ctx.fillStyle = gradient;
                             ctx.fill();
@@ -196,8 +204,8 @@ var Renderer = (function() {
 
                         case 'reflection':
                             ctx.beginPath();
-                            innerRadius = obj.radius/3;
-                            outerRadius = obj.radius;
+                            innerRadius = obj.r/3;
+                            outerRadius = obj.r;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
 
@@ -205,7 +213,7 @@ var Renderer = (function() {
                             gradient.addColorStop(0, '#51FFD6');
                             gradient.addColorStop(1, 'white');
 
-                            ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
+                            ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
                             ctx.fillStyle = gradient;
                             ctx.fill();
@@ -215,8 +223,8 @@ var Renderer = (function() {
 
                         case 'dark':
                             ctx.beginPath();
-                            innerRadius = obj.radius/3;
-                            outerRadius = obj.radius;
+                            innerRadius = obj.r/3;
+                            outerRadius = obj.r;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
 
@@ -226,7 +234,7 @@ var Renderer = (function() {
                             gradient.addColorStop(0.6, '#652323');
                             gradient.addColorStop(1, '#000000');
 
-                            ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
+                            ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
                             ctx.fillStyle = gradient;
                             ctx.fill();
@@ -236,8 +244,8 @@ var Renderer = (function() {
 
                         case 'supernova':
                             ctx.beginPath();
-                            innerRadius = obj.radius/4;
-                            outerRadius = obj.radius/2;
+                            innerRadius = obj.r/4;
+                            outerRadius = obj.r/2;
                             // Radius of the entire circle.
                             ctx.globalAlpha = 0.3;
 
@@ -247,7 +255,7 @@ var Renderer = (function() {
                             gradient.addColorStop(0.6, 'white');
                             gradient.addColorStop(1, 'purple');
 
-                            ctx.arc(obj.x, obj.y, obj.radius, 0, 2 * Math.PI);
+                            ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
                             ctx.fillStyle = gradient;
                             ctx.fill();
@@ -264,7 +272,7 @@ var Renderer = (function() {
 
                     // hull
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
@@ -275,7 +283,7 @@ var Renderer = (function() {
 
                 case 'Moon':
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
@@ -294,8 +302,8 @@ var Renderer = (function() {
                 case 'TradingPost':
                     ctx.beginPath();
                     ctx.fillStyle = obj.color;
-                    ctx.fillRect(obj.x - obj.radius/2, obj.y - obj.radius/2, obj.radius, obj.radius);
-                    // ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.fillRect(obj.x - obj.r/2, obj.y - obj.r/2, obj.r, obj.r);
+                    // ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fill();
                     ctx.closePath();
 
@@ -311,7 +319,7 @@ var Renderer = (function() {
 
                     //draw range line of post
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius + 20, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r + 20, 0, Math.PI*2);
                     ctx.globalAlpha = 0.5;
                     ctx.strokeStyle = obj.color;
                     ctx.lineWidth = 1;
@@ -323,8 +331,8 @@ var Renderer = (function() {
                 case 'ShipYard':
                     ctx.beginPath();
                     ctx.fillStyle = obj.color;
-                    ctx.fillRect(obj.x - obj.radius/2, obj.y - obj.radius/2, obj.radius, obj.radius);
-                    // ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.fillRect(obj.x - obj.r/2, obj.y - obj.r/2, obj.r, obj.r);
+                    // ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fill();
                     ctx.closePath();
 
@@ -340,7 +348,7 @@ var Renderer = (function() {
 
                     //draw range line of post
                     ctx.beginPath();
-                    ctx.arc(obj.x, obj.y, obj.radius + 20, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r + 20, 0, Math.PI*2);
                     ctx.globalAlpha = 0.2;
                     ctx.strokeStyle = obj.color;
                     ctx.lineWidth = 1;
@@ -352,7 +360,7 @@ var Renderer = (function() {
                 case 'BackgroundStar':
                     ctx.beginPath();
                     ctx.globalAlpha = obj.opacity/100;
-                    ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI*2);
+                    ctx.arc(obj.x, obj.y, obj.r, 0, Math.PI*2);
                     ctx.fillStyle = obj.color;
                     ctx.fill();
                     ctx.closePath();
