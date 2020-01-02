@@ -35,18 +35,16 @@ var angle = 0;
 //TODO: adjust amount of astrobject created with scale
 //TODO: change to es6 style
 //TODO: fade nebulae borders
-//TODO: implement showing resources (resource angle start, angle finish, level (depending on availiable on planet))
 //TODO: make empty energy blink red
-//TODO: show speed
-//TODO: show coordinates/
-//TODO: populate trading posts
-//TODO: populate shipyards
+//TODO: space nyan cat
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
-//TODO: ability to place markers, will show on the screen borders
+//TODO: populate shipyards
+//TODO: populate trading posts
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
-//TODO: space nyan cat
 //TODO: draw basic ship models instead of circle
+//TODO: ability to place markers, will show on the screen borders
+//TODO: fix context menu position
 
 var zoom = 100;
 
@@ -89,6 +87,7 @@ let menuVisible = false;
 const toggleMenu = command => {
     menu.style.display = command === "show" ? "block" : "none";
     menuVisible = !menuVisible;
+    console.log(menu.style.display);
 };
 
 const setPosition = (top, left ) => {
@@ -112,7 +111,7 @@ canvas.addEventListener("contextmenu", e => {
         var all = map.activeChunk.allAstrobjects;
 
         var astrobject;
-        
+
         for (var i = 0; i < all.length; i++) {
             if (all[i].type !== 'nebula') {
                 if (all[i].checkCollision(1, translatedX, tranlatedY)) {
@@ -124,8 +123,8 @@ canvas.addEventListener("contextmenu", e => {
 
         if (astrobject)
             setPosition(e.pageX, e.pageY);
-        else
-            if (menuVisible)toggleMenu("hide");
+        else if (menuVisible)
+            toggleMenu("hide");
     }
 
     return false;

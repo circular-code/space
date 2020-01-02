@@ -213,7 +213,6 @@ body {
     z-index: 4;
     border: 1px solid #34c7c1;
     background: rgba(255, 255, 255, 0.11);
-    border-r: 2px;
 }
 #menu .menu-options {
 	list-style: none;
@@ -231,4 +230,19 @@ body {
 }
 #menu .menu-options .menu-option:hover {
 	background: rgba(0, 0, 0, 0.2);
+}
+
+#info {
+	position: fixed;
+    bottom: 5px;
+    left: 5px;
+}
+
+#info > * {
+	display: inline-block;
+	margin-right: 10px;
+	color: #34c7c1;
+	font-family: sans-serif;
+	font-style: italic;
+	font-size: 12px;
 }
