@@ -188,8 +188,14 @@ body {
 }
 
 #optionsContainer label,
-#optionsContainer input {
+#optionsContainer input,
+#topUi i {
 	color: white;
+}
+
+#topUi > i {
+	margin-right: 20px;
+	cursor: pointer;
 }
 
 #options {
@@ -245,4 +251,8 @@ body {
 	font-family: sans-serif;
 	font-style: italic;
 	font-size: 12px;
+}
+
+#compress {
+	display: none;
 }

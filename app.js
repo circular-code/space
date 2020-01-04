@@ -1,5 +1,7 @@
 'use strict';
 var canvas = document.getElementById("pocketUniverse");
+var expand = document.getElementById("expand");
+var compress = document.getElementById("compress");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -9,27 +11,45 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
-//TODO: enter/exit fullscreen buttons
-//var requestedFullscreen = false;
-//document.onclick = function () {
-//    if (requestedFullscreen)
-//        return false;
-//
-//    requestedFullscreen = true;
-//
-//    if (canvas.requestFullscreen) {
-//        canvas.requestFullscreen();
-//    }
-//    else if (canvas.mozRequestFullScreen) { /* Firefox */
-//        canvas.mozRequestFullScreen();
-//    }
-//    else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-//        canvas.webkitRequestFullscreen();
-//    }
-//    else if (canvas.msRequestFullscreen) { /* IE/Edge */
-//        canvas.msRequestFullscreen();
-//    }
-//}
+
+var requestedFullscreen = false;
+expand.onclick = function () {
+   if (requestedFullscreen)
+       return false;
+
+   requestedFullscreen = true;
+
+   if (document.body.requestFullscreen) {
+        document.body.requestFullscreen();
+   }
+   else if (document.body.mozRequestFullScreen) { /* Firefox */
+        document.body.mozRequestFullScreen();
+   }
+   else if (document.body.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        document.body.webkitRequestFullscreen();
+   }
+   else if (document.body.msRequestFullscreen) { /* IE/Edge */
+        document.body.msRequestFullscreen();
+   }
+
+   compress.style.display = 'inline-block';
+   expand.style.display = 'none';
+}
+
+compress.onclick = function () {
+   if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    requestedFullscreen = false;
+    compress.style.display = 'none';
+    expand.style.display = 'inline-block';
+}
 
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of astrobject created with scale
