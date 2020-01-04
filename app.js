@@ -178,25 +178,6 @@ document.getElementById('removeFlag').addEventListener('click', function() {
     canvas.click();
 });
 
-function randomNumBetween(max, min, convertToHex) {
-    if (typeof max === 'undefined'){
-        console.error('max undefined');
-        return false;
-    }
-    if (typeof min === 'undefined'){
-        min = 0;
-    }
-
-    var number = Math.floor(Math.random()*(max-min)+min);
-
-    if (convertToHex) {
-        number = number.toString(16);
-        return number.length === 1 ? '0' + number : number;
-    }
-    else
-        return number;
-}
-
 function keyDownHandler(e) {
     if (e.keyCode === 87) {
         wPressed = true;
@@ -230,10 +211,6 @@ function keyUpHandler(e) {
 function mouseClickHandler(e) {
     mouseX = e.clientX + viewport.x;
     mouseY = e.clientY + viewport.y;
-}
-
-function distance (x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
 }
 
 var time = Date.now();

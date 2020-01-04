@@ -12,6 +12,9 @@ var Renderer = (function() {
             for (var i = 0; i< map.chunks.length; i++) {
                 Renderer.renderChunk(map.chunks[i]);
             }
+            for (var i = 0; i< map.flaggedAstrobjects.length; i++) {
+                Renderer.renderFlagHint(map.flaggedAstrobjects[i]);
+            }
         },
         renderChunk: function(chunk) {
             for (var i = 0; i < chunk.allAstrobjects.length; i++) {
@@ -93,6 +96,44 @@ var Renderer = (function() {
             ctx.closePath();
             ctx.globalAlpha = 1;
             ctx.lineWidth = 1;
+        },
+        renderFlagHint: function(astrobject) {
+            var lines = [
+                {
+                    p1:{x:0,y:0},
+                    p2:{x:0, y:canvas.height}
+                },
+                {
+                    p1:{x:canvas.width, y:canvas.height},
+                    p2:{x:0, y:canvas.height}
+                },
+                {
+                    p1:{x:canvas.width, y:canvas.height},
+                    p2:{x:canvas.width, y:0}
+                },
+                {
+                    p1:{x:0, y:0},
+                    p2:{x:canvas.width, y:0}
+                }
+            ];
+
+            for (var i = 0; i < lines.length; i++) {
+                var intersection = checkLineIntersection(
+                    lines[i].p1.x, lines[i].p1.y,
+                    lines[i].p2.x, lines[i].p2.y,
+                    astrobject.x - viewport.x, astrobject.y - viewport.y,
+                    ship.x - viewport.x, ship.y - viewport.y
+                    );
+
+                if (intersection && intersection.onLine1 && intersection.onLine2) {
+                   ctx.beginPath();
+                   ctx.arc(intersection.x + viewport.x, intersection.y + viewport.y, 10, 0, Math.PI*2);
+                   ctx.fillStyle = 'magenta';
+                   ctx.fill();
+                   ctx.closePath();
+                }
+            }
+
         },
         renderAstrobject: function (obj, backgroundStar) {
 
@@ -380,12 +421,19 @@ var Renderer = (function() {
 
                     ctx.beginPath();
                     ctx.moveTo(obj.x, obj.y);
-                    ctx.lineTo(obj.x - 8, obj.y - 8);
-                    ctx.lineTo(obj.x + 8, obj.y - 8);
+                    ctx.lineTo(obj.x - 8, obj.y - 32);
+                    ctx.lineTo(obj.x + 8, obj.y - 32);
                     ctx.lineTo(obj.x, obj.y);
                     ctx.closePath();
                     ctx.fillStyle = "magenta";
                     ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.moveTo(obj.x, obj.y);
+                    ctx.lineTo(ship.x, ship.y);
+                    ctx.closePath();
+                    ctx.strokeStyle = "rgba(256,256,256,0.05)";
+                    ctx.stroke();
                 }
             }
         }
