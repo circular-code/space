@@ -65,6 +65,8 @@ compress.onclick = function () {
 //TODO: prevent bug of rarely loading more than max energy
 //TODO: show distance in flaghints on hover?
 //TODO: create more backgroundstars while flying
+//TODO: random background meteorites
+//TODO: show smartass quotes when crashing into something, like the bucket/hammer game (climbing up)
 
 var zoom = 100;
 
@@ -179,6 +181,28 @@ document.getElementById('removeFlag').addEventListener('click', function() {
     canvas.click();
 });
 
+var spaceJump = undefined;
+var blackout = undefined;
+
+document.getElementById('spaceJump').addEventListener('click', function() {
+    if (ship.engine.speed < ship.engine.speedMax)
+        console.log('YOU NEED MORE SPEED');
+
+    spaceJump = true;
+
+    setTimeout(function() {
+        spaceJump = undefined;
+        blackout = true;
+
+        ship.engine.speed = 5000;
+
+        setTimeout(function() {
+            blackout = undefined;
+            ship.engine.speed = 350;
+        }, 1000);
+    }, 1000);
+});
+
 function keyDownHandler(e) {
     if (e.keyCode === 87) {
         wPressed = true;
@@ -221,11 +245,14 @@ function renderLoop(now) {
     var timeDelta = (now - time) / 1000;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
 
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#08050C";
-    ctx.fill();
+    if (typeof spaceJump === 'undefined') {
+        ctx.clearRect(0 + viewport.x, 0 + viewport.y, canvas.width + viewport.x, canvas.height + viewport.y);
+
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#08050C";
+        ctx.fill();
+    }
 
     //render static background stars
     for (var j = 0; j < map.backgroundStars[0].length; j++) {
@@ -248,6 +275,10 @@ function renderLoop(now) {
     ctx.translate(-viewport.x, -viewport.y);
     viewport.focus();
 
+    // if (typeof spaceJump === 'undefined') {
+    //     Renderer.renderMap(map);
+    //     Renderer.renderShip(ship);
+    // }
     Renderer.renderMap(map);
     Renderer.renderShip(ship);
     ship.checkCollision();
@@ -270,10 +301,12 @@ function renderLoop(now) {
             userInterface.yCoordinate.textContent = Math.round(ship.y) / 1000;
         }
     }
+
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 5;
+var scale = 1;
+// var scale = 5;
 var size = 3000 * scale * scale;
 var r = 3;
 

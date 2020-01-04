@@ -111,7 +111,7 @@ Ship.prototype.mine = function(resource, amount) {
 
 Ship.prototype.move = function(timeDelta) {
 
-    if (this.batteries.energy <= 0) {
+    if (this.batteries.energy <= 0 || blackout || spaceJump) {
         wPressed = false;
         sPressed = false;
         aPressed = false;
