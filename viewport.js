@@ -5,8 +5,10 @@ function Viewport (x,y) {
 }
 
 Viewport.prototype.focus = function() {
-    this.x = ship.x - canvas.width / 2 + ship.r / 2;
-    this.y = ship.y - canvas.height / 2 + ship.r / 2;
+    this.x = (ship.x - canvas.width / 2 + ship.r / 2);
+    this.y = (ship.y - canvas.height / 2 + ship.r / 2);
+    // this.x = (ship.x - canvas.width / 2) * (zoom/100);
+    // this.y = (ship.y - canvas.height / 2) * (zoom/100);
 };
 
 Viewport.prototype.isInside = function(x, y) {

@@ -67,6 +67,7 @@ compress.onclick = function () {
 //TODO: create more backgroundstars while flying
 //TODO: random background meteorites
 //TODO: show smartass quotes when crashing into something, like the bucket/hammer game (climbing up)
+//TODO: draw viewport borders to fix zoom problem
 
 var zoom = 100;
 
@@ -270,9 +271,8 @@ function renderLoop(now) {
 
     ship.checkActiveChunk();
 
-    viewport.focus();
+    ctx.translate(-viewport.x * (zoom/100), -viewport.y * (zoom/100));
     ctx.scale(zoom/100, zoom/100);
-    ctx.translate(-viewport.x, -viewport.y);
     viewport.focus();
 
     // if (typeof spaceJump === 'undefined') {
