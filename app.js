@@ -64,7 +64,6 @@ compress.onclick = function () {
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
 //TODO: draw basic ship models instead of circle
 //TODO: ability to place markers, will show on the screen borders
-//TODO: fix context menu position
 
 var zoom = 100;
 
@@ -107,10 +106,10 @@ let menuVisible = false;
 const toggleMenu = command => {
     menu.style.display = command === "show" ? "block" : "none";
     menuVisible = !menuVisible;
-    console.log(menu.style.display);
 };
 
 const setPosition = (top, left ) => {
+    console.log(top,left);
     menu.style.left = left + 'px';
     menu.style.top = top + 'px';
     toggleMenu("show");
@@ -142,7 +141,7 @@ canvas.addEventListener("contextmenu", e => {
         }
 
         if (astrobject)
-            setPosition(e.pageX, e.pageY);
+            setPosition(e.pageY, e.pageX);
         else if (menuVisible)
             toggleMenu("hide");
     }
