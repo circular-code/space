@@ -60,10 +60,11 @@ compress.onclick = function () {
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
 //TODO: populate shipyards
 //TODO: populate trading posts
-//TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
 //TODO: draw basic ship models instead of circle
-//TODO: ability to place markers, will show on the screen borders
 //TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)
+//TODO: prevent bug of rarely loading more than max energy
+//TODO: show distance in flaghints on hover?
+//TODO: create more backgroundstars while flying
 
 var zoom = 100;
 
@@ -125,9 +126,9 @@ canvas.addEventListener("contextmenu", e => {
     var translatedX = e.pageX + viewport.x;
     var tranlatedY = e.pageY + viewport.y;
 
-    if (map.activeChunk) {
+    if (viewport.isInside(translatedX, tranlatedY)) {
 
-        var all = map.activeChunk.allAstrobjects;
+        var all = getClosestObjects(map.activeChunk);
 
         var astrobject;
 
@@ -227,8 +228,14 @@ function renderLoop(now) {
     ctx.fill();
 
     //render static background stars
-    for (var j = 0; j < map.backgroundStars.length; j++) {
-        Renderer.renderAstrobject(map.backgroundStars[j], true);
+    for (var j = 0; j < map.backgroundStars[0].length; j++) {
+        Renderer.renderAstrobject(map.backgroundStars[0][j], 1, timeDelta);
+    }
+    for (j = 0; j < map.backgroundStars[1].length; j++) {
+        Renderer.renderAstrobject(map.backgroundStars[1][j], 2, timeDelta);
+    }
+    for (j = 0; j < map.backgroundStars[2].length; j++) {
+        Renderer.renderAstrobject(map.backgroundStars[2][j], 3, timeDelta);
     }
 
     if (timeDelta)
@@ -263,11 +270,10 @@ function renderLoop(now) {
             userInterface.yCoordinate.textContent = Math.round(ship.y) / 1000;
         }
     }
-    //returns a DomHighResTimestamp, use maybe instead of Date.now() ?
     requestAnimationFrame(renderLoop);
 }
 
-var scale = 1;
+var scale = 5;
 var size = 3000 * scale * scale;
 var r = 3;
 

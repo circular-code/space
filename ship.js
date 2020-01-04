@@ -78,9 +78,8 @@ Ship.prototype.refuelEnergy = function(timeDelta) {
             return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
         });
 
-        //TODO: load twice as fast when in range of two suns
         if (collidedObjects.length > 0 && this.batteries.energyCapacity > (this.batteries.energy + this.batteries.energyRegenerationAmount)) {
-            this.batteries.energy += this.batteries.energyRegenerationAmount * timeDelta;
+            this.batteries.energy += this.batteries.energyRegenerationAmount * timeDelta * collidedObjects.length;
         }
     }
 };
@@ -221,24 +220,3 @@ Ship.prototype.store = function(amount, type) {
     if (amount > 0)
         console.info('storage amount reached for type ' + type);
 };
-
-function getClosestObjects(chunk) {
-
-    var all = chunk.allAstrobjects || [];
-
-    for (var i = 0; i < map.chunks.length; i++) {
-        var c = map.chunks[i];
-        if ((c.x === chunk.x+1 && c.y === chunk.y-1) ||
-            (c.x === chunk.x && c.y === chunk.y-1) ||
-            (c.x === chunk.x-1 && c.y === chunk.y-1) ||
-            (c.x === chunk.x+1 && c.y === chunk.y) ||
-            (c.x === chunk.x-1 && c.y === chunk.y) ||
-            (c.x === chunk.x+1 && c.y === chunk.y+1) ||
-            (c.x === chunk.x && c.y === chunk.y+1) ||
-            (c.x === chunk.x-1 && c.y === chunk.y-1)) {
-            all = all.concat(map.chunks[i].allAstrobjects);
-        }
-    }
-
-    return all;
-}

@@ -134,3 +134,24 @@ function createAstrobjects(chunk, classHolder, amountMax, amountMin, rMax, rMin)
         planetAmount--;
     }
 }
+
+function getClosestObjects(chunk) {
+
+    var all = chunk.allAstrobjects || [];
+
+    for (var i = 0; i < map.chunks.length; i++) {
+        var c = map.chunks[i];
+        if ((c.x === chunk.x+1 && c.y === chunk.y-1) ||
+            (c.x === chunk.x && c.y === chunk.y-1) ||
+            (c.x === chunk.x-1 && c.y === chunk.y-1) ||
+            (c.x === chunk.x+1 && c.y === chunk.y) ||
+            (c.x === chunk.x-1 && c.y === chunk.y) ||
+            (c.x === chunk.x+1 && c.y === chunk.y+1) ||
+            (c.x === chunk.x && c.y === chunk.y+1) ||
+            (c.x === chunk.x-1 && c.y === chunk.y-1)) {
+            all = all.concat(map.chunks[i].allAstrobjects);
+        }
+    }
+
+    return all;
+}

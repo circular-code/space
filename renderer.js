@@ -135,9 +135,22 @@ var Renderer = (function() {
             }
 
         },
-        renderAstrobject: function (obj, backgroundStar) {
+        renderAstrobject: function (obj, backgroundStar, timeDelta) {
 
             if (backgroundStar || viewport.isInside(obj.x, obj.y)) {
+
+                if (backgroundStar === 1 && ship.engine.speed > 0) {
+                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.1;
+                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.1
+                }
+                if (backgroundStar === 2 && ship.engine.speed > 0) {
+                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.05;
+                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.05;
+                }
+                if (backgroundStar === 3 && ship.engine.speed > 0 && timeDelta) {
+                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.01;
+                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.01;
+                }
 
                 switch(obj.name) {
 

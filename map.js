@@ -17,18 +17,23 @@ Map.prototype.generateChunk = function(x, y) {
 
 //TODO: add a second/third layer of stars, to create a feeling of depth, second layer needs to move
 Map.prototype.generateBackground = function() {
-    var bstarAmount = 60;
-    while (bstarAmount) {
 
-        var bgstar =  new BackgroundStar(undefined,
-            randomNumBetween(3,1),
-            randomNumBetween(canvas.width),
-            randomNumBetween(canvas.height)
-        );
+    for (var q = 0; q < 3; q++) {
 
-        this.backgroundStars.push(bgstar);
-
-        bstarAmount--;
+        this.backgroundStars.push([]);
+        var bstarAmount = 60;
+        while (bstarAmount) {
+    
+            var bgstar =  new BackgroundStar(undefined,
+                randomNumBetween(3,1),
+                randomNumBetween(canvas.width),
+                randomNumBetween(canvas.height)
+            );
+    
+            this.backgroundStars[q].push(bgstar);
+    
+            bstarAmount--;
+        }
     }
 };
 
