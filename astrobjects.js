@@ -7,6 +7,7 @@ function Astrobject(r, x, y) {
     this.y = y;
     this.color = '#0000ff';
     this.name = 'Astrobject';
+    this.hasFlag = false;
 }
 
 Astrobject.prototype.checkCollision = function(r, x, y) {

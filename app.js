@@ -11,7 +11,6 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
-
 var requestedFullscreen = false;
 expand.onclick = function () {
    if (requestedFullscreen)
@@ -64,6 +63,7 @@ compress.onclick = function () {
 //TODO: replace backgroundstars with very slowly moving star panes 1-3 - test https://codepen.io/jpalmieri/pen/PJLNZP
 //TODO: draw basic ship models instead of circle
 //TODO: ability to place markers, will show on the screen borders
+//TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)
 
 var zoom = 100;
 
@@ -105,7 +105,7 @@ let menuVisible = false;
 
 const toggleMenu = command => {
     menu.style.display = command === "show" ? "block" : "none";
-    menuVisible = !menuVisible;
+    menuVisible = command === "show";
 };
 
 const setPosition = (top, left ) => {
@@ -140,13 +140,42 @@ canvas.addEventListener("contextmenu", e => {
             }
         }
 
-        if (astrobject)
+        if (astrobject) {
+            map.contextMenuAstrobject = astrobject;
             setPosition(e.pageY, e.pageX);
-        else if (menuVisible)
+        }
+        else {
             toggleMenu("hide");
+            map.contextMenuAstrobject = undefined;
+        }
     }
 
     return false;
+});
+
+document.getElementById('addFlag').addEventListener('click', function() {
+    if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === false) {
+        map.contextMenuAstrobject.hasFlag = true;
+        map.flaggedAstrobjects.push(map.contextMenuAstrobject);
+    }
+    else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === true)
+        console.log('astrobject already has a flag');
+
+    canvas.click();
+});
+
+document.getElementById('removeFlag').addEventListener('click', function() {
+    if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === true) {
+        map.contextMenuAstrobject.hasFlag = false;
+        var index = map.flaggedAstrobjects.indexOf(map.contextMenuAstrobject);
+        if (index > -1) {
+            map.flaggedAstrobjects.splice(index, 1);
+        }
+    }
+    else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === false)
+        console.log('astrobject has no flag that could be removed');
+
+    canvas.click();
 });
 
 function randomNumBetween(max, min, convertToHex) {

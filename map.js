@@ -4,6 +4,8 @@ function Map (size, scale) {
     this.chunkSize = size;
     this.scale = scale;
     this.backgroundStars = [];
+    this.flaggedAstrobjects = [];
+    this.contextMenuAstrobject = undefined;
 }
 
 Map.prototype.generateChunk = function(x, y) {
