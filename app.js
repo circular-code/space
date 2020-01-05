@@ -50,25 +50,6 @@ compress.onclick = function () {
     expand.style.display = 'inline-block';
 }
 
-//TODO: adjust render distance to zoom level, and refocus on center (ship)
-//TODO: adjust amount of astrobject created with scale
-//TODO: change to es6 style
-//TODO: fade nebulae borders
-//TODO: make empty energy blink red
-//TODO: space nyan cat
-//TODO: implement space stations, shipwrecks, star bases and other discoverable objects
-//TODO: name astrobjects, colonized planets/moons? fractions/reputation?
-//TODO: populate shipyards
-//TODO: populate trading posts
-//TODO: draw basic ship models instead of circle
-//TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)
-//TODO: prevent bug of rarely loading more than max energy
-//TODO: show distance in flaghints on hover?
-//TODO: create more backgroundstars while flying
-//TODO: random background meteorites
-//TODO: show smartass quotes when crashing into something, like the bucket/hammer game (climbing up)
-//TODO: draw viewport borders to fix zoom problem
-
 var zoom = 100;
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -113,7 +94,6 @@ const toggleMenu = command => {
 };
 
 const setPosition = (top, left ) => {
-    console.log(top,left);
     menu.style.left = left + 'px';
     menu.style.top = top + 'px';
     toggleMenu("show");
@@ -146,6 +126,7 @@ canvas.addEventListener("contextmenu", e => {
 
         if (astrobject) {
             map.contextMenuAstrobject = astrobject;
+            manageContextMenuOptions(astrobject);
             setPosition(e.pageY, e.pageX);
         }
         else {
@@ -163,7 +144,7 @@ document.getElementById('addFlag').addEventListener('click', function() {
         map.flaggedAstrobjects.push(map.contextMenuAstrobject);
     }
     else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === true)
-        console.log('astrobject already has a flag');
+        alert.log('astrobject already has a flag');
 
     canvas.click();
 });
@@ -177,7 +158,16 @@ document.getElementById('removeFlag').addEventListener('click', function() {
         }
     }
     else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === false)
-        console.log('astrobject has no flag that could be removed');
+        alert.log('astrobject has no flag that could be removed');
+
+    canvas.click();
+});
+
+document.getElementById('requestLanding').addEventListener('click', function() {
+    if (ship.checkCollision(map.contextMenuAstrobject.range, map.contextMenuAstrobject.x, map.contextMenuAstrobject.y))
+        alert('Landing granted.');
+    else
+        alert('Too far away.');
 
     canvas.click();
 });
@@ -186,8 +176,16 @@ var spaceJump = undefined;
 var blackout = undefined;
 
 document.getElementById('spaceJump').addEventListener('click', function() {
-    if (ship.engine.speed < ship.engine.speedMax)
-        console.log('YOU NEED MORE SPEED');
+    if (ship.engine.speed < ship.engine.speedMax) {
+        alert('YOU NEED MORE SPEED');
+        return;
+    }
+    else if (ship.jumptank.amount < 10) {
+        alert('OUT OF JUMP FUEL');
+        return;
+    }
+
+    ship.jumptank.amount -= 10;
 
     spaceJump = true;
 
@@ -216,6 +214,16 @@ function keyDownHandler(e) {
     }
     else if (e.keyCode === 68) {
         dPressed = true;
+    }
+    else if (e.keyCode === 122) {
+        if (expand.style.display === 'none' || expand.style.display === '') {
+            compress.style.display = 'none';
+            expand.style.display = 'inline-block';
+        }
+        else {
+            compress.style.display = 'inline-block';
+            expand.style.display = 'none';
+        }
     }
 }
 
@@ -281,7 +289,7 @@ function renderLoop(now) {
     // }
     Renderer.renderMap(map);
     Renderer.renderShip(ship);
-    ship.checkCollision();
+    ship.checkAllCollisions();
 
     if (timeDelta)
         ship.refuelEnergy(timeDelta);
@@ -291,14 +299,17 @@ function renderLoop(now) {
     time = now;
 
     if (typeof userInterface !== 'undefined') {
+        if (typeof ship.credits === 'number' && ship.credits === ship.credits) {
+            userInterface.credits.textContent = ship.credits + ' $';
+        }
         if (userInterface.speed && ship.engine) {
-            userInterface.speed.textContent = ship.engine.speed;
+            userInterface.speed.textContent = pad(ship.engine.speed, 3);
         }
         if (userInterface.xCoordinate) {
-            userInterface.xCoordinate.textContent = Math.round(ship.x) / 1000;
+            userInterface.xCoordinate.textContent = (Math.round(ship.x) / 1000).toFixed(3);
         }
         if (userInterface.yCoordinate) {
-            userInterface.yCoordinate.textContent = Math.round(ship.y) / 1000;
+            userInterface.yCoordinate.textContent = (Math.round(ship.y) / 1000).toFixed(3);
         }
     }
 
@@ -339,8 +350,8 @@ function download(data, filename, type) {
         a.click();
         setTimeout(function() {
             document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);  
-        }, 0); 
+            window.URL.revokeObjectURL(url);
+        }, 0);
     }
 }
 
@@ -351,9 +362,8 @@ function onChange(event) {
 }
 
 function onReaderLoad(event) {
-    console.log(event.target.result);
     var obj = JSON.parse(event.target.result);
-    
+
     ship = Object.assign(new Ship(), obj.ship);
 
     document.getElementById('storage').innerHTML = '';
@@ -433,3 +443,41 @@ document.getElementById('options').addEventListener('click', function() {
         optionsContainer.classList.add('visible');
     }
 });
+
+function manageContextMenuOptions (astrobject) {
+
+    var addFlag = document.getElementById('addFlag');
+    var removeFlag = document.getElementById('removeFlag');
+    var requestLanding = document.getElementById('requestLanding');
+    var scanPlanet = document.getElementById('scanPlanet');
+
+    switch(astrobject.name) {
+
+        case 'TradingPost':
+        case 'ShipYard':
+            addFlag.style.display = 'block';
+            removeFlag.style.display = 'block';
+            requestLanding.style.display = 'block';
+            scanPlanet.style.display = 'none';
+            break;
+
+        case 'Planet':
+            addFlag.style.display = 'block';
+            removeFlag.style.display = 'block';
+            requestLanding.style.display = 'none';
+            scanPlanet.style.display = 'block';
+            break;
+
+        default:
+            addFlag.style.display = 'block';
+            removeFlag.style.display = 'block';
+            requestLanding.style.display = 'none';
+            scanPlanet.style.display = 'none';
+    }
+}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}

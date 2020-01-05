@@ -23,15 +23,15 @@ Map.prototype.generateBackground = function() {
         this.backgroundStars.push([]);
         var bstarAmount = 60;
         while (bstarAmount) {
-    
+
             var bgstar =  new BackgroundStar(undefined,
                 randomNumBetween(3,1),
                 randomNumBetween(canvas.width),
                 randomNumBetween(canvas.height)
             );
-    
+
             this.backgroundStars[q].push(bgstar);
-    
+
             bstarAmount--;
         }
     }

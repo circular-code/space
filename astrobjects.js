@@ -27,6 +27,7 @@ function Star(loaded, r, x, y) {
 
 Star.prototype = Object.create(Astrobject.prototype);
 Star.prototype.constructor = Astrobject;
+Star.energyRegenerationAmount = 1;
 
 function Planet(loaded, r, x, y, chunk) {
 
@@ -279,6 +280,7 @@ function TradingPost(loaded, planet, chunk) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
         this.r = planet.r * (randomNumBetween(5,1)/10);
+        this.range = this.r + 20;
 
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);
@@ -331,6 +333,7 @@ function ShipYard(loaded, planet, chunk) {
 
         this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
         this.r = planet.r * (randomNumBetween(5,1)/10);
+        this.range = this.r + 20;
 
         this.x = planet.x + this.extRadius * Math.cos(this.angle);
         this.y = planet.y + this.extRadius * Math.sin(this.angle);

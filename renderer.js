@@ -69,7 +69,23 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 15, (ship.batteries.energy / ship.batteries.energyCapacity) * 30, 3);
+            ctx.rect(ship.x - 15, ship.y + 15, (ship.movementEnergySource.amount / ship.movementEnergySource.capacity) * 30, 3);
+            ctx.globalAlpha = 0.7;
+            ctx.fillStyle = "#FFA500";
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.closePath();
+
+            //energyContainer
+            ctx.beginPath();
+            ctx.rect(ship.x + 15, ship.y + 21, 0.5, 1);
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.stroke();
+            ctx.closePath();
+
+            //energyAmount
+            ctx.beginPath();
+            ctx.rect(ship.x - 15, ship.y + 20, (ship.jumptank.amount / ship.jumptank.capacity) * 10, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -79,9 +95,9 @@ var Renderer = (function() {
             //shield
             ctx.globalAlpha = 0.3;
             ctx.beginPath();
-            ctx.arc(ship.x, ship.y, ship.r + 5, 0, Math.PI*2);
+            ctx.arc(ship.x, ship.y, ship.r + 5, 0, Math.PI*1.5);
             ctx.strokeStyle = '#05C7F2';
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 2;
             ctx.stroke();
             ctx.closePath();
             ctx.globalAlpha = 1;
@@ -373,7 +389,7 @@ var Renderer = (function() {
 
                         //draw range line of post
                         ctx.beginPath();
-                        ctx.arc(obj.x, obj.y, obj.r + 20, 0, Math.PI*2);
+                        ctx.arc(obj.x, obj.y, obj.range, 0, Math.PI*2);
                         ctx.globalAlpha = 0.5;
                         ctx.strokeStyle = obj.color;
                         ctx.lineWidth = 1;
@@ -402,7 +418,7 @@ var Renderer = (function() {
 
                         //draw range line of post
                         ctx.beginPath();
-                        ctx.arc(obj.x, obj.y, obj.r + 20, 0, Math.PI*2);
+                        ctx.arc(obj.x, obj.y, obj.range, 0, Math.PI*2);
                         ctx.globalAlpha = 0.2;
                         ctx.strokeStyle = obj.color;
                         ctx.lineWidth = 1;

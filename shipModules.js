@@ -1,27 +1,27 @@
 'use strict';
-function Module(level, type, builtin) {
+function Module(level, name, builtin) {
     this.level = level;
-    this.type = type; //scanner, storage, engine, batteries
+    this.name = name; //scanner, storage, engine, battery
     this.builtin = builtin;
 }
 
 // yes, this is overriding this kind of storage api access, but I really dont need it and the name is hard to replace.
-function Storage(loaded, level, type, builtin, contentType) {
+function Storage(loaded, level, name, builtin, contentType) {
 
     if (loaded)
         return this;
 
-    Module.call(this, level, type, builtin);
+    Module.call(this, level, name, builtin);
     this.amount = 0;
-    this.size = 100;
+    this.capacity = 100;
     this.domUnits = undefined;
     // this.manufacturedMaterials = [],
     // this.data = [];
 
-    if (contentType === 'solid' || contentType === 'liquid' || contentType === 'gas' || contentType === 'plasma')
+    if (contentType === 'solid' || contentType === 'liquid' || contentType === 'gas' || contentType === 'plasma' || contentType === 'digital')
         this.contentType = contentType;
     else
-        console.error('Invalid storage type defined for Storage initialisation.');
+        console.error('Invalid contentType defined for Storage initialisation.');
 }
 
 Storage.prototype = Object.create(Module.prototype);
@@ -56,8 +56,8 @@ Storage.prototype.createUI = function() {
     document.getElementById('storage').appendChild(storageContainer);
 };
 
-function Engine(level, type, builtin) {
-    Module.call(this, level, type, builtin);
+function Engine(level, name, builtin) {
+    Module.call(this, level, name, builtin);
     this.speed = 0;
     this.speedMax = 350;
     this.speedMin = 0;
@@ -67,15 +67,20 @@ function Engine(level, type, builtin) {
 Engine.prototype = Object.create(Module.prototype);
 Engine.prototype.constructor = Module;
 
-//TODO: introduce alternative energies like a fuel tank as starter energy, maybe also a different kind of energy to make "jumps"?
-function Batteries(level, size, type, builtin) {
-    Module.call(this, level, size, type, builtin);
-    this.energy = 50;
-    this.energyCapacity = 50;
-    this.energyRegenerationAmount = 1;
+function Battery(level, name, builtin) {
+    Module.call(this, level, name, builtin);
+    this.amount = 50;
+    this.capacity = 50;
 }
 
-Batteries.prototype = Object.create(Module.prototype);
-Batteries.prototype.constructor = Module;
+Battery.prototype = Object.create(Module.prototype);
+Battery.prototype.constructor = Module;
 
-// Shield Generator, Weapons, Cabins, ...
+function Fueltank(level, name, builtin) {
+    Module.call(this, level, name, builtin);
+    this.amount = 50;
+    this.capacity = 50;
+}
+
+Fueltank.prototype = Object.create(Module.prototype);
+Fueltank.prototype.constructor = Module;

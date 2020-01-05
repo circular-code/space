@@ -27,8 +27,12 @@ function Ship (r, x, y, size) {
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
     this.storages = [new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'liquid'), new Storage(undefined, 1, 'storage', true, 'gas'), new Storage(undefined, 1, 'storage', true, 'plasma')];
-    this.batteries = new Batteries(1, 'batteries', true);
+    this.battery = new Battery(1, 'battery', true);
+    this.fueltank = new Fueltank(1, 'fueltank', true);
+    this.jumptank = new Fueltank(1, 'jumptank', true);
+    this.movementEnergySource = this.fueltank;
     this.capacity = 5;
+    this.credits = 13.37;
 
     this.storages.forEach(storage => {
         storage.createUI();
@@ -78,8 +82,8 @@ Ship.prototype.refuelEnergy = function(timeDelta) {
             return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
         });
 
-        if (collidedObjects.length > 0 && this.batteries.energyCapacity > (this.batteries.energy + this.batteries.energyRegenerationAmount)) {
-            this.batteries.energy += this.batteries.energyRegenerationAmount * timeDelta * collidedObjects.length;
+        if (collidedObjects.length > 0 && this.battery.capacity > (this.battery.amount + Star.energyRegenerationAmount)) {
+            this.battery.amount += Star.energyRegenerationAmount * timeDelta * collidedObjects.length;
         }
     }
 };
@@ -111,7 +115,7 @@ Ship.prototype.mine = function(resource, amount) {
 
 Ship.prototype.move = function(timeDelta) {
 
-    if (this.batteries.energy <= 0 || blackout || spaceJump) {
+    if (this.movementEnergySource.amount <= 0 || blackout || spaceJump) {
         wPressed = false;
         sPressed = false;
         aPressed = false;
@@ -127,11 +131,11 @@ Ship.prototype.move = function(timeDelta) {
 
     if (wPressed && this.engine.speed < this.engine.speedMax) {
         this.engine.speed += this.engine.acceleration;
-        this.batteries.energy -= 1 * timeDelta;
+        this.movementEnergySource.amount -= 1 * timeDelta;
     }
     if (sPressed && this.engine.speed > this.engine.speedMin) {
         this.engine.speed -= this.engine.acceleration;
-        this.batteries.energy -= 1 * timeDelta;
+        this.movementEnergySource.amount -= 1 * timeDelta;
     }
     if (!this.engine.angle)
         this.engine.angle = 0;
@@ -146,7 +150,7 @@ Ship.prototype.move = function(timeDelta) {
         else
             this.engine.angle -= angleSpeedMod * timeDelta * 5;
 
-        this.batteries.energy -= 1  * timeDelta;
+        this.movementEnergySource.amount -= 1  * timeDelta;
     }
     if (dPressed) {
         if ((this.engine.angle + angleSpeedMod) > Math.PI)
@@ -154,7 +158,7 @@ Ship.prototype.move = function(timeDelta) {
         else
             this.engine.angle += angleSpeedMod * timeDelta * 5;
 
-        this.batteries.energy -= 1 * timeDelta;
+        this.movementEnergySource.amount -= 1 * timeDelta;
     }
 
     let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
@@ -164,7 +168,7 @@ Ship.prototype.move = function(timeDelta) {
     this.y += yVelocity * timeDelta;
 };
 
-Ship.prototype.checkCollision = function() {
+Ship.prototype.checkAllCollisions = function() {
     var ship = this;
 
     if (map.activeChunk) {
@@ -184,12 +188,16 @@ Ship.prototype.checkCollision = function() {
             }
             else {
                 alert('You collided with an astronomical entity and got smashed to bits in the process.');
-                Ship.prototype.checkCollision = function(){};
+                Ship.prototype.checkAllCollisions = function(){};
                 Renderer = undefined;
                 location.reload();
             }
         }
     }
+};
+
+Ship.prototype.checkCollision = function(r, x, y) {
+    return distance(x, y, this.x, this.y) <= r + this.r;
 };
 
 Ship.prototype.scan = function(astrobject, depth) {
@@ -199,20 +207,20 @@ Ship.prototype.scan = function(astrobject, depth) {
 Ship.prototype.store = function(amount, type) {
 
     var storages = ship.storages.filter(function(storage){
-        return storage.contentType === type && storage.size !== storage.amount;
+        return storage.contentType === type && storage.capacity !== storage.amount;
     });
 
     for (var i = 0; i < storages.length; i++) {
         var storage = storages[i];
-        if (storage.size >= (storage.amount + amount)) {
+        if (storage.capacity >= (storage.amount + amount)) {
             storage.amount += amount;
             amount = 0;
             storage.refresh();
             break;
         }
-        else if (storage.size < (storage.amount + amount)) {
-            storage.amount = storage.size;
-            amount = storage.amount + amount - storage.size;
+        else if (storage.capacity < (storage.amount + amount)) {
+            storage.amount = storage.capacity;
+            amount = storage.amount + amount - storage.capacity;
             storage.refresh();
         }
     }

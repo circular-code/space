@@ -89,7 +89,7 @@ Chunk.prototype.populate = function() {
 };
 
 Chunk.prototype.getRandomType = function() {
-    var type = randomNumBetween(6);
+    var type = randomNumBetween(7);
 
     var chunkType = [
         "starsAndPlanets",

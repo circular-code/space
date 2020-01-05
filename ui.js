@@ -22,6 +22,10 @@ var userInterface = (function() {
         var container = document.createElement('div');
         container.id = 'info';
 
+        var credits = document.createElement('div');
+        credits.id = 'credits';
+        this.credits = credits;
+
         var speed = document.createElement('div');
         speed.id = 'speed';
         this.speed = speed;
@@ -30,13 +34,19 @@ var userInterface = (function() {
         xCoordinate.id = 'xCoordinate';
         this.xCoordinate = xCoordinate;
 
+        var seperator = document.createElement('div');
+        seperator.id = 'seperator';
+        seperator.textContent = '/';
+
         var yCoordinate = document.createElement('div');
         yCoordinate.id = 'yCoordinate';
         this.yCoordinate = yCoordinate;
 
-        container.appendChild(speed);
         container.appendChild(xCoordinate);
+        container.appendChild(seperator);
         container.appendChild(yCoordinate);
+        container.appendChild(speed);
+        container.appendChild(credits);
 
         return container;
     };
