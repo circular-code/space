@@ -14,6 +14,9 @@
       <i id="compress" class="far fa-compress"></i>
       <i id="expand" class="far fa-expand"></i>
       <i id="options" class="far fa-ellipsis-v"></i>
+      <button type="button" class="open-modal" data-open="modal1">
+        modal
+      </button>
       <div id="optionsContainer">
           <div id="bottomUi">
             <label for="fileUpload">upload saved game here</label>
@@ -32,6 +35,23 @@
     </div>
     <!-- <input type="range" min="-1" max="3" step="0.1" value="1" class="slider" id="scaleSlider"> -->
     <div id="ui"></div>
+
+    <div class="modal" id="modal1" data-animation="slideInOutTop">
+      <div class="modal-dialog">
+        <header id="modal-header">
+          <h2 id="modalTitle">Iowa Outpost - Dalarian System 113.14 - High Order Sovereignity</h2>
+          <button class="close-modal" aria-label="close modal" data-close>
+            EXIT
+          </button>
+        </header>
+        <section id="modal-content">
+          <div id="tradepost-info" class="modal-panel"></div>
+          <div id="tradepost-fuel" class="modal-panel"></div>
+          <div id="tradepost-goods" class="modal-panel"></div>
+          <div id="tradepost-services" class="modal-panel"></div>
+        </section>
+      </div>
+    </div>
     <script src="math.js"></script>
     <script src="ui.js"></script>
     <script src="renderer.js"></script>
@@ -43,5 +63,6 @@
     <script src="ship.js"></script>
     <script src="map.js"></script>
     <script src="app.js"></script>
+    <script src="modal.js"></script>
   </body>
 </html>
