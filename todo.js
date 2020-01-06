@@ -20,6 +20,9 @@
 //TODO: black hole animation (something like jump animation)
 //TODO: new game/load game ui --> on map creation fake loading "constructing x-wings, recruting rebels etc.."
 //TODO: buy fuel somewhere
+//TODO: welcome loading animation before showing stats of trade post
+//TODO: create modal based on outpost data, implement buying and selling
+
 
 //module ideas
 //scanner
@@ -31,3 +34,6 @@
 //nebula particle gatherer
 // weapons
 // cabins/cells
+
+//landing on planets
+//landing on a station minigame
