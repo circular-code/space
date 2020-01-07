@@ -309,6 +309,45 @@ function TradingPost(loaded, planet, chunk) {
 
     this.color = 'purple';
     this.name = 'TradingPost';
+    this.info = {
+        title: states[randomNumBetween(states.length)] + ' Outpost',
+        system: 'Dalarian 113.14',
+        status: 'peaceful',
+        allegiance: 'High Order',
+        commander: 'Rasmus Skarsgard'
+    };
+    this.haveResources = [];
+    this.needResources = [];
+    this.maintenance = [
+        new Commodity(false,'Fuel', -1, randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Jumpfuel', -1, randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Energy', -1, randomNumBetween(100,1), 'KWH'),
+        new Commodity(false,'Repair Service', -1, randomNumBetween(100,1), 'H')
+    ];
+
+    var temp = [];
+
+    for (var index = 0; index < randomNumBetween(32,8); index++) {
+        var element = elements[randomNumBetween(elements.length)];
+        if (temp.indexOf(element) === -1) {
+            temp.push(element);
+            this.haveResources.push(new Commodity(false, element, randomNumBetween(100,1), randomNumBetween(1000,10)));
+        }
+        else
+            index--;
+    }
+
+    temp.length = 0;
+
+    for (var index = 0; index < randomNumBetween(32,8); index++) {
+        var element = elements[randomNumBetween(elements.length)]
+        if (temp.indexOf(element) === -1) {
+            temp.push(element);
+            this.needResources.push(new Commodity(false, element, randomNumBetween(100,1), randomNumBetween(1000,10)));
+        }
+        else
+            index--;
+    }
 
     chunk.allAstrobjects.push(this);
 }

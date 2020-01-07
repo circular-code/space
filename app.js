@@ -166,6 +166,7 @@ document.getElementById('removeFlag').addEventListener('click', function() {
 document.getElementById('requestLanding').addEventListener('click', function() {
     if (ship.checkCollision(map.contextMenuAstrobject.range, map.contextMenuAstrobject.x, map.contextMenuAstrobject.y)){
         alert('Landing granted.');
+        createTradePostModal(map.contextMenuAstrobject);
         document.getElementById("modal1").classList.add("is-visible");
     }
     else
@@ -338,8 +339,6 @@ var ship = new Ship(r, mouseX, mouseY, size);
 var viewport = new Viewport(0,0);
 
 renderLoop();
-
-createTradePostModal();
 
 function download(data, filename, type) {
     var file = new Blob([data], {type: type});

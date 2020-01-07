@@ -13,7 +13,6 @@ document.addEventListener("click", e => {
 });
 
 document.addEventListener("keyup", e => {
-  // if we press the ESC
   if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
     document.querySelector(".modal.is-visible").classList.remove("is-visible");
   }
@@ -22,17 +21,24 @@ document.addEventListener("keyup", e => {
 function createModalPanel(id, subtitle, height) {
     var panel = document.createElement('div');
     panel.className = 'modal-panel';
-    panel.id = id;
+	panel.id = id;
 
-    if (height)
-        panel.style.height = height + 'px';
+	if (height) {
+		panel.style.height = height + 'px';
+		panel.style.maxHeight = height + 'px';
+	}
 
     var title = document.createElement('h3');
     title.className = 'modal-subtitle';
     title.textContent = subtitle;
 
     var sub = document.createElement('div');
-    sub.className = 'modal-subcontent-container';
+	sub.className = 'modal-subcontent-container';
+
+	if (height) {
+		sub.style.height = height - 60 + 'px';
+		sub.style.maxHeight = height - 60 + 'px';
+	}
 
     panel.appendChild(title);
     panel.appendChild(sub);
@@ -58,71 +64,72 @@ function createModalInfo(title, text) {
     return sub;
 }
 
-function createModalResource(title, buy, sell, buttontext) {
+function createModalCommodity(commodity, buy, sell, buttontext) {
 
     var sub = document.createElement('div');
-    sub.className = 'modal-resource-container modal-subcontent';
+    sub.className = 'modal-commodity-container modal-subcontent';
 
     var h4 = document.createElement('h4');
-    h4.className = 'modal-resource-name';
-    h4.textContent = title;
+    h4.className = 'modal-commodity-name';
+	h4.textContent = commodity.name;
+
+	var amount = document.createElement('p');
+	amount.className = 'modal-commodity-amount';
+	amount.textContent = commodity.amount === -1 ? '' : '(' + commodity.amount + ' ' + commodity.unit + ')';
 
     var input = document.createElement('input');
     input.type = 'number';
-    input.name = title;
+    input.name = commodity.name;
 
     var button = document.createElement('button');
     button.type = 'button';
-    button.textContent = buy ? 'buy' : sell ? 'sell' : buttontext;
+	button.textContent = buy ? 'buy' : sell ? 'sell' : buttontext;
 
-    sub.appendChild(h4);
-    sub.appendChild(input);
+	var price = document.createElement('p');
+	price.className = 'modal-commodity-price';
+	price.textContent = commodity.price + ' $/' + commodity.unit;
+
+
+	sub.appendChild(h4);
+	if (amount)
+		sub.appendChild(amount);
+	sub.appendChild(input);
     sub.appendChild(button);
+	sub.appendChild(price);
 
     return sub;
 }
 
-function createTradePostModal() {
-    var infoPanel = createModalPanel('tradepost-info', 'General Information', 300);
-    infoPanel.sub.appendChild(createModalInfo('Name','Iowa Outpost'));
-    infoPanel.sub.appendChild(createModalInfo('System','Dalarian 113.14'));
-    infoPanel.sub.appendChild(createModalInfo('Status','peaceful'));
-    infoPanel.sub.appendChild(createModalInfo('Allegiance','High Order'));
-    infoPanel.sub.appendChild(createModalInfo('Commander','Rasmus Skarsgard'));
+function clearTradePostModal() {
+  	document.getElementById('modalContent').innerHTML = '';
+}
 
-    var fuelPanel = createModalPanel('tradepost-fuel', 'Maintenance', 278);
-    fuelPanel.sub.appendChild(createModalResource('Fuel', true));
-    fuelPanel.sub.appendChild(createModalResource('Jump Fuel', true));
-    fuelPanel.sub.appendChild(createModalResource('Energy', true));
-    fuelPanel.sub.appendChild(createModalResource('Repair Service', true));
+function createTradePostModal(post) {
+
+    clearTradePostModal();
+
+    document.getElementById('modalTitle').textContent = post.info.title + ' - ' + post.info.system + ' - ' + post.info.allegiance;
+
+    var infoPanel = createModalPanel('tradepost-info', 'General Information', 295);
+    infoPanel.sub.appendChild(createModalInfo('Name', post.info.title));
+    infoPanel.sub.appendChild(createModalInfo('System', post.info.system));
+    infoPanel.sub.appendChild(createModalInfo('Status', post.info.status));
+    infoPanel.sub.appendChild(createModalInfo('Allegiance', post.info.allegiance));
+    infoPanel.sub.appendChild(createModalInfo('Commander', post.info.commander));
+
+	var fuelPanel = createModalPanel('tradepost-fuel', 'Maintenance', 283);
+	for (var index = 0; index < post.maintenance.length; index++)
+		fuelPanel.sub.appendChild(createModalCommodity(post.maintenance[index], true));
 
     var buyPanel = createModalPanel('tradepost-buy', 'Buy');
 
-    var resources = [];
-
-    for (var index = 0; index < 12; index++) {
-        var element = elements[randomNumBetween(elements.length)]
-        if (resources.indexOf(element) === -1) {
-            resources.push(element);
-            buyPanel.sub.appendChild(createModalResource(element, true));
-        }
-        else
-            index--;
-    }
+    for (var index = 0; index < post.haveResources.length; index++)
+      	buyPanel.sub.appendChild(createModalCommodity(post.haveResources[index], true));
 
     var sellPanel = createModalPanel('tradepost-sell', 'Sell');
 
-    var resources = [];
-
-    for (var index = 0; index < 12; index++) {
-        var element = elements[randomNumBetween(elements.length)]
-        if (resources.indexOf(element) === -1) {
-            resources.push(element);
-            sellPanel.sub.appendChild(createModalResource(element, false, true));
-        }
-        else
-            index--;
-    }
+    for (var index = 0; index < post.needResources.length; index++)
+      	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], true));
 
     var target = document.getElementById('modalContent');
     target.appendChild(infoPanel.panel);

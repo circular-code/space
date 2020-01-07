@@ -169,18 +169,18 @@ h3.modal-subtitle {
     overflow: auto;
 }
 
+.modal-commodity-container.modal-subcontent > * {
+    display: inline-block;
+}
+
 .modal p.modal-text {
 	display: inline-block;
 }
 
 .modal-subcontent {
-    padding: 15px;
+	padding: 15px;
+	display: flex;
     border-bottom: 1px solid rgba(127, 255, 212, 0.25);
-}
-
-.modal-subcontent h4 {
-	margin-right: 10px;
-    width: 150px;
 }
 
 .modal-subcontent-container > .modal-subcontent:last-of-type {
@@ -188,6 +188,7 @@ h3.modal-subtitle {
 }
 
 .modal input[type="number"] {
+	width: 130px;
     padding: 5px 5px;
     border: none;
     background: rgba(28, 56, 60, 0.7);
@@ -206,6 +207,40 @@ h3.modal-subtitle {
 
 .modal-subcontent-container::-webkit-scrollbar-thumb {
     background-color: #32c3ca;
+}
+
+.modal-commodity-amount {
+	flex-grow: 1;
+	color: #6e8f94;
+    font-size: 11px;
+    margin-top: 7px;
+    margin-left: 2px;
+}
+
+.modal-commodity-price {
+	margin-left: 5px;
+    color: #32c3ca;
+    font-size: 14px;
+	margin-top: 5px;
+	min-width: 80px;
+	text-align: right;
+}
+
+.modal-commodity-name {
+	margin-top: 4px;
+}
+
+#tradepost-info h4 {
+    min-width: 150px;
+}
+
+.modal-commodity-value-info {
+	position: absolute;
+    float: left;
+    left: 190px;
+    top: 20px;
+    font-size: 12px;
+    color: #32c3ca;
 }
 
 /* ANIMATIONS
