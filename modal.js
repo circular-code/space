@@ -64,7 +64,7 @@ function createModalInfo(title, text) {
     return sub;
 }
 
-function createModalCommodity(commodity, buy, sell, buttontext) {
+function createModalCommodity(commodity, buy, buttontext) {
 
     var sub = document.createElement('div');
     sub.className = 'modal-commodity-container modal-subcontent';
@@ -77,27 +77,68 @@ function createModalCommodity(commodity, buy, sell, buttontext) {
 	amount.className = 'modal-commodity-amount';
 	amount.textContent = commodity.amount === -1 ? '' : '(' + commodity.amount + ' ' + commodity.unit + ')';
 
+	var inputContainer = document.createElement('div');
+	inputContainer.className = 'modal-commodity-input-container';
+
+	var valueInfo = document.createElement('p');
+	valueInfo.className = 'modal-commodity-value-info';
+
     var input = document.createElement('input');
     input.type = 'number';
-    input.name = commodity.name;
+	input.name = commodity.name;
+	input.addEventListener('keyup', function(e) {
+		if (e.keyCode !== 13)
+			valueInfo.textContent = e.target.value > 0 ? e.target.value * commodity.price + '$' : '';
+		else
+			changeValue(commodity, buy, amount, input);
+	});
+
+	inputContainer.appendChild(valueInfo);
+	inputContainer.appendChild(input);
 
     var button = document.createElement('button');
     button.type = 'button';
-	button.textContent = buy ? 'buy' : sell ? 'sell' : buttontext;
+	button.textContent = buttontext || (buy ? 'buy' : 'sell');
+	button.addEventListener('click', function() {
+		changeValue(commodity, buy, amount, input);
+	});
 
 	var price = document.createElement('p');
 	price.className = 'modal-commodity-price';
 	price.textContent = commodity.price + ' $/' + commodity.unit;
 
-
 	sub.appendChild(h4);
-	if (amount)
-		sub.appendChild(amount);
-	sub.appendChild(input);
+	sub.appendChild(amount);
+	sub.appendChild(inputContainer);
     sub.appendChild(button);
 	sub.appendChild(price);
 
     return sub;
+}
+
+function changeValue (commodity, buy, amount, input) {
+	if (input.value > 0) {
+		if (buy) {
+			if (commodity.amount === -1) {
+				//do nothing currently
+			}
+			else if (commodity.amount < input.value) {
+				alert('only ' + commodity.amount + ' left in stock. Please decrease amount to match stock left.');
+				input.value = commodity.amount;
+			}
+			else if (commodity.amount === 0) {
+				alert('We are very sorry, but it seems like we are out of stock. Please come back later');
+			}
+			else {
+				commodity.amount -= +input.value;
+				amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
+			}
+		}
+		else {
+			commodity.amount += +input.value;
+			amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
+		}
+	}
 }
 
 function clearTradePostModal() {
@@ -124,12 +165,12 @@ function createTradePostModal(post) {
     var buyPanel = createModalPanel('tradepost-buy', 'Buy');
 
     for (var index = 0; index < post.haveResources.length; index++)
-      	buyPanel.sub.appendChild(createModalCommodity(post.haveResources[index], true));
+      buyPanel.sub.appendChild(createModalCommodity(post.haveResources[index], true));
 
     var sellPanel = createModalPanel('tradepost-sell', 'Sell');
 
     for (var index = 0; index < post.needResources.length; index++)
-      	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], true));
+      	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], false));
 
     var target = document.getElementById('modalContent');
     target.appendChild(infoPanel.panel);

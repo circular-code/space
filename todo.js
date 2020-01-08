@@ -22,7 +22,7 @@
 //TODO: buy fuel somewhere
 //TODO: welcome loading animation before showing stats of trade post
 //TODO: create modal based on outpost data, implement buying and selling
-
+//TODO: implement eventlog as chat of some sort
 
 //module ideas
 //scanner
