@@ -26,16 +26,25 @@ function Ship (r, x, y, size) {
     this.y = y;
     this.level = 1;
     this.engine = new Engine(1, 'engine', true);
-    this.storages = [new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'solid'), new Storage(undefined, 1, 'storage', true, 'liquid'), new Storage(undefined, 1, 'storage', true, 'gas'), new Storage(undefined, 1, 'storage', true, 'plasma')];
-    this.battery = new Battery(1, 'battery', true);
-    this.fueltank = new Fueltank(1, 'fueltank', true);
-    this.jumptank = new Fueltank(1, 'jumptank', true);
-    this.movementEnergySource = this.fueltank;
+    this.movementEnergySource = new Storage(undefined, 1, 'fueltank', true, 'fuel', 100);
+    this.jumptank = new Storage(undefined, 1, 'fueltank', true, 'jumpfuel', 100);
+    this.battery = new Storage(undefined, 1, 'storage', true, 'other', 100);
+    this.storages = [
+        new Storage(undefined, 1, 'storage', true, 'solid'),
+        new Storage(undefined, 1, 'storage', true, 'solid'),
+        new Storage(undefined, 1, 'storage', true, 'liquid'),
+        new Storage(undefined, 1, 'storage', true, 'gas'),
+        new Storage(undefined, 1, 'storage', true, 'plasma'),
+        this.movementEnergySource,
+        this.jumptank,
+        this.battery
+    ];
     this.capacity = 5;
     this.credits = 13.37;
 
     this.storages.forEach(storage => {
-        storage.createUI();
+        if (storage.type === 'solid' || storage.type === 'liquid' || storage.type === 'gas' || storage.type === 'plasma')
+            storage.createUI();
     });
 }
 
@@ -204,27 +213,29 @@ Ship.prototype.scan = function(astrobject, depth) {
     return astrobject.slice(0, depth);
 };
 
-Ship.prototype.store = function(amount, type) {
+Ship.prototype.store = function(commodity) {
 
-    var storages = ship.storages.filter(function(storage){
-        return storage.contentType === type && storage.capacity !== storage.amount;
+    var storages = ship.storages.filter(function(storage) {
+        return storage.type === commodity.type && storage.capacity !== storage.amount;
     });
 
     for (var i = 0; i < storages.length; i++) {
         var storage = storages[i];
-        if (storage.capacity >= (storage.amount + amount)) {
-            storage.amount += amount;
-            amount = 0;
-            storage.refresh();
+        if (storage.capacity >= (storage.amount + commodity.amount)) {
+            storage.amount += commodity.amount;
+            commodity.amount = 0;
+            storage.refreshUI();
             break;
         }
-        else if (storage.capacity < (storage.amount + amount)) {
+        else if (storage.capacity < (storage.amount + commodity.amount)) {
             storage.amount = storage.capacity;
-            amount = storage.amount + amount - storage.capacity;
-            storage.refresh();
+            commodity.amount = storage.amount + commodity.amount - storage.capacity;
+            storage.refreshUI();
         }
     }
 
-    if (amount > 0)
+    if (commodity.amount > 0)
         console.info('storage amount reached for type ' + type);
 };
+
+

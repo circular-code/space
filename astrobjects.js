@@ -319,10 +319,10 @@ function TradingPost(loaded, planet, chunk) {
     this.haveResources = [];
     this.needResources = [];
     this.maintenance = [
-        new Commodity(false,'Fuel', -1, 'fluid', randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Jumpfuel', -1, 'fluid', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
         new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
-        new Commodity(false,'Repair Service', 'other', -1, randomNumBetween(100,1), 'H')
+        new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
     ];
 
     var temp = [];

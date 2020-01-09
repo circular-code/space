@@ -117,28 +117,27 @@ function createModalCommodity(commodity, buy, buttontext) {
 }
 
 function changeValue (commodity, buy, amount, input) {
-	if (input.value > 0) {
+	var value = +input.value;
+	if (value > 0) {
 		if (buy) {
 			if (commodity.amount === -1) {
-				//do nothing currently
+				ship.store(new Commodity(false,commodity.name,value,commodity.type));
 			}
-			else if (commodity.amount < input.value) {
+			else if (commodity.amount < value) {
 				alert('only ' + commodity.amount + ' left in stock. Please decrease amount to match stock left.');
-				input.value = commodity.amount;
+				value = commodity.amount;
 			}
 			else if (commodity.amount === 0) {
 				alert('We are very sorry, but it seems like we are out of stock. Please come back later');
 			}
 			else {
-				commodity.amount -= +input.value;
+				commodity.amount -= +value;
 				amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
-				//TODO: store funktion umschreiben, sodass commodities gestored werden, je nach typ.
-				//TODO: beim abbauen von resources entstehen commodities
-				// ship.store();
+				ship.store(new Commodity(false,commodity.name,value,commodity.type));
 			}
 		}
 		else {
-			commodity.amount += +input.value;
+			commodity.amount += +value;
 			amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
 		}
 	}

@@ -7,7 +7,7 @@
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
 //TODO: populate shipyards
-//TODO: populate trading posts
+//TODO: populate trading posts more details
 //TODO: draw basic ship models instead of circle
 //TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)
 //TODO: prevent bug of rarely loading more than max energy
@@ -23,6 +23,14 @@
 //TODO: welcome loading animation before showing stats of trade post
 //TODO: create modal based on outpost data, implement buying and selling
 //TODO: implement eventlog as chat of some sort
+//TODO: bottomUi
+//TODO: beim abbauen von resources entstehen commodities
+
+//resource ideas
+//black market (slaves, drugs, illegal substances, human trafficking)
+//processed things in categories? (food, machine parts, )
+//full products (tv's n stuff)
+//base materials (beton o.Ä.)
 
 //module ideas
 //scanner
