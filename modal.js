@@ -132,6 +132,9 @@ function changeValue (commodity, buy, amount, input) {
 			else {
 				commodity.amount -= +input.value;
 				amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
+				//TODO: store funktion umschreiben, sodass commodities gestored werden, je nach typ.
+				//TODO: beim abbauen von resources entstehen commodities
+				// ship.store();
 			}
 		}
 		else {

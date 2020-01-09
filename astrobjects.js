@@ -319,10 +319,10 @@ function TradingPost(loaded, planet, chunk) {
     this.haveResources = [];
     this.needResources = [];
     this.maintenance = [
-        new Commodity(false,'Fuel', -1, randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Jumpfuel', -1, randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Energy', -1, randomNumBetween(100,1), 'KWH'),
-        new Commodity(false,'Repair Service', -1, randomNumBetween(100,1), 'H')
+        new Commodity(false,'Fuel', -1, 'fluid', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Jumpfuel', -1, 'fluid', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
+        new Commodity(false,'Repair Service', 'other', -1, randomNumBetween(100,1), 'H')
     ];
 
     var temp = [];
@@ -331,7 +331,8 @@ function TradingPost(loaded, planet, chunk) {
         var element = elements[randomNumBetween(elements.length)];
         if (temp.indexOf(element) === -1) {
             temp.push(element);
-            this.haveResources.push(new Commodity(false, element, randomNumBetween(100,1), randomNumBetween(1000,10)));
+            //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
+            this.haveResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
         }
         else
             index--;
@@ -343,7 +344,8 @@ function TradingPost(loaded, planet, chunk) {
         var element = elements[randomNumBetween(elements.length)]
         if (temp.indexOf(element) === -1) {
             temp.push(element);
-            this.needResources.push(new Commodity(false, element, randomNumBetween(100,1), randomNumBetween(1000,10)));
+            //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
+            this.needResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
         }
         else
             index--;
