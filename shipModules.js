@@ -50,12 +50,12 @@ Storage.prototype.createUI = function() {
     document.getElementById('storage').appendChild(storageContainer);
 };
 
-function Engine(level, name, builtin) {
+function Engine(level, name, builtin, speed, speedMax, speedMin, acceleration) {
     Module.call(this, level, name, builtin);
-    this.speed = 0;
-    this.speedMax = 350;
-    this.speedMin = 0;
-    this.acceleration = 1;
+    this.speed = speed;
+    this.speedMax = speedMax;
+    this.speedMin = speedMin;
+    this.acceleration = acceleration;
 }
 
 Engine.prototype = Object.create(Module.prototype);

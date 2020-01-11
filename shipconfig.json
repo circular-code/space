@@ -1,0 +1,19 @@
+{
+    "fighter": [{
+            "info": {
+                "imgpath": "",
+                "name":"aasd",
+                "price": 12
+            },
+            "stats": {
+                
+            },
+            "modules": {
+                "blaengine"
+            }
+        }
+    ],
+    "hauler":,
+    "taxi":,
+    "allrounder":
+}

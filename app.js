@@ -33,7 +33,7 @@ expand.onclick = function () {
 
    compress.style.display = 'inline-block';
    expand.style.display = 'none';
-}
+};
 
 compress.onclick = function () {
    if (document.exitFullscreen) {
@@ -48,7 +48,7 @@ compress.onclick = function () {
     requestedFullscreen = false;
     compress.style.display = 'none';
     expand.style.display = 'inline-block';
-}
+};
 
 var zoom = 100;
 
@@ -333,6 +333,10 @@ userInterface.create();
 var map = new Map(size, scale);
 map.addChunk(0,0);
 map.generateBackground();
+
+import ShipFactory from "factories/shipFactory.js";
+var Engine = new Engine(ModuleData["engines"]["blaengine"].level, 'engine', true, ModuleData["engines"]["blaengine"]["stats"]["speed"], ModuleData["engines"]["blaengine"]["stats"]["speedMax"],ModuleData["engines"]["blaengine"]["stats"]["speedMin"],ModuleData["engines"]["blaengine"]["stats"]["acceleration"]);
+//var ship = new ShipFactory.BuildShip(Info, Engine, Storage, Battery);
 
 var ship = new Ship(r, mouseX, mouseY, size);
 

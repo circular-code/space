@@ -25,7 +25,7 @@ function Ship (r, x, y, size) {
     this.x = x;
     this.y = y;
     this.level = 1;
-    this.engine = new Engine(1, 'engine', true);
+    this.engine = new Engine(1, 'engine', true, 0, 30, 0, 1);
     this.movementEnergySource = new Storage(undefined, 1, 'fueltank', true, 'fuel', 100);
     this.jumptank = new Storage(undefined, 1, 'fueltank', true, 'jumpfuel', 100);
     this.battery = new Storage(undefined, 1, 'storage', true, 'other', 100);
