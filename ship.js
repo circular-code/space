@@ -235,7 +235,7 @@ Ship.prototype.store = function(commodity) {
     }
 
     if (commodity.amount > 0)
-        console.info('storage amount reached for type ' + type);
+        alert('storage amount reached for type ' + type);
 };
 
 

@@ -121,7 +121,7 @@ function changeValue (commodity, buy, amount, input) {
 	if (value > 0) {
 		if (buy) {
 			if (commodity.amount === -1) {
-				ship.store(new Commodity(false,commodity.name,value,commodity.type));
+				ship.buy(new Commodity(false,commodity.name,value,commodity.type));
 			}
 			else if (commodity.amount < value) {
 				alert('only ' + commodity.amount + ' left in stock. Please decrease amount to match stock left.');
@@ -133,7 +133,7 @@ function changeValue (commodity, buy, amount, input) {
 			else {
 				commodity.amount -= +value;
 				amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
-				ship.store(new Commodity(false,commodity.name,value,commodity.type));
+				ship.buy(new Commodity(false,commodity.name,value,commodity.type));
 			}
 		}
 		else {

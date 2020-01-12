@@ -1,4 +1,5 @@
 'use strict';
+
 function Module(level, name, builtin) {
     this.level = level;
     this.name = name; //scanner, storage, engine, battery

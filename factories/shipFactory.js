@@ -1,6 +1,4 @@
-
-
-function BuildShip(Info, Engine, Storage, Battery)
+export default function BuildShip(Info, Engine, Storage, Battery)
 {
     var collided = true;
     var xcounter = 0;

@@ -1,12 +1,4 @@
-{
-    
-// [ shipmodulmatrix
-//     [1,1,1],
-//     [1,1],
-//     [1,1,1],
-//     [1,0,1]
-// ]
-
+export default shipUserConfig = {
     "engines":
     {
         "blaengine":
@@ -39,7 +31,7 @@
             "level": 1,
             "info": {
                 "name": "railgun",
-                "ammo": 
+                "ammo":
             },
             "stats": {
                 "projectileSpeed": 0,
