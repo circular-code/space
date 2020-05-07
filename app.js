@@ -11,6 +11,8 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
+//TODO: save key to generate chunk, only save changes made inside the chunk, instead of saving the whole thing
+
 var requestedFullscreen = false;
 expand.onclick = function () {
    if (requestedFullscreen)
