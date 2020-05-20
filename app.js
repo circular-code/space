@@ -11,7 +11,7 @@ var aPressed = false;
 var dPressed = false;
 var angle = 0;
 
-//TODO: save key to generate chunk, only save changes made inside the chunk, instead of saving the whole thing
+//TODO: implement seed based generation: save key to generate chunk,only save changes from the player made inside the chunk, then re-generate chunk based on key and apply changes from the player, instead of saving the whole thing
 
 var requestedFullscreen = false;
 expand.onclick = function () {
