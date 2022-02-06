@@ -386,6 +386,16 @@ body {
     z-index: 3;
 }
 
+#topUi > i {
+    margin-right: 20px;
+    cursor: pointer;
+    border: 1px solid white;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
 #bottomUi {
 	position: fixed;
 	bottom: 30px;
@@ -500,11 +510,6 @@ body {
 #optionsContainer input,
 #topUi i {
 	color: white;
-}
-
-#topUi > i {
-	margin-right: 20px;
-	cursor: pointer;
 }
 
 #options {

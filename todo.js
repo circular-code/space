@@ -1,5 +1,6 @@
 //TODO: adjust render distance to zoom level, and refocus on center (ship)
 //TODO: adjust amount of astrobject created with scale
+//TODO: implement seed based generation: save key to generate chunk,only save changes from the player made inside the chunk, then re-generate chunk based on key and apply changes from the player, instead of saving the whole thing
 //TODO: change to es6 style
 //TODO: fade nebulae borders
 //TODO: make empty energy blink red
@@ -9,6 +10,7 @@
 //TODO: populate shipyards
 //TODO: populate trading posts more details
 //TODO: draw basic ship models instead of circle
+//TODO: add a second/third layer of background stars, to create a feeling of depth, second layer needs to move
 //TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)
 //TODO: prevent bug of rarely loading more than max energy
 //TODO: show distance in flaghints on hover?

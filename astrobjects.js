@@ -21,7 +21,7 @@ function Star(loaded, r, x, y) {
 
     Astrobject.call(this, r, x, y);
     this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
-    this.range = this.r + randomNumBetween(50,30) * scale;
+    this.range = this.r + randomNumBetween(50,30) * app.scale;
     this.name = 'Star';
 }
 
@@ -272,7 +272,7 @@ function TradingPost(loaded, planet, chunk) {
     // this.origin = planet;
     this.originX = planet.x;
     this.originY = planet.y;
-    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10) * scale;
+    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10) * app.scale;
 
     var postCollided = true;
 

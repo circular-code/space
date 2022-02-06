@@ -10,14 +10,14 @@
     <canvas id="pocketUniverse" width="480" height="320"></canvas>
     <div id="shadow"></div>
     <div id="topUi">
-      <i id="spaceJump" class="fal fa-rocket-launch"></i>
-      <i id="compress" class="far fa-compress"></i>
-      <i id="expand" class="far fa-expand"></i>
-      <i id="options" class="far fa-ellipsis-v"></i>
+      <i title="jump" id="spaceJump" class="fal fa-rocket-launch"></i>
+      <i title="compress" id="compress" class="far fa-compress"></i>
+      <i title="expand" id="expand" class="far fa-expand"></i>
+      <i title="options" id="options" class="far fa-ellipsis-v"></i>
       <div id="optionsContainer">
           <div id="bottomUi">
-            <label for="fileUpload">upload saved game here</label>
-            <input id="fileUpload" name="fileUpload" type="file" />
+            <label for="uploadFile">upload saved game here</label>
+            <input id="uploadFile" name="uploadFile" type="file" />
             <button id="saveButton">save</button>
           </div>
       </div>
@@ -45,9 +45,11 @@
         </section>
       </div>
     </div>
+    <script src="utils.js"></script>
     <script src="math.js"></script>
     <script src="model.js"></script>
     <script src="ui.js"></script>
+    <script src="canvas.js"></script>
     <script src="renderer.js"></script>
     <script src="chunk.js"></script>
     <script src="resource.js"></script>
