@@ -26,13 +26,6 @@
 //TODO: bottomUi
 //TODO: beim abbauen von resources entstehen commodities
 
-// [ shipmodulmatrix
-//     [1,1,1],
-//     [1,1],
-//     [1,1,1],
-//     [1,0,1]
-// ]
-
 //resource ideas
 //black market (slaves, drugs, illegal substances, human trafficking)
 //processed things in categories? (food, machine parts, )

@@ -1,18 +1,21 @@
 const closeEls = document.querySelectorAll("[data-close]");
 
-for (const el of closeEls)
+for (const el of closeEls) {
   el.addEventListener("click", function() {
     this.parentElement.parentElement.parentElement.classList.remove("is-visible");
   });
+}
 
 document.addEventListener("click", e => {
-  if (e.target == document.querySelector(".modal.is-visible"))
+  if (e.target == document.querySelector(".modal.is-visible")) {
     document.querySelector(".modal.is-visible").classList.remove("is-visible");
+  }
 });
 
 document.addEventListener("keyup", e => {
-  if (e.key == "Escape" && document.querySelector(".modal.is-visible"))
+  if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
     document.querySelector(".modal.is-visible").classList.remove("is-visible");
+  }
 });
 
 function createModalPanel(id, subtitle, height) {
@@ -118,7 +121,7 @@ function changeValue (commodity, buy, amount, input) {
 	if (value > 0) {
 		if (buy) {
 			if (commodity.amount === -1) {
-				ship.buy(new Commodity(false,commodity.name,value,commodity.type));
+				ship.store(new Commodity(false,commodity.name,value,commodity.type));
 			}
 			else if (commodity.amount < value) {
 				alert('only ' + commodity.amount + ' left in stock. Please decrease amount to match stock left.');
@@ -130,7 +133,7 @@ function changeValue (commodity, buy, amount, input) {
 			else {
 				commodity.amount -= +value;
 				amount.textContent = '(' + commodity.amount + ' ' + commodity.unit + ')';
-				ship.buy(new Commodity(false,commodity.name,value,commodity.type));
+				ship.store(new Commodity(false,commodity.name,value,commodity.type));
 			}
 		}
 		else {

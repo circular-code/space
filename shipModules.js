@@ -1,5 +1,4 @@
 'use strict';
-
 function Module(level, name, builtin) {
     this.level = level;
     this.name = name; //scanner, storage, engine, battery
@@ -51,12 +50,12 @@ Storage.prototype.createUI = function() {
     document.getElementById('storage').appendChild(storageContainer);
 };
 
-function Engine(level, name, builtin, speed, speedMax, speedMin, acceleration) {
+function Engine(level, name, builtin) {
     Module.call(this, level, name, builtin);
-    this.speed = speed;
-    this.speedMax = speedMax;
-    this.speedMin = speedMin;
-    this.acceleration = acceleration;
+    this.speed = 0;
+    this.speedMax = 350;
+    this.speedMin = 0;
+    this.acceleration = 1;
 }
 
 Engine.prototype = Object.create(Module.prototype);
