@@ -21,6 +21,18 @@ var Renderer = (function() {
                 Renderer.renderAstrobject(chunk.allAstrobjects[i]);
             }
         },
+        renderViewportBorders: function() {
+            ctx.beginPath();
+            ctx.moveTo(0,0);
+            ctx.lineTo(canvas.width, 0);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            ctx.lineTo(0,0);
+            ctx.strokeStyle = '#00FF00';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+            ctx.closePath();
+        },
         renderShip: function(ship)  {
 
             // //particles

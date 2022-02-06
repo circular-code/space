@@ -37,41 +37,41 @@ var app = (function() {
         }
         
         //render static background stars
-        for (var j = 0; j < app.map.backgroundStars[0].length; j++) {
+        for (var j = 0; j < app.map.backgroundStars[0].length; j++)
             Renderer.renderAstrobject(app.map.backgroundStars[0][j], 1, timeDelta);
-        }
-        for (j = 0; j < app.map.backgroundStars[1].length; j++) {
+        for (j = 0; j < app.map.backgroundStars[1].length; j++)
             Renderer.renderAstrobject(app.map.backgroundStars[1][j], 2, timeDelta);
-        }
-        for (j = 0; j < app.map.backgroundStars[2].length; j++) {
+        for (j = 0; j < app.map.backgroundStars[2].length; j++)
             Renderer.renderAstrobject(app.map.backgroundStars[2][j], 3, timeDelta);
-        }
         
         if (timeDelta)
             app.ship.move(timeDelta);
         
-            app.ship.checkActiveChunk();
-        
+        app.ship.checkActiveChunk();
+        Renderer.renderViewportBorders();
+
+        // everything that is drawn before this line will be relative to the screen
         ctx.translate(-app.viewport.x * (global.zoom/100), -app.viewport.y * (global.zoom/100));
+        //everything that is drawn after this line will be relative to the map
         ctx.scale(global.zoom/100, global.zoom/100);
         app.viewport.focus();
         
         // if (typeof spaceJump === 'undefined') {
-            //     Renderer.renderMap(map);
-            //     Renderer.renderShip(ship);
-            // }
-            Renderer.renderMap(app.map);
-            Renderer.renderShip(app.ship);
-            app.ship.checkCollisions();
+        //     Renderer.renderMap(map);
+        //     Renderer.renderShip(ship);
+        // }
+        Renderer.renderMap(app.map);
+        Renderer.renderShip(app.ship);
+        app.ship.checkCollisions();
+        
+        if (timeDelta)
+            app.ship.refuelEnergy(timeDelta);
+        
+        app.ship.mine();
+        
+        time = now;
             
-            if (timeDelta)
-                app.ship.refuelEnergy(timeDelta);
-            
-            app.ship.mine();
-            
-            time = now;
-            
-            if (typeof userInterface !== 'undefined') {
+        if (typeof userInterface !== 'undefined') {
             if (typeof app.ship.credits === 'number' && app.ship.credits === app.ship.credits) {
                 userInterface.credits.textContent = ship.credits + ' $';
             }
