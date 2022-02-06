@@ -14,12 +14,12 @@ canvas.addEventListener("click", userInterface.handlers.mouseClickHandler, false
 canvas.addEventListener("contextmenu", e => {
     e.preventDefault();
 
-    var translatedX = e.pageX + viewport.x;
-    var tranlatedY = e.pageY + viewport.y;
+    var translatedX = e.pageX + app.viewport.x;
+    var tranlatedY = e.pageY + app.viewport.y;
 
-    if (viewport.isInside(translatedX, tranlatedY)) {
+    if (app.viewport.isInside(translatedX, tranlatedY)) {
 
-        var all = Chunk.getClosestObjects(map.activeChunk);
+        var all = Chunk.getClosestObjects(app.map.activeChunk);
 
         var astrobject;
 
@@ -33,13 +33,13 @@ canvas.addEventListener("contextmenu", e => {
         }
 
         if (astrobject) {
-            map.contextMenuAstrobject = astrobject;
+            app.map.contextMenuAstrobject = astrobject;
             userInterface.manageContextMenuOptions(astrobject);
             userInterface.setPosition(e.pageY, e.pageX);
         }
         else {
             userInterface.toggleMenu("hide");
-            map.contextMenuAstrobject = undefined;
+            app.map.contextMenuAstrobject = undefined;
         }
     }
 

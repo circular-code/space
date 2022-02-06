@@ -28,8 +28,8 @@ var app = (function() {
         
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         
-        if (typeof spaceJump === 'undefined') {
-            ctx.clearRect(0 + global.viewport.x, 0 + global.viewport.y, canvas.width + global.viewport.x, canvas.height + global.viewport.y);
+        if (typeof global.spaceJump === 'undefined') {
+            ctx.clearRect(0 + app.viewport.x, 0 + app.viewport.y, canvas.width + app.viewport.x, canvas.height + app.viewport.y);
             
             ctx.rect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#08050C";
@@ -37,52 +37,52 @@ var app = (function() {
         }
         
         //render static background stars
-        for (var j = 0; j < global.map.backgroundStars[0].length; j++) {
-            Renderer.renderAstrobject(global.map.backgroundStars[0][j], 1, timeDelta);
+        for (var j = 0; j < app.map.backgroundStars[0].length; j++) {
+            Renderer.renderAstrobject(app.map.backgroundStars[0][j], 1, timeDelta);
         }
-        for (j = 0; j < global.map.backgroundStars[1].length; j++) {
-            Renderer.renderAstrobject(global.map.backgroundStars[1][j], 2, timeDelta);
+        for (j = 0; j < app.map.backgroundStars[1].length; j++) {
+            Renderer.renderAstrobject(app.map.backgroundStars[1][j], 2, timeDelta);
         }
-        for (j = 0; j < global.map.backgroundStars[2].length; j++) {
-            Renderer.renderAstrobject(global.map.backgroundStars[2][j], 3, timeDelta);
+        for (j = 0; j < app.map.backgroundStars[2].length; j++) {
+            Renderer.renderAstrobject(app.map.backgroundStars[2][j], 3, timeDelta);
         }
         
         if (timeDelta)
-        ship.move(timeDelta);
+            app.ship.move(timeDelta);
         
-        ship.checkActiveChunk();
+            app.ship.checkActiveChunk();
         
-        ctx.translate(-global.viewport.x * (zoom/100), -global.viewport.y * (zoom/100));
-        ctx.scale(zoom/100, zoom/100);
-        global.viewport.focus();
+        ctx.translate(-app.viewport.x * (global.zoom/100), -app.viewport.y * (global.zoom/100));
+        ctx.scale(global.zoom/100, global.zoom/100);
+        app.viewport.focus();
         
         // if (typeof spaceJump === 'undefined') {
             //     Renderer.renderMap(map);
             //     Renderer.renderShip(ship);
             // }
-            Renderer.renderMap(map);
-            Renderer.renderShip(ship);
-            global.ship.checkCollisions();
+            Renderer.renderMap(app.map);
+            Renderer.renderShip(app.ship);
+            app.ship.checkCollisions();
             
             if (timeDelta)
-                global.ship.refuelEnergy(timeDelta);
+                app.ship.refuelEnergy(timeDelta);
             
-            global.ship.mine();
+            app.ship.mine();
             
             time = now;
             
             if (typeof userInterface !== 'undefined') {
-            if (typeof global.ship.credits === 'number' && global.ship.credits === global.ship.credits) {
+            if (typeof app.ship.credits === 'number' && app.ship.credits === app.ship.credits) {
                 userInterface.credits.textContent = ship.credits + ' $';
             }
             if (userInterface.speed && ship.engine) {
-                userInterface.speed.textContent = pad(global.ship.engine.speed, 3);
+                userInterface.speed.textContent = pad(app.ship.engine.speed, 3);
             }
             if (userInterface.xCoordinate) {
-                userInterface.xCoordinate.textContent = (Math.round(global.ship.x) / 1000).toFixed(3);
+                userInterface.xCoordinate.textContent = (Math.round(app.ship.x) / 1000).toFixed(3);
             }
             if (userInterface.yCoordinate) {
-                userInterface.yCoordinate.textContent = (Math.round(global.ship.y) / 1000).toFixed(3);
+                userInterface.yCoordinate.textContent = (Math.round(app.ship.y) / 1000).toFixed(3);
             }
         }
         

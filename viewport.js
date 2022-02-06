@@ -5,8 +5,8 @@ function Viewport (x,y) {
 }
 
 Viewport.prototype.focus = function() {
-    this.x = (ship.x - canvas.width / 2 + ship.r / 2);
-    this.y = (ship.y - canvas.height / 2 + ship.r / 2);
+    this.x = (app.ship.x - canvas.width / 2 + app.ship.r / 2);
+    this.y = (app.ship.y - canvas.height / 2 + app.ship.r / 2);
     // this.x = (ship.x - canvas.width / 2) * (app.zoom/100);
     // this.y = (ship.y - canvas.height / 2) * (app.zoom/100);
 };

@@ -4,7 +4,7 @@ var userInterface = (function() {
     ui.menuVisible = false;
     var requestedFullscreen = false;
 
-    const dom = {
+    const DOM = {
         root:document.getElementById('ui'),
         addFlag: document.getElementById('addFlag'),
         removeFlag: document.getElementById('removeFlag'),
@@ -23,9 +23,9 @@ var userInterface = (function() {
     };
 
     ui.create = function() {
-        dom.root.appendChild(ui.createShip());
-        dom.root.appendChild(ui.createStorage());
-        dom.root.appendChild(ui.createInfo());
+        DOM.root.appendChild(ui.createShip());
+        DOM.root.appendChild(ui.createStorage());
+        DOM.root.appendChild(ui.createInfo());
     };
 
     ui.createShip = function() {
@@ -113,19 +113,22 @@ var userInterface = (function() {
         document.addEventListener("keyup", ui.handlers.keyUp, false);
         window.addEventListener('resize', ui.handlers.resize);
         
-        dom.uploadFile.addEventListener('change', ui.handlers.uploadFile);
-        dom.addFlag.addEventListener('click', ui.handlers.addFlag);
-        dom.removeFlag.addEventListener('click', ui.handlers.removeFlag);
-        dom.requestLanding.addEventListener('click', ui.handlers.requestLanding);
-        dom.spaceJump.addEventListener('click', ui.handlers.spaceJump);  
-        dom.options.addEventListener('click', ui.handlers.options);
-        dom.saveButton.addEventListener('click', ui.handlers.saveButton);
-        dom.expand.addEventListener('click', ui.handlers.expand);
-        dom.compress.addEventListener('click', ui.handlers.compress);
+        DOM.uploadFile.addEventListener('change', ui.handlers.uploadFile);
+        DOM.addFlag.addEventListener('click', ui.handlers.addFlag);
+        DOM.removeFlag.addEventListener('click', ui.handlers.removeFlag);
+        DOM.requestLanding.addEventListener('click', ui.handlers.requestLanding);
+        DOM.spaceJump.addEventListener('click', ui.handlers.spaceJump);  
+        DOM.options.addEventListener('click', ui.handlers.options);
+        DOM.saveButton.addEventListener('click', ui.handlers.saveButton);
+        DOM.expand.addEventListener('click', ui.handlers.expand);
+        DOM.compress.addEventListener('click', ui.handlers.compress);
     };
 
     ui.handlers = {
         compress: function () {
+            if (!requestedFullscreen)
+                return false;
+
             if (document.exitFullscreen) {
                  document.exitFullscreen();
              } else if (document.webkitExitFullscreen) {
@@ -136,8 +139,8 @@ var userInterface = (function() {
                  document.msExitFullscreen();
              }
              requestedFullscreen = false;
-             dom.expandcompress.style.display = 'none';
-             dom.expandexpand.style.display = 'inline-block';
+             DOM.compress.style.display = 'none';
+             DOM.expand.style.display = 'inline-block';
         },
         expand: function () {
             if (requestedFullscreen)
@@ -158,15 +161,15 @@ var userInterface = (function() {
                  document.body.msRequestFullscreen();
             }
          
-            dom.compress.style.display = 'inline-block';
-            dom.expand.style.display = 'none';
+            DOM.compress.style.display = 'inline-block';
+            DOM.expand.style.display = 'none';
         },
         saveButton: function() {
 
             var obj = {
-                ship: ship,
-                map: map,
-                viewport: viewport
+                ship: app.ship,
+                map: app.map,
+                viewport: app.viewport
             };
 
             ui.download(JSON.stringify(obj), 'space-game', 'application/json');
@@ -180,17 +183,17 @@ var userInterface = (function() {
                 optionsContainer.classList.add('visible');
             }
         },
-        spacejump: function() {
-            if (ship.engine.speed < ship.engine.speedMax) {
+        spaceJump: function() {
+            if (app.ship.engine.speed < app.ship.engine.speedMax) {
                 alert('YOU NEED MORE SPEED');
                 return;
             }
-            else if (ship.jumptank.amount < 10) {
+            else if (app.ship.jumptank.amount < 10) {
                 alert('OUT OF JUMP FUEL');
                 return;
             }
         
-            ship.jumptank.amount -= 10;
+            app.ship.jumptank.amount -= 10;
         
             app.spaceJump = true;
         
@@ -198,18 +201,18 @@ var userInterface = (function() {
                 app.spaceJump = undefined;
                 app.blackout = true;
         
-                ship.engine.speed = 5000;
+                app.ship.engine.speed = 5000;
         
                 setTimeout(function() {
                     app.blackout = undefined;
-                    ship.engine.speed = 350;
+                    app.ship.engine.speed = 350;
                 }, 1000);
             }, 1000);
         },
         requestLanding: function() {
-            if (ship.checkCollision(map.contextMenuAstrobject.range, map.contextMenuAstrobject.x, map.contextMenuAstrobject.y)){
+            if (app.ship.checkCollision(app.map.contextMenuAstrobject.range, app.map.contextMenuAstrobject.x, app.map.contextMenuAstrobject.y)){
                 alert('Landing granted.');
-                createTradePostModal(map.contextMenuAstrobject);
+                createTradePostModal(app.map.contextMenuAstrobject);
                 document.getElementById("modal1").classList.add("is-visible");
             }
             else
@@ -218,24 +221,24 @@ var userInterface = (function() {
             canvas.click();
         },
         addFlag: function() {
-            if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === false) {
-                map.contextMenuAstrobject.hasFlag = true;
-                map.flaggedAstrobjects.push(map.contextMenuAstrobject);
+            if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === false) {
+                app.map.contextMenuAstrobject.hasFlag = true;
+                app.map.flaggedAstrobjects.push(app.map.contextMenuAstrobject);
             }
-            else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === true)
+            else if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === true)
                 alert.log('astrobject already has a flag');
 
             canvas.click();
         },
         removeFlag: function() {
-            if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === true) {
-                map.contextMenuAstrobject.hasFlag = false;
-                var index = map.flaggedAstrobjects.indexOf(map.contextMenuAstrobject);
+            if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === true) {
+                app.map.contextMenuAstrobject.hasFlag = false;
+                var index = app.map.flaggedAstrobjects.indexOf(app.map.contextMenuAstrobject);
                 if (index > -1) {
-                    map.flaggedAstrobjects.splice(index, 1);
+                    app.map.flaggedAstrobjects.splice(index, 1);
                 }
             }
-            else if (map.contextMenuAstrobject && map.contextMenuAstrobject.hasFlag === false)
+            else if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === false)
                 alert.log('astrobject has no flag that could be removed');
 
             canvas.click();
@@ -255,12 +258,12 @@ var userInterface = (function() {
             }
             else if (e.keyCode === 122) {
                 if (expand.style.display === 'none' || expand.style.display === '') {
-                    dom.compress.style.display = 'none';
-                    dom.expand.style.display = 'inline-block';
+                    DOM.compress.style.display = 'none';
+                    DOM.expand.style.display = 'inline-block';
                 }
                 else {
-                    dom.compress.style.display = 'inline-block';
-                    dom.expand.style.display = 'none';
+                    DOM.compress.style.display = 'inline-block';
+                    DOM.expand.style.display = 'none';
                 }
             }
         },
@@ -322,41 +325,41 @@ var userInterface = (function() {
     ui.copyGameState = function(event) {
         var obj = JSON.parse(event.target.result);
 
-        ship = Object.assign(new Ship(), obj.ship);
+        app.ship = Object.assign(new Ship(), obj.ship);
 
         document.getElementById('storage').innerHTML = '';
 
-        var length = ship.storages.length;
+        var length = app.ship.storages.length;
         for (let i = 0; i < length; i++) {
-            ship.storages.push(Object.assign(new Storage(true), ship.storages[i]));
-            ship.storages[i+length].createUI();
-            ship.storages[i+length].refresh();
+            app.ship.storages.push(Object.assign(new Storage(true), app.ship.storages[i]));
+            app.ship.storages[i+length].createUI();
+            app.ship.storages[i+length].refresh();
         }
-        ship.storages.splice(0,length);
+        app.ship.storages.splice(0,length);
 
-        mouseX = ship.x;
-        mouseY = ship.y;
+        mouseX = app.ship.x;
+        mouseY = app.ship.y;
 
         //TODO: map load besser implementieren, ui clearen, gesamtes system "ladebereit" aufsetzen
         map = Object.assign(new Map(), obj.map);
 
-        for (var i = 0; i < map.chunks.length; i++) {
-            map.chunks[i] = Object.assign(new Chunk(), map.chunks[i]);
+        for (var i = 0; i < app.map.chunks.length; i++) {
+            app.map.chunks[i] = Object.assign(new Chunk(), app.map.chunks[i]);
 
-            for (var j = 0; j < map.chunks[i].backgroundStars.length; j++) {
-                map.chunks[i].backgroundStars[j] = Object.assign(new BackgroundStar(), map.chunks[i].backgroundStars[j]);
+            for (var j = 0; j < app.map.chunks[i].backgroundStars.length; j++) {
+                app.map.chunks[i].backgroundStars[j] = Object.assign(new BackgroundStar(), app.map.chunks[i].backgroundStars[j]);
             }
 
-            for (var k = 0; k < map.chunks[i].allAstrobjects.length; k++) {
+            for (var k = 0; k < app.map.chunks[i].allAstrobjects.length; k++) {
 
-                let astrobject = map.chunks[i].allAstrobjects[k];
+                let astrobject = app.map.chunks[i].allAstrobjects[k];
 
                 switch (astrobject.name) {
                     case 'Star':
                         astrobject = Object.assign(new Star(true), astrobject);
                         break;
                     case 'Planet':
-                        let length = ship.storages.length;
+                        let length = app.ship.storages.length;
                         astrobject = Object.assign(new Planet(true), astrobject);
                         if (astrobject.resources) {
                             for (let i = 0; i < astrobject.resources.length; i++) {
@@ -383,7 +386,7 @@ var userInterface = (function() {
                     case 'ShipYard':
                         astrobject = Object.assign(new ShipYard(true), astrobject);
                         break;
-            }
+                }
             }
         }
 
@@ -391,13 +394,13 @@ var userInterface = (function() {
     };
 
     ui.toggleMenu = command => {
-        menu.style.display = command === "show" ? "block" : "none";
-        menuVisible = command === "show";
+        DOM.menu.style.display = command === "show" ? "block" : "none";
+        ui.menuVisible = command === "show";
     };
     
     ui.setPosition = (top, left ) => {
-        menu.style.left = left + 'px';
-        menu.style.top = top + 'px';
+        DOM.menu.style.left = left + 'px';
+        DOM.menu.style.top = top + 'px';
         ui.toggleMenu("show");
     };
 

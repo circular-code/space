@@ -141,8 +141,8 @@ class Chunk {
 
         var all = chunk.allAstrobjects || [];
     
-        for (var i = 0; i < map.chunks.length; i++) {
-            var c = map.chunks[i];
+        for (var i = 0; i < app.map.chunks.length; i++) {
+            var c = app.map.chunks[i];
             if ((c.x === chunk.x+1 && c.y === chunk.y-1) ||
                 (c.x === chunk.x && c.y === chunk.y-1) ||
                 (c.x === chunk.x-1 && c.y === chunk.y-1) ||
@@ -151,7 +151,7 @@ class Chunk {
                 (c.x === chunk.x+1 && c.y === chunk.y+1) ||
                 (c.x === chunk.x && c.y === chunk.y+1) ||
                 (c.x === chunk.x-1 && c.y === chunk.y-1)) {
-                all = all.concat(map.chunks[i].allAstrobjects);
+                all = all.concat(app.map.chunks[i].allAstrobjects);
             }
         }
     

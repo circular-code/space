@@ -52,7 +52,7 @@ class Ship {
 
         if (app.map.activeChunk && app.map.activeChunk.active === true) {
             // if ship not inside chunk
-            if (app.ship.x < app.map.activeChunk.x * app.map.activeChunk.size ||
+            if (this.x < app.map.activeChunk.x * app.map.activeChunk.size ||
                 app.ship.x > (app.map.activeChunk.x * app.map.activeChunk.size + app.map.activeChunk.size) ||
                 app.ship.y < app.map.activeChunk.y * app.map.activeChunk.size ||
                 app.ship.y > (app.map.activeChunk.y * app.map.activeChunk.size + app.map.activeChunk.size)) {
@@ -63,16 +63,16 @@ class Ship {
         }
         else {
             app.map.activeChunk = app.map.chunks.filter(function(chunk){
-                return ship.x > chunk.x * chunk.size &&
-                ship.x < (chunk.x * chunk.size + chunk.size) &&
-                ship.y > chunk.y * chunk.size &&
-                ship.y < (chunk.y * chunk.size + chunk.size);
+                return app.ship.x > chunk.x * chunk.size &&
+                app.ship.x < (chunk.x * chunk.size + chunk.size) &&
+                app.ship.y > chunk.y * chunk.size &&
+                app.ship.y < (chunk.y * chunk.size + chunk.size);
             })[0];
     
-            if (map.activeChunk) {
-                map.activeChunk.active = true;
+            if (app.map.activeChunk) {
+                app.map.activeChunk.active = true;
     
-                map.generateChunksAroundChunk(map.activeChunk.x, map.activeChunk.y);
+                app.map.generateChunksAroundChunk(app.map.activeChunk.x, app.map.activeChunk.y);
             }
             else {
                 console.error('ship out of bounds');
@@ -83,9 +83,9 @@ class Ship {
     refuelEnergy(timeDelta) {
         var ship = this;
     
-        if (map.activeChunk) {
+        if (app.map.activeChunk) {
     
-            var all = Chunk.getClosestObjects(map.activeChunk);
+            var all = Chunk.getClosestObjects(app.map.activeChunk);
     
             var collidedObjects = all.filter(function(object) {
                 return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
@@ -105,9 +105,9 @@ class Ship {
 
         var ship = this;
     
-        if (map.activeChunk) {
+        if (app.map.activeChunk) {
     
-            var all = Chunk.getClosestObjects(map.activeChunk);
+            var all = Chunk.getClosestObjects(app.map.activeChunk);
     
             var collidedObjects = all.filter(function(object) {
                 return object.r ? distance(ship.x, ship.y, object.x, object.y) <= object.r + 20 : false;
@@ -180,9 +180,9 @@ class Ship {
     checkCollisions() {
         var ship = this;
     
-        if (map.activeChunk) {
+        if (app.map.activeChunk) {
     
-            var all = Chunk.getClosestObjects(map.activeChunk);
+            var all = Chunk.getClosestObjects(app.map.activeChunk);
     
             var collidedObjects = all.filter(function(object) {
                 return distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.r && object.name !== 'Nebula';
@@ -215,7 +215,7 @@ class Ship {
 
     store(commodity) {
 
-        var storages = ship.storages.filter(function(storage) {
+        var storages = this.storages.filter(function(storage) {
             return storage.type === commodity.type && storage.capacity !== storage.amount;
         });
     

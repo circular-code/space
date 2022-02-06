@@ -137,13 +137,13 @@ var Renderer = (function() {
                 var intersection = checkLineIntersection(
                     lines[i].p1.x, lines[i].p1.y,
                     lines[i].p2.x, lines[i].p2.y,
-                    astrobject.x - viewport.x, astrobject.y - viewport.y,
-                    ship.x - viewport.x, ship.y - viewport.y
+                    astrobject.x - app.viewport.x, astrobject.y - app.viewport.y,
+                    app.ship.x - app.viewport.x, app.ship.y - app.viewport.y
                     );
 
                 if (intersection && intersection.onLine1 && intersection.onLine2) {
                    ctx.beginPath();
-                   ctx.arc(intersection.x + viewport.x, intersection.y + viewport.y, 10, 0, Math.PI*2);
+                   ctx.arc(intersection.x + app.viewport.x, intersection.y + app.viewport.y, 10, 0, Math.PI*2);
                    ctx.fillStyle = 'magenta';
                    ctx.fill();
                    ctx.closePath();
@@ -153,19 +153,19 @@ var Renderer = (function() {
         },
         renderAstrobject: function (obj, backgroundStar, timeDelta) {
 
-            if (backgroundStar || viewport.isInside(obj.x, obj.y)) {
+            if (backgroundStar || app.viewport.isInside(obj.x, obj.y)) {
 
-                if (backgroundStar === 1 && ship.engine.speed > 0) {
-                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.1;
-                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.1
+                if (backgroundStar === 1 && app.ship.engine.speed > 0) {
+                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.1;
+                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.1
                 }
-                if (backgroundStar === 2 && ship.engine.speed > 0) {
-                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.05;
-                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.05;
+                if (backgroundStar === 2 && app.ship.engine.speed > 0) {
+                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.05;
+                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.05;
                 }
-                if (backgroundStar === 3 && ship.engine.speed > 0 && timeDelta) {
-                    obj.x -= ship.engine.speed * Math.cos(ship.engine.angle) * timeDelta * 0.01;
-                    obj.y -= ship.engine.speed * Math.sin(ship.engine.angle) * timeDelta * 0.01;
+                if (backgroundStar === 3 && app.ship.engine.speed > 0 && timeDelta) {
+                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.01;
+                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.01;
                 }
 
                 switch(obj.name) {
@@ -459,7 +459,7 @@ var Renderer = (function() {
 
                     ctx.beginPath();
                     ctx.moveTo(obj.x, obj.y);
-                    ctx.lineTo(ship.x, ship.y);
+                    ctx.lineTo(app.ship.x, app.ship.y);
                     ctx.closePath();
                     ctx.strokeStyle = "rgba(256,256,256,0.05)";
                     ctx.stroke();

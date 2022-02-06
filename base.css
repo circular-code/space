@@ -567,7 +567,7 @@ body {
 	font-size: 12px;
 }
 
-#compress {
+#topUi > i#compress {
 	display: none;
 }
 
