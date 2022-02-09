@@ -295,7 +295,7 @@ var userInterface = (function() {
         },
         uploadFile: function(event) {
             var reader = new FileReader();
-            reader.onload = ui.copyGameState;
+            reader.onload = ui.loadGameState;
             reader.readAsText(event.target.files[0]);
         },
         resize: function() {
@@ -322,7 +322,7 @@ var userInterface = (function() {
         }
     };
 
-    ui.copyGameState = function(event) {
+    ui.loadGameState = function(event) {
         var obj = JSON.parse(event.target.result);
 
         app.ship = Object.assign(new Ship(), obj.ship);
@@ -331,7 +331,7 @@ var userInterface = (function() {
 
         var length = app.ship.storages.length;
         for (let i = 0; i < length; i++) {
-            app.ship.storages.push(Object.assign(new Storage(true), app.ship.storages[i]));
+            app.ship.storages.push(Object.assign(new StorageModule(true), app.ship.storages[i]));
             app.ship.storages[i+length].createUI();
             app.ship.storages[i+length].refresh();
         }
