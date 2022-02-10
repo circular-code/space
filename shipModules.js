@@ -18,11 +18,18 @@ class Module {
     }
 }
 
-// TODO: aufbereiten sodass dies per Object.values(storage) aufgerufen werden kann
+// TODO: aggregatszustand, temperaturbereich
 
 class StorageModule {
-    constructor(level, builtin, type, amount) {
-        
+    constructor(objectData, level, builtin, type, amount) {
+        if (objectData) {
+            level = objectData.level;
+            builtin = objectData.builtin;
+            amount = objectData.amount;
+            capacity = objectData.capacity;
+            domUnits = objectData.domUnits;
+            type = objectData.type;
+        }
         super("storage", level, builtin);
         this.amount = amount || 0;
         this.capacity = 100;
