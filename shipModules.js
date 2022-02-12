@@ -21,20 +21,34 @@ class Module {
 // TODO: aggregatszustand, temperaturbereich
 
 class StorageModule {
-    constructor(objectData, level, builtin, type, amount) {
+    constructor(objectData, level, builtin, aggregateState, amount, capacity, tempMin, tempMax, domUnits) {
         if (objectData) {
             level = objectData.level;
             builtin = objectData.builtin;
+            aggregateState = objectData.aggregateState;
             amount = objectData.amount;
             capacity = objectData.capacity;
+            tempMin = objectData.tempMin;
+            tempMax = objectData.tempMax;
             domUnits = objectData.domUnits;
-            type = objectData.type;
         }
+
+        if (!level || typeof level !== 'number' || level <= 0 || level > 3) {
+            level = 1;
+            console.error('Invalid value for level given. Level set to 1');
+        }
+
+        if (typeof builtin !== 'boolean')
+            builtin = true;
+            console.error('Invalid value for builtin given. builtin set to true');
+
         super("storage", level, builtin);
+        this.aggregateState = aggregateState || "solid";
         this.amount = amount || 0;
-        this.capacity = 100;
-        this.domUnits = undefined;
-        this.type = type;
+        this.capacity = capacity || 0;
+        this.tempMin = tempMin || 0;
+        this.tempMax = tempMax || 0;
+        this.domUnits = domUnits || undefined;
     }
  
     refreshUI() {
