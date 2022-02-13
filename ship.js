@@ -43,8 +43,8 @@ class Ship {
         this.credits = 13.37;
 
         this.storages.forEach(storage => {
-            if (storage.type === 'solid' || storage.type === 'liquid' || storage.type === 'gas' || storage.type === 'plasma')
-                storage.createUI();
+            // if (storage.type === 'solid' || storage.type === 'liquid' || storage.type === 'gas' || storage.type === 'plasma')
+                // storage.createUI();
         });
     }
 

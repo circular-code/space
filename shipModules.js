@@ -18,65 +18,132 @@ class Module {
     }
 }
 
-// TODO: aggregatszustand, temperaturbereich
-
 class StorageModule {
-    constructor(objectData, level, builtin, aggregateState, amount, capacity, tempMin, tempMax, domUnits) {
-        if (objectData) {
-            level = objectData.level;
-            builtin = objectData.builtin;
-            aggregateState = objectData.aggregateState;
-            amount = objectData.amount;
-            capacity = objectData.capacity;
-            tempMin = objectData.tempMin;
-            tempMax = objectData.tempMax;
-            domUnits = objectData.domUnits;
+
+    #types = ['solid','liquid','gas','plasma'];
+    _level;
+    _builtin;
+    _type;
+    _amount;
+    _capacity;
+    _tempMin;
+    _tempMax;
+
+    constructor(object, level, builtin, type, amount, capacity, tempMin, tempMax) {
+
+        // enable just throwing old object at constructor to create new object
+        if (object) {
+            level = object.level;
+            builtin = object.builtin;
+            type = object.type;
+            amount = object.amount;
+            capacity = object.capacity;
+            tempMin = object.tempMin;
+            tempMax = object.tempMax;
         }
 
         if (!level || typeof level !== 'number' || level <= 0 || level > 3) {
+            console.error('Invalid value for level given. Level set to 1', level);
             level = 1;
-            console.error('Invalid value for level given. Level set to 1');
         }
 
-        if (typeof builtin !== 'boolean')
+        if (typeof builtin !== 'boolean') {
+            console.error('Invalid value for builtin given. builtin set to true', builtin);
             builtin = true;
-            console.error('Invalid value for builtin given. builtin set to true');
+        }
 
         super("storage", level, builtin);
-        this.aggregateState = aggregateState || "solid";
-        this.amount = amount || 0;
-        this.capacity = capacity || 0;
-        this.tempMin = tempMin || 0;
-        this.tempMax = tempMax || 0;
-        this.domUnits = domUnits || undefined;
+
+        if (typeof type !== 'string' || !this.#types[type]) {
+            console.error('Invalid value for type given. type set to solid', type);
+            type = 'solid';
+        }
+
+        if (typeof amount !== 'number' || amount !== amount || amount < 0) {
+            console.error('Invalid value for amount given. amount set to 0', amount);
+            amount = 0;
+        }
+
+        if (typeof capacity !== 'number' || capacity !== capacity || capacity < 0) {
+            console.error('Invalid value for capacity given. capacity set to 0', capacity);
+            capacity = 0;
+        }
+
+        if (typeof tempMin !== 'number' || tempMin !== tempMin || tempMin < -273.15) {
+            console.error('Invalid value for tempMin given. tempMin set to 0', tempMin);
+            tempMin = 0;
+        }
+
+        if (typeof tempMax !== 'number' || tempMax !== tempMax || tempMax < -273.15) {
+            console.error('Invalid value for tempMax given. tempMax set to 0', tempMax);
+            tempMax = 0;
+        }
+
+        this._type = type;
+        this._amount = amount;
+        this._capacity = capacity;
+        this._tempMin = tempMin;
+        this._tempMax = tempMax;
+    }
+
+    get type() {
+        return this._type;
+    }
+    get amount() {
+        return this._amount;
+    }
+    get capacity() {
+        return this._capacity;
+    }
+    get tempMin() {
+        return this._tempMin;
+    }
+    get tempMax() {
+        return this._tempMax;
+    }
+
+    set type(value) {
+        return this._type;
+    }
+    set amount() {
+        return this._amount;
+    }
+    set capacity() {
+        return this._capacity;
+    }
+    set tempMin() {
+        return this._tempMin;
+    }
+    set tempMax() {
+        return this._tempMax;
     }
  
     refreshUI() {
-        if (!this.storageUI && userInterface && userInterface.dom)
-            this.createUI();
+        // if (!this.storageUI && userInterface && userInterface.dom)
+        //     this.createUI();
     
-        var elements = this.storageUI.querySelectorAll('.' + this.type);
+        // var elements = this.storageUI.querySelectorAll('.' + this.type);
     
-        var num = this.amount / 10;
-        for (var i = 0; i < elements.length; i++) {
-                elements[i].classList.remove('active');
-                if (i < num)
-                    elements[i].classList.add('active');
-        }
+        // var num = this.amount / 10;
+        // for (var i = 0; i < elements.length; i++) {
+        //         elements[i].classList.remove('active');
+        //         if (i < num)
+        //             elements[i].classList.add('active');
+        // }
     }
 
     createUI() {
-        var storageContainer = document.createElement('div');
-        storageContainer.className = 'storage-container-' + this.type;
+        // var storageContainer = document.createElement('div');
+        // storageContainer.className = 'storage-container-' + this.type;
     
-        for (var j = 0; j < 10; j++) {
-            var div = document.createElement('div');
-            div.classList.add(this.type);
-            storageContainer.appendChild(div);
-        }
+        // for (var j = 0; j < 10; j++) {
+        //     var div = document.createElement('div');
+        //     div.classList.add(this.type);
+        //     storageContainer.appendChild(div);
+        // }
     
-        this.storageUI = storageContainer;
-        document.getElementById('storage').appendChild(storageContainer);
+        // this.storageUI = storageContainer;
+        // document.getElementById('storage').appendChild(storageContainer);
     };
 }
 

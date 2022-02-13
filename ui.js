@@ -331,9 +331,9 @@ var userInterface = (function() {
 
         var length = app.ship.storages.length;
         for (let i = 0; i < length; i++) {
-            app.ship.storages.push(Object.assign(new StorageModule(app.ship.storages[i]));
-            app.ship.storages[i+length].createUI();
-            app.ship.storages[i+length].refresh();
+            app.ship.storages.push(Object.assign(new StorageModule(app.ship.storages[i])));
+            // app.ship.storages[i+length].createUI();
+            // app.ship.storages[i+length].refresh();
         }
         app.ship.storages.splice(0,length);
 
