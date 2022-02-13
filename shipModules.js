@@ -18,17 +18,15 @@ class Module {
     }
 }
 
-class StorageModule {
+class StorageModule extends Module {
 
     #types = ['solid','liquid','gas','plasma'];
-    _level;
-    _builtin;
-    _type;
-    _amount;
-    _capacity;
-    _tempMin;
-    _tempMax;
-
+    #type;
+    #amount;
+    #capacity;
+    #tempMin;
+    #tempMax;
+    
     constructor(object, level, builtin, type, amount, capacity, tempMin, tempMax) {
 
         // enable just throwing old object at constructor to create new object
@@ -54,68 +52,90 @@ class StorageModule {
 
         super("storage", level, builtin);
 
-        if (typeof type !== 'string' || !this.#types[type]) {
-            console.error('Invalid value for type given. type set to solid', type);
-            type = 'solid';
-        }
-
-        if (typeof amount !== 'number' || amount !== amount || amount < 0) {
-            console.error('Invalid value for amount given. amount set to 0', amount);
-            amount = 0;
-        }
-
-        if (typeof capacity !== 'number' || capacity !== capacity || capacity < 0) {
-            console.error('Invalid value for capacity given. capacity set to 0', capacity);
-            capacity = 0;
-        }
-
-        if (typeof tempMin !== 'number' || tempMin !== tempMin || tempMin < -273.15) {
-            console.error('Invalid value for tempMin given. tempMin set to 0', tempMin);
-            tempMin = 0;
-        }
+        this.#setType(type);
+        this.#setAmount(amount);
+        this.#setCapacity(capacity);
+        this.#setTempMin(tempMin);
+        this.#setTempMax(tempMax);
 
         if (typeof tempMax !== 'number' || tempMax !== tempMax || tempMax < -273.15) {
             console.error('Invalid value for tempMax given. tempMax set to 0', tempMax);
             tempMax = 0;
         }
 
-        this._type = type;
-        this._amount = amount;
-        this._capacity = capacity;
-        this._tempMin = tempMin;
-        this._tempMax = tempMax;
+        this.#type = type;
+        this.#amount = amount;
+        this.#capacity = capacity;
+        this.#tempMin = tempMin;
+        this.#tempMax = tempMax;
     }
 
     get type() {
-        return this._type;
+        return this.#type;
     }
     get amount() {
-        return this._amount;
+        return this.#amount;
     }
     get capacity() {
-        return this._capacity;
+        return this.#capacity;
     }
     get tempMin() {
-        return this._tempMin;
+        return this.#tempMin;
     }
     get tempMax() {
-        return this._tempMax;
+        return this.#tempMax;
     }
 
-    set type(value) {
-        return this._type;
+    set type(type) {
+        this.#setType(type);
     }
-    set amount() {
-        return this._amount;
+    set amount(amount) {
+        this.#setAmount(amount);
     }
-    set capacity() {
-        return this._capacity;
+    set capacity(capacity) {
+        this.#setCapacity(capacity);
     }
-    set tempMin() {
-        return this._tempMin;
+    set tempMin(tempMin) {
+        this.#setTempMin(tempMin);
     }
-    set tempMax() {
-        return this._tempMax;
+    set tempMax(tempMax) {
+        this.#setTempMax(tempMax);
+    }
+
+    #setType(type) {
+        if (typeof type !== 'string' || !this.#types[type]) {
+            console.error('Invalid value for type given. type set to solid', type);
+            type = 'solid';
+        }
+        this.#type = type;
+    }
+    #setAmount(amount) {
+        if (typeof amount !== 'number' || amount !== amount || amount < 0) {
+            console.error('Invalid value for amount given. amount set to 0', amount);
+            amount = 0;
+        }
+        this.#amount = amount;
+    }
+    #setCapacity(capacity) {
+        if (typeof capacity !== 'number' || capacity !== capacity || capacity < 0) {
+            console.error('Invalid value for capacity given. capacity set to 0', capacity);
+            capacity = 0;
+        }
+        this.#capacity = capacity;
+    }
+    #setTempMin(tempMin) {
+        if (typeof tempMin !== 'number' || tempMin !== tempMin || tempMin < -273.15) {
+            console.error('Invalid value for tempMin given. tempMin set to 0', tempMin);
+            tempMin = 0;
+        }
+        this.#tempMin = tempMin;
+    }
+    #setTempMax(tempMax) {
+        if (typeof tempMax !== 'number' || tempMax !== tempMax || tempMax < -273.15) {
+            console.error('Invalid value for tempMax given. tempMax set to 0', tempMax);
+            tempMax = 0;
+        }
+        this.#tempMax = tempMax;
     }
  
     refreshUI() {
@@ -147,7 +167,7 @@ class StorageModule {
     };
 }
 
-class EngineModule {
+class EngineModule extends Module {
     constructor(level, builtin) {
         super("engine", level, builtin);
         this.speed = 0;
