@@ -25,14 +25,15 @@ class Ship {
         this.x = x;
         this.y = y;
         this.level = 1;
-        this.engine = new EngineModule(1, true);
-        this.movementEnergySource = new StorageModule(undefined, 1, false, 'liquid', 0, 100, -100, 100);
-        this.jumptank = new StorageModule(undefined, 1, false, 'liquid', 0, 100, -100, 100);
-        this.battery = new StorageModule(undefined, 1, false, 'energy', 0, 100, -100, 100),
+        this.engine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
+        this.backupEngine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
+        this.backupFuelTank = new StorageModule(undefined, 1, false, 'liquid', 100, 100, -100, 100);
+        this.jumptank = new StorageModule(undefined, 1, false, 'liquid', 100, 100, -100, 100);
+        this.battery = new StorageModule(undefined, 1, false, 'energy', 100, 100, -100, 100),
         this.storages = [
             new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
             new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
-            this.movementEnergySource,
+            this.backupFuelTank,
             this.jumptank,
             this.battery
         ];
@@ -121,7 +122,7 @@ class Ship {
 
     move(timeDelta) {
 
-        if (this.movementEnergySource.amount <= 0 || app.blackout || app.spaceJump) {
+        if (this.battery.amount <= 0 || app.blackout || app.spaceJump) {
             app.wPressed = false;
             app.sPressed = false;
             app.aPressed = false;
@@ -137,11 +138,11 @@ class Ship {
     
         if (app.wPressed && this.engine.speed < this.engine.speedMax) {
             this.engine.speed += this.engine.acceleration;
-            this.movementEnergySource.amount -= 1 * timeDelta;
+            this.battery.amount -= 1 * timeDelta;
         }
-        if (app.sPressed && this.engine.speed > this.engine.speedMin) {
+        if (app.sPressed && this.engine.speed > 0) {
             this.engine.speed -= this.engine.acceleration;
-            this.movementEnergySource.amount -= 1 * timeDelta;
+            this.battery.amount -= 1 * timeDelta;
         }
         if (!this.engine.angle)
             this.engine.angle = 0;
@@ -156,7 +157,7 @@ class Ship {
             else
                 this.engine.angle -= angleSpeedMod * timeDelta * 5;
     
-            this.movementEnergySource.amount -= 1  * timeDelta;
+            this.battery.amount -= 1  * timeDelta;
         }
         if (app.dPressed) {
             if ((this.engine.angle + angleSpeedMod) > Math.PI)
@@ -164,7 +165,7 @@ class Ship {
             else
                 this.engine.angle += angleSpeedMod * timeDelta * 5;
     
-            this.movementEnergySource.amount -= 1 * timeDelta;
+            this.battery.amount -= 1 * timeDelta;
         }
     
         let xVelocity = this.engine.speed * Math.cos(this.engine.angle);

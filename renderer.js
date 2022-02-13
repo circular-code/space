@@ -81,7 +81,7 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 15, (ship.movementEnergySource.amount / ship.movementEnergySource.capacity) * 30, 3);
+            ctx.rect(ship.x - 15, ship.y + 15, (ship.battery.amount / ship.battery.capacity) * 30, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();

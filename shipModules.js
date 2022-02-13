@@ -34,7 +34,7 @@ class Module {
         this.#moduleType = moduleType;
     }
     #setLevel(level) {
-        if (!level || typeof level !== 'number' || level <= 0 || level > 3) {
+        if (typeof level !== 'number' || level !== level || level < 1 || level > 3) {
             console.error('Invalid value for level given. Level set to 1', level);
             level = 1;
         }
@@ -64,17 +64,17 @@ class StorageModule extends Module {
     #tempMin;
     #tempMax;
     
-    constructor(object, level, builtin, type, amount, capacity, tempMin, tempMax) {
+    constructor(dataObject, level, builtin, type, amount, capacity, tempMin, tempMax) {
 
         // enable just throwing old object at constructor to create new object
-        if (object) {
-            level = object.level;
-            builtin = object.builtin;
-            type = object.type;
-            amount = object.amount;
-            capacity = object.capacity;
-            tempMin = object.tempMin;
-            tempMax = object.tempMax;
+        if (dataObject) {
+            level = dataObject.level;
+            builtin = dataObject.builtin;
+            type = dataObject.type;
+            amount = dataObject.amount;
+            capacity = dataObject.capacity;
+            tempMin = dataObject.tempMin;
+            tempMax = dataObject.tempMax;
         }
 
         super("storage", level, builtin);
@@ -143,40 +143,108 @@ class StorageModule extends Module {
     }
  
     refreshUI() {
-        // if (!this.storageUI && userInterface && userInterface.dom)
-        //     this.createUI();
+        if (!this.storageUI && userInterface && userInterface.dom)
+            this.createUI();
     
-        // var elements = this.storageUI.querySelectorAll('.' + this.type);
+        var elements = this.storageUI.querySelectorAll('.' + this.type);
     
-        // var num = this.amount / 10;
-        // for (var i = 0; i < elements.length; i++) {
-        //         elements[i].classList.remove('active');
-        //         if (i < num)
-        //             elements[i].classList.add('active');
-        // }
+        var num = this.amount / 10;
+        for (var i = 0; i < elements.length; i++) {
+                elements[i].classList.remove('active');
+                if (i < num)
+                    elements[i].classList.add('active');
+        }
     }
 
     createUI() {
-        // var storageContainer = document.createElement('div');
-        // storageContainer.className = 'storage-container-' + this.type;
+        var storageContainer = document.createElement('div');
+        storageContainer.className = 'storage-container-' + this.type;
     
-        // for (var j = 0; j < 10; j++) {
-        //     var div = document.createElement('div');
-        //     div.classList.add(this.type);
-        //     storageContainer.appendChild(div);
-        // }
+        for (var j = 0; j < 10; j++) {
+            var div = document.createElement('div');
+            div.classList.add(this.type);
+            storageContainer.appendChild(div);
+        }
     
-        // this.storageUI = storageContainer;
-        // document.getElementById('storage').appendChild(storageContainer);
+        this.storageUI = storageContainer;
+        document.getElementById('storage').appendChild(storageContainer);
     };
 }
 
 class EngineModule extends Module {
-    constructor(level, builtin) {
+
+    #angle;
+    #speed;
+    #speedMax;
+    #acceleration;
+
+    constructor(dataObject, level, builtin, angle, speed, speedMax, acceleration) {
+
+        // enable just throwing old object at constructor to create new object
+        if (dataObject) {
+            level = dataObject.level;
+            builtin = dataObject.builtin;
+            angle = dataObject.angle;
+            speed = dataObject.speed;
+            speedMax = dataObject.speedMax;
+            acceleration = dataObject.acceleration;
+        }
+
         super("engine", level, builtin);
-        this.speed = 0;
-        this.speedMax = 350;
-        this.speedMin = 0;
-        this.acceleration = 1;
+
+        this.#setAngle(angle);
+        this.#setSpeed(speed);
+        this.#setSpeedMax(speedMax);
+        this.#setAcceleration(acceleration);
+    }
+
+    get angle() {
+        return this.#angle;
+    }
+    get speed() {
+        return this.#speed;
+    }
+    get speedMax() {
+        return this.#speedMax;
+    }
+    get acceleration() {
+        return this.#acceleration;
+    }
+
+    set angle(angle) {
+        this.#setAngle(angle);
+    }
+    set speed(speed) {
+        this.#setSpeed(speed);
+    }
+
+    #setAngle(angle) {
+        if (typeof angle !== 'number' || angle !== angle || angle > Math.PI || angle < (-Math.PI)) {
+            console.error('Invalid value for angle given. Angle set to PI', angle);
+            angle = 0;
+        }
+
+        this.#angle = angle;
+    }
+    #setSpeed(speed) {
+        if (typeof speed !== 'number' || speed !== speed || speed < 0 ) {
+            console.error('Invalid value for speed given. Speed set to 0', speed);
+            speed = 0;
+        }
+        this.#speed = speed;
+    }
+    #setSpeedMax(speedMax) {
+        if (typeof speedMax !== 'number' || speedMax !== speedMax || speedMax <= 0 ) {
+            console.error('Invalid value for speedMax given. speedMax set to 100', speedMax);
+            speedMax = 100;
+        }
+        this.#speedMax = speedMax;
+    }
+    #setAcceleration(acceleration) {
+        if (typeof acceleration !== 'number' || acceleration !== acceleration || acceleration <= 0 ) {
+            console.error('Invalid value for acceleration given. Aceleration set to 1', acceleration);
+            acceleration = 1;
+        }
+        this.#acceleration = acceleration;
     }
 }

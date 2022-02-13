@@ -7,7 +7,6 @@ var app = (function() {
         sPressed: false,
         aPressed: false,
         dPressed: false,
-        // angle: 0,
         zoom: 100,
         spaceJump: undefined,
         blackout: undefined,
