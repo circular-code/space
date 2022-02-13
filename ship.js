@@ -25,16 +25,13 @@ class Ship {
         this.x = x;
         this.y = y;
         this.level = 1;
-        this.engine = new EngineModule(1, 'engine', true);
-        this.movementEnergySource = new StorageModule(undefined, 1, 'fueltank', true, 'fuel', 100);
-        this.jumptank = new StorageModule(undefined, 1, 'fueltank', true, 'jumpfuel', 100);
-        this.battery = new StorageModule(undefined, 1, 'storage', true, 'other', 100);
+        this.engine = new EngineModule(1, true);
+        this.movementEnergySource = new StorageModule(undefined, 1, false, 'liquid', 0, 100, -100, 100);
+        this.jumptank = new StorageModule(undefined, 1, false, 'liquid', 0, 100, -100, 100);
+        this.battery = new StorageModule(undefined, 1, false, 'energy', 0, 100, -100, 100),
         this.storages = [
-            new StorageModule(undefined, 1, 'storage', true, 'solid'),
-            new StorageModule(undefined, 1, 'storage', true, 'solid'),
-            new StorageModule(undefined, 1, 'storage', true, 'liquid'),
-            new StorageModule(undefined, 1, 'storage', true, 'gas'),
-            new StorageModule(undefined, 1, 'storage', true, 'plasma'),
+            new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
+            new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
             this.movementEnergySource,
             this.jumptank,
             this.battery

@@ -1,26 +1,63 @@
 'use strict';
 class Module {
 
-    static validModuleTypes = {
+    #moduleType;
+    #level;
+    #builtin;
+
+    #validModuleTypes = {
         "scanner": true,
         "storage": true,
         "engine": true,
-        "battery": true,
     }
 
     constructor (moduleType, level, builtin) {
-        if (!Module.validModuleTypes[moduleType])
-            throw new Error("Invalid module type given to module constructor.");
-            
-        this.moduleType = moduleType;
-        this.level = level;
-        this.builtin = builtin;
+        this.#setModuleType(moduleType);
+        this.#setLevel(level);
+        this.#setBuiltin(builtin);
+    }
+
+    get moduleType() {
+        return this.#moduleType;
+    }
+    get level() {
+        return this.#level;
+    }
+    get builtin() {
+        return this.#builtin;
+    }
+
+    #setModuleType(moduleType) {
+        if (typeof moduleType !== 'string' || !this.#validModuleTypes[moduleType])
+            throw new Error("Invalid moduleType given.");
+
+        this.#moduleType = moduleType;
+    }
+    #setLevel(level) {
+        if (!level || typeof level !== 'number' || level <= 0 || level > 3) {
+            console.error('Invalid value for level given. Level set to 1', level);
+            level = 1;
+        }
+        this.#level = level;
+    }
+    #setBuiltin(builtin) {
+        if (typeof builtin !== 'boolean') {
+            console.error('Invalid value for builtin given. builtin set to true', builtin);
+            builtin = true;
+        }
+        this.#builtin = builtin;
     }
 }
 
 class StorageModule extends Module {
 
-    #types = ['solid','liquid','gas','plasma'];
+    #validStorageTypes = {
+        "solid": true,
+        "liquid": true,
+        "gas": true,
+        "plasma": true,
+        "energy": true
+    }
     #type;
     #amount;
     #capacity;
@@ -40,16 +77,6 @@ class StorageModule extends Module {
             tempMax = object.tempMax;
         }
 
-        if (!level || typeof level !== 'number' || level <= 0 || level > 3) {
-            console.error('Invalid value for level given. Level set to 1', level);
-            level = 1;
-        }
-
-        if (typeof builtin !== 'boolean') {
-            console.error('Invalid value for builtin given. builtin set to true', builtin);
-            builtin = true;
-        }
-
         super("storage", level, builtin);
 
         this.#setType(type);
@@ -57,17 +84,6 @@ class StorageModule extends Module {
         this.#setCapacity(capacity);
         this.#setTempMin(tempMin);
         this.#setTempMax(tempMax);
-
-        if (typeof tempMax !== 'number' || tempMax !== tempMax || tempMax < -273.15) {
-            console.error('Invalid value for tempMax given. tempMax set to 0', tempMax);
-            tempMax = 0;
-        }
-
-        this.#type = type;
-        this.#amount = amount;
-        this.#capacity = capacity;
-        this.#tempMin = tempMin;
-        this.#tempMax = tempMax;
     }
 
     get type() {
@@ -86,24 +102,12 @@ class StorageModule extends Module {
         return this.#tempMax;
     }
 
-    set type(type) {
-        this.#setType(type);
-    }
     set amount(amount) {
         this.#setAmount(amount);
     }
-    set capacity(capacity) {
-        this.#setCapacity(capacity);
-    }
-    set tempMin(tempMin) {
-        this.#setTempMin(tempMin);
-    }
-    set tempMax(tempMax) {
-        this.#setTempMax(tempMax);
-    }
 
     #setType(type) {
-        if (typeof type !== 'string' || !this.#types[type]) {
+        if (typeof type !== 'string' || !this.#validStorageTypes[type]) {
             console.error('Invalid value for type given. type set to solid', type);
             type = 'solid';
         }
