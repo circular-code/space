@@ -258,6 +258,22 @@ input[type=number]::-webkit-outer-spin-button {
 	position: relative;
 }
 
+.modal.shipyard .modal-dialog,
+.modal.shipyard .modal-panel,
+.modal.shipyard h3.modal-subtitle {
+    background: rgb(35 34 16 / 70%);
+	border-top: 1px solid rgb(255 246 127 / 25%);
+	border-bottom: 1px solid rgb(255 246 127 / 25%);
+}
+
+.modal.shipyard h2 {
+	color: #ffeb00;
+}
+
+.modal.shipyard button {
+	background: #ffeb00;
+}
+
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {
@@ -353,7 +369,6 @@ input[type=number]::-webkit-outer-spin-button {
 	  transform: rotate(0deg);
 	}
 }
-
 
 /** custom style **/
 

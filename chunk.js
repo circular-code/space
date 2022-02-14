@@ -11,7 +11,6 @@ class Chunk {
     }
 
     populate() {
-
         switch (this.type) {
             case 'starsAndPlanets':
                 this.createAstrobjects(this, Planet, this.size/40, this.size/80, 20 * this.scale, 10 * this.scale);

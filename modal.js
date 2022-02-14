@@ -143,13 +143,15 @@ function changeValue (commodity, buy, amount, input) {
 	}
 }
 
-function clearTradePostModal() {
+function clearModal() {
   	document.getElementById('modalContent').innerHTML = '';
 }
 
 function createTradePostModal(post) {
 
-    clearTradePostModal();
+    clearModal();
+
+	document.getElementById('modal1').classList.remove("shipyard");
 
     document.getElementById('modalTitle').textContent = post.info.title + ' - ' + post.info.system + ' - ' + post.info.allegiance;
 
@@ -179,4 +181,16 @@ function createTradePostModal(post) {
     target.appendChild(fuelPanel.panel);
     target.appendChild(buyPanel.panel);
     target.appendChild(sellPanel.panel);
+}
+
+function createShipyardModal(yard) {
+
+    clearModal();
+	document.getElementById('modal1').classList.add("shipyard");
+    document.getElementById('modalTitle').textContent = yard.name;
+
+    var infoPanel = createModalPanel('tradepost-info', 'Shipyard Information', 295);
+
+    var target = document.getElementById('modalContent');
+    target.appendChild(infoPanel.panel);
 }

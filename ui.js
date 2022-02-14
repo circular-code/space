@@ -212,7 +212,11 @@ var userInterface = (function() {
         requestLanding: function() {
             if (app.ship.checkCollision(app.map.contextMenuAstrobject.range, app.map.contextMenuAstrobject.x, app.map.contextMenuAstrobject.y)){
                 alert('Landing granted.');
-                createTradePostModal(app.map.contextMenuAstrobject);
+                if (app.map.contextMenuAstrobject instanceof ShipYard)
+                    createShipyardModal(app.map.contextMenuAstrobject);
+                else
+                    createTradePostModal(app.map.contextMenuAstrobject);
+                
                 document.getElementById("modal1").classList.add("is-visible");
             }
             else

@@ -27,66 +27,70 @@ example: {
 
 /* how many layers can a planet have, how many resource spots will be distributed on the planet? */
 
-function Resource (loaded, name, type, amount, depthMin, depthMax) {
+class Resource {
 
-    if (loaded)
-        return this;
+    constructor(loaded, name, type, amount, depthMin, depthMax) {
 
-    // e.g. crystal
-    this.name = name;
+        //TODO: rework loaded
+        if (loaded)
+            return this;
 
-    // solid, fluid, gas
-    this.type = type;
+        // e.g. crystal
+        this.name = name;
 
-    switch(name) {
+        // solid, fluid, gas
+        this.type = type;
 
-        case 'gas':
-            this.color = 'green';
-            break;
+        switch(name) {
 
-        case 'crystal':
-            this.color = 'blue';
-            break;
+            case 'gas':
+                this.color = 'green';
+                break;
 
-        case 'metal':
-            this.color = 'orange';
-            break;
+            case 'crystal':
+                this.color = 'blue';
+                break;
+
+            case 'metal':
+                this.color = 'orange';
+                break;
+        }
+
+        //positive integer
+        this.amount = amount;
+
+        // float between 0 - 1
+        this.quality = Math.random();
+
+        // random value inside depth range
+        this.depth = randomNumBetween(depthMax, depthMin);
+
+        var x;
+        // random value inside depth range
+        this.angleStart = x = randomNumBetween(0, 2 * Math.PI);
+        this.angleEnd = x + randomNumBetween(40) / 10;
+
+        // depletion flag
+        this.depleted = false;
     }
 
-    //positive integer
-    this.amount = amount;
-
-    // float between 0 - 1
-    this.quality = Math.random();
-
-    // random value inside depth range
-    this.depth = randomNumBetween(depthMax, depthMin);
-
-    var x;
-    // random value inside depth range
-    this.angleStart = x = randomNumBetween(0, 2 * Math.PI);
-    this.angleEnd = x + randomNumBetween(40) / 10;
-
-    // depletion flag
-    this.depleted = false;
+    retain(amount) {
+        if (typeof amount !== 'number')
+            return console.error('Tried to retain resource with invalid amount.');
+    
+        if (this.depleted) {
+            console.info('Requested resource is depleted.');
+            return 0;
+        }
+    
+        if ((this.amount - amount) > 0) {
+            this.amount -= amount;
+            return amount;
+        }
+        else if ((this.amount - amount) <= 0) {
+            this.amount = 0;
+            this.depleted = true;
+            return amount + (this.amount - amount);
+        }
+    }
 }
-
-Resource.prototype.retain = function (amount) {
-    if (typeof amount !== 'number')
-        return console.error('Tried to retain resource with invalid amount.');
-
-    if (this.depleted) {
-        console.info('Requested resource is depleted.');
-        return 0;
-    }
-
-    if ((this.amount - amount) > 0) {
-        this.amount -= amount;
-        return amount;
-    }
-    else if ((this.amount - amount) <= 0) {
-        this.amount = 0;
-        this.depleted = true;
-        return amount + (this.amount - amount);
-    }
-};
