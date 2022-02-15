@@ -149,9 +149,8 @@ function clearModal() {
 
 function createTradePostModal(post) {
 
-    clearModal();
-
-	document.getElementById('modal1').classList.remove("shipyard");
+	clearModal();
+	document.getElementById('modal').className = 'modal tradepost-modal'
 
     document.getElementById('modalTitle').textContent = post.info.title + ' - ' + post.info.system + ' - ' + post.info.allegiance;
 
@@ -176,21 +175,32 @@ function createTradePostModal(post) {
     for (var index = 0; index < post.needResources.length; index++)
       	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], false));
 
-    var target = document.getElementById('modalContent');
-    target.appendChild(infoPanel.panel);
-    target.appendChild(fuelPanel.panel);
-    target.appendChild(buyPanel.panel);
-    target.appendChild(sellPanel.panel);
+    var modalContent = document.getElementById('modalContent');
+    modalContent.appendChild(infoPanel.panel);
+    modalContent.appendChild(fuelPanel.panel);
+    modalContent.appendChild(buyPanel.panel);
+    modalContent.appendChild(sellPanel.panel);
 }
 
 function createShipyardModal(yard) {
 
     clearModal();
-	document.getElementById('modal1').classList.add("shipyard");
+	document.getElementById('modal').className = 'modal shipyard-modal'
     document.getElementById('modalTitle').textContent = yard.name;
 
     var infoPanel = createModalPanel('tradepost-info', 'Shipyard Information', 295);
 
-    var target = document.getElementById('modalContent');
-    target.appendChild(infoPanel.panel);
+    var modalContent = document.getElementById('modalContent');
+    modalContent.appendChild(infoPanel.panel);
+}
+
+function createShipDetailsModal(ship) {
+	clearModal();
+	document.getElementById('modal').className = 'modal ship-modal'
+	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
+
+    var infoPanel = createModalPanel('tradepost-info', 'Basic Ship Information', 295);
+
+    var modalContent = document.getElementById('modalContent');
+    modalContent.appendChild(infoPanel.panel);
 }

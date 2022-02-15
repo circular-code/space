@@ -85,7 +85,7 @@ table {
 	border-top: 1px solid rgba(127, 255, 212, 0.25);
 	border-bottom: 1px solid rgba(127, 255, 212, 0.25);
     /* box-shadow: 0px 0px 20px 5px rgba(71, 129, 134, 0.5); */
-    background: rgba(16, 33, 35, 0.7);
+    background: rgb(20 20 20 / 65%);
     overflow: auto;
     cursor: default;
     width: 80vw;
@@ -127,6 +127,7 @@ table {
     color: #0c181b;
     font-size: 14px;
     cursor: pointer;
+	outline: none;
 }
 
 .modal p + p {
@@ -254,26 +255,58 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+#topUi button {
+	background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+	cursor: pointer;
+}
+
 .modal button {
 	position: relative;
 }
 
-.modal.shipyard .modal-dialog,
-.modal.shipyard .modal-panel,
-.modal.shipyard h3.modal-subtitle {
+.modal.shipyard-modal .modal-panel,
+.modal.shipyard-modal h3.modal-subtitle {
     background: rgb(35 34 16 / 70%);
+}
+
+.modal.shipyard-modal .modal-dialog,
+.modal.shipyard-modal .modal-panel,
+.modal.shipyard-modal h3.modal-subtitle {
 	border-top: 1px solid rgb(255 246 127 / 25%);
 	border-bottom: 1px solid rgb(255 246 127 / 25%);
 }
 
-.modal.shipyard h2 {
+.modal.shipyard-modal h2 {
 	color: #ffeb00;
 }
 
-.modal.shipyard button {
+.modal.shipyard-modal button {
 	background: #ffeb00;
 }
 
+.modal.ship-modal h2 {
+	color: #dbdbdb;
+}
+
+.modal.ship-modal button {
+	background: #dbdbdb;
+}
+
+.modal.ship-modal .modal-panel,
+.modal.ship-modal h3.modal-subtitle {
+    background: rgb(255 255 255 / 10%);
+}
+
+.modal.ship-modal .modal-dialog,
+.modal.ship-modal .modal-panel,
+.modal.ship-modal h3.modal-subtitle {
+	border-top: 1px solid rgb(255 255 255 / 25%);
+	border-bottom: 1px solid rgb(255 255 255 / 25%);
+}
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {
@@ -527,10 +560,6 @@ body {
 	color: white;
 }
 
-#options {
-	cursor: pointer;
-}
-
 #optionsContainer {
 	display: none;
 }
@@ -582,7 +611,7 @@ body {
 	font-size: 12px;
 }
 
-#topUi > i#compress {
+#topUi > #compressButton {
 	display: none;
 }
 

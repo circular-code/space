@@ -2,7 +2,7 @@
 class Map {
     constructor(size, scale) {
         this.chunks = [];
-        this.chunkSize = size;
+        this.chunkSize = size * scale * scale;
         this.scale = scale;
         this.backgroundStars = [];
         this.flaggedAstrobjects = [];

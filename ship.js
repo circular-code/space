@@ -1,30 +1,31 @@
 class Ship {
 
-    constructor(r, x, y, size) {
-        var collided = true;
-        var xcounter = 0;
-        while (collided) {
+    constructor(size) {
 
-            collided = this.checkCollisions(app.map.chunks[0], x, y, r);
+        this.r = 3;
+        this.x = randomNumBetween(size);
+        this.y = randomNumBetween(size);
+        this.spawnShip(size);
 
-            if (collided) {
-                x = randomNumBetween(size);
-                y = randomNumBetween(size);
-            }
-            else {
-                collided = false;
-            }
-            xcounter++;
-            if (xcounter > 100) {
-                console.error('Could not generate ship on map. Check map creation values.');
-                collided = false;
-            }
-        }
+        // engines,
+        // arms,
+        // shields,
+        // fueltanks,
+        // batteries,
+        // storages,
+        // crew,
+        // passengers,
+        // bunks
 
-        this.r = r;
-        this.x = x;
-        this.y = y;
-        this.level = 1;
+        this.details = {
+            manufacturer: "Corellian Engineering Corporation",
+            name: "Milennium Falcon",
+            class: "light frighter",
+            model: "YT-1300",
+            variant: "f"
+        };
+
+        
         this.engine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
         this.backupEngine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
         this.backupFuelTank = new StorageModule(undefined, 1, false, 'liquid', 100, 100, -100, 100);
@@ -42,8 +43,31 @@ class Ship {
 
         this.storages.forEach(storage => {
             // if (storage.type === 'solid' || storage.type === 'liquid' || storage.type === 'gas' || storage.type === 'plasma')
-                // storage.createUI();
+            //     storage.createUI();
         });
+    }
+
+    spawnShip(size) {
+        var collided = true;
+        var genCounter = 0;
+
+        while (collided) {
+
+            collided = this.checkCollisions();
+
+            if (collided) {
+                this.x = randomNumBetween(size);
+                this.y = randomNumBetween(size);
+            }
+            else {
+                collided = false;
+            }
+            genCounter++;
+            if (genCounter > 100) {
+                console.error('Could not generate ship on map. Check map creation values.');
+                collided = false;
+            }
+        }
     }
 
     checkActiveChunk() {
@@ -176,22 +200,15 @@ class Ship {
     }
 
     checkCollisions() {
-        var ship = this;
-    
         if (app.map.activeChunk) {
-    
-            var all = Chunk.getClosestObjects(app.map.activeChunk);
-    
-            var collidedObjects = all.filter(function(object) {
-                return distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.r && object.name !== 'Nebula';
-            });
+            var collidedObjects = Chunk.getClosestObjects(app.map.activeChunk).filter(object => this.checkCollision(object.r, object.x, object.y) && object.name !== 'Nebula');
     
             if (collidedObjects.length > 0) {
     
                 if (collidedObjects[0].name === 'Wormhole' && collidedObjects[0].partner) {
-                    ship.x = collidedObjects[0].partner.x + collidedObjects[0].partner.r + 30;
-                    ship.y = collidedObjects[0].partner.y + collidedObjects[0].partner.r + 30;
-                    ship.engine.angle = randomNumBetween(Math.PI, -Math.PI);
+                    this.x = collidedObjects[0].partner.x + collidedObjects[0].partner.r + 30;
+                    this.y = collidedObjects[0].partner.y + collidedObjects[0].partner.r + 30;
+                    this.engine.angle = randomNumBetween(Math.PI, -Math.PI);
                 }
                 else {
                     alert('You collided with an astronomical entity and got smashed to bits in the process.');

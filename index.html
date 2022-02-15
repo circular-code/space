@@ -10,16 +10,27 @@
     <canvas id="pocketUniverse" width="480" height="320"></canvas>
     <div id="shadow"></div>
     <div id="topUi">
-      <i title="jump" id="spaceJump" class="fal fa-rocket-launch"></i>
-      <i title="compress" id="compress" class="far fa-compress"></i>
-      <i title="expand" id="expand" class="far fa-expand"></i>
-      <i title="options" id="options" class="far fa-ellipsis-v"></i>
+      <button id="viewShipDetailsButton" type="button" title="view details">
+        <i class="fal fa-rocket-launch"></i>
+      </button>
+      <button id="spaceJumpButton" type="button" title="jump">
+        <i class="fal fa-rocket-launch"></i>
+      </button>
+      <button id="compressButton" type="button">
+        <i title="compress" class="far fa-compress"></i>
+      </button>
+      <button id="expandButton" type="button" title="expand">
+        <i class="far fa-expand"></i>
+      </button>
+      <button id="optionsButton" type="button" title="options">
+        <i class="far fa-ellipsis-v"></i>
+      </button>
       <div id="optionsContainer">
-          <div id="bottomUi">
-            <label for="uploadFile">upload saved game here</label>
-            <input id="uploadFile" name="uploadFile" type="file" />
-            <button id="saveButton">save</button>
-          </div>
+        <div id="bottomUi">
+          <label for="uploadFile">upload saved game here</label>
+          <input id="uploadFile" name="uploadFile" type="file" />
+          <button id="saveButton">save</button>
+        </div>
       </div>
     </div>
     <div id="menu">
@@ -33,7 +44,7 @@
     <!-- <input type="range" min="-1" max="3" step="0.1" value="1" class="slider" id="scaleSlider"> -->
     <div id="ui"></div>
 
-    <div class="modal" id="modal1" data-animation="slideInOutTop">
+    <div class="modal" id="modal" data-animation="slideInOutTop">
       <div class="modal-dialog">
         <header id="modal-header">
           <h2 id="modalTitle">Iowa Outpost - Dalarian System 113.14 - High Order Sovereignity</h2>

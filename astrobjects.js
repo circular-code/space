@@ -1,5 +1,6 @@
 'use strict';
 // Stars, Planets, Dwarf planets, minor planets, exoplanets, brown dwarfs, galaxies, discs, nebulae, void
+// https://en.wikipedia.org/wiki/Astronomical_object#Categories_by_location
 
 function Astrobject(r, x, y) {
     this.r = r;

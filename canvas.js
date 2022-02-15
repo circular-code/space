@@ -9,7 +9,7 @@ canvas.addEventListener("click", e => {
 
 canvas.addEventListener('DOMMouseScroll', userInterface.handlers.handleScroll, false);
 canvas.addEventListener('mousewheel', userInterface.handlers.handleScroll, false);
-canvas.addEventListener("click", userInterface.handlers.mouseClickHandler, false);
+// canvas.addEventListener("click", userInterface.handlers.mouseClickHandler, false);
 
 canvas.addEventListener("contextmenu", e => {
     e.preventDefault();

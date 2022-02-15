@@ -9,10 +9,11 @@ var userInterface = (function() {
         addFlag: document.getElementById('addFlag'),
         removeFlag: document.getElementById('removeFlag'),
         requestLanding: document.getElementById('requestLanding'),
-        spaceJump: document.getElementById('spaceJump'),
-        options:  document.getElementById('options'),
-        expand: document.getElementById("expand"),
-        compress: document.getElementById("compress"),
+        viewShipDetailsButton: document.getElementById('viewShipDetailsButton'),
+        spaceJumpButton: document.getElementById('spaceJumpButton'),
+        optionsButton:  document.getElementById('optionsButton'),
+        expandButton: document.getElementById("expandButton"),
+        compressButton: document.getElementById("compressButton"),
         saveButton: document.getElementById('saveButton'),
         uploadFile: document.getElementById('uploadFile'),
         menu: document.getElementById('menu')
@@ -117,11 +118,12 @@ var userInterface = (function() {
         DOM.addFlag.addEventListener('click', ui.handlers.addFlag);
         DOM.removeFlag.addEventListener('click', ui.handlers.removeFlag);
         DOM.requestLanding.addEventListener('click', ui.handlers.requestLanding);
-        DOM.spaceJump.addEventListener('click', ui.handlers.spaceJump);  
-        DOM.options.addEventListener('click', ui.handlers.options);
+        DOM.spaceJumpButton.addEventListener('click', ui.handlers.spaceJump);
+        DOM.viewShipDetailsButton.addEventListener('click', ui.handlers.viewShipDetails);
+        DOM.optionsButton.addEventListener('click', ui.handlers.options);
         DOM.saveButton.addEventListener('click', ui.handlers.saveButton);
-        DOM.expand.addEventListener('click', ui.handlers.expand);
-        DOM.compress.addEventListener('click', ui.handlers.compress);
+        DOM.expandButton.addEventListener('click', ui.handlers.expand);
+        DOM.compressButton.addEventListener('click', ui.handlers.compress);
     };
 
     ui.handlers = {
@@ -209,6 +211,10 @@ var userInterface = (function() {
                 }, 1000);
             }, 1000);
         },
+        viewShipDetails: function() {
+            createShipDetailsModal(app.ship);
+            document.getElementById("modal").classList.add("is-visible");
+        },
         requestLanding: function() {
             if (app.ship.checkCollision(app.map.contextMenuAstrobject.range, app.map.contextMenuAstrobject.x, app.map.contextMenuAstrobject.y)){
                 alert('Landing granted.');
@@ -217,7 +223,7 @@ var userInterface = (function() {
                 else
                     createTradePostModal(app.map.contextMenuAstrobject);
                 
-                document.getElementById("modal1").classList.add("is-visible");
+                document.getElementById("modal").classList.add("is-visible");
             }
             else
                 alert('Too far away.');
@@ -285,10 +291,6 @@ var userInterface = (function() {
                 app.dPressed = false;
             }
         },
-        mouseClick: function(e) {
-            mouseX = e.clientX + viewport.x;
-            mouseY = e.clientY + viewport.y;
-        },
         handleScroll: function(e) {
             if (e.wheelDelta < 0 && app.zoom !== 50)
                 app.zoom--;
@@ -340,9 +342,6 @@ var userInterface = (function() {
             // app.ship.storages[i+length].refresh();
         }
         app.ship.storages.splice(0,length);
-
-        mouseX = app.ship.x;
-        mouseY = app.ship.y;
 
         //TODO: map load besser implementieren, ui clearen, gesamtes system "ladebereit" aufsetzen
         map = Object.assign(new Map(), obj.map);

@@ -13,11 +13,6 @@ var app = (function() {
         scale: 1,
     };
 
-    global.size = 3000 * global.scale * global.scale,
-    global.r = 3;
-    global.mouseX = global.size/2 - global.r/2;
-    global.mouseY = global.size/2 - global.r/2;
-
     var time = Date.now();
     // var ship = JSON.parse(localStorage.getItem('space-ship-state'));
     
@@ -93,8 +88,8 @@ var app = (function() {
     return global;
 })();
 
-app.map = new Map(app.size, app.scale);
-app.ship = new Ship(app.r, app.mouseX, app.mouseY, app.size);
+app.map = new Map(3000, app.scale);
+app.ship = new Ship(app.map.chunkSize);
 app.viewport = new Viewport(0,0);
 app.renderLoop();
 
