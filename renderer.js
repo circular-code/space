@@ -53,11 +53,11 @@ var Renderer = (function() {
             // ctx.shadowColor = "transparent";
             // ctx.shadowBlur = 0;
 
-            if(ship.engine.speed > 0) {
+            if(ship.engines[0].speed > 0) {
                 ctx.beginPath();
-                ctx.moveTo(Math.cos(ship.engine.angle - Math.PI) * 4 + ship.x, Math.sin(ship.engine.angle - Math.PI) + ship.y);
-                ctx.lineTo(Math.cos(ship.engine.angle - Math.PI) * (4 +  ship.engine.speed / 15) + ship.x, Math.sin(ship.engine.angle - Math.PI) * (4 +  ship.engine.speed / 15) + ship.y);
-                ctx.lineTo(Math.cos(ship.engine.angle - Math.PI) + ship.x, Math.sin(ship.engine.angle - Math.PI) * 4 + ship.y);
+                ctx.moveTo(Math.cos(ship.engines[0].angle - Math.PI) * 4 + ship.x, Math.sin(ship.engines[0].angle - Math.PI) + ship.y);
+                ctx.lineTo(Math.cos(ship.engines[0].angle - Math.PI) * (4 +  ship.engines[0].speed / 15) + ship.x, Math.sin(ship.engines[0].angle - Math.PI) * (4 +  ship.engines[0].speed / 15) + ship.y);
+                ctx.lineTo(Math.cos(ship.engines[0].angle - Math.PI) + ship.x, Math.sin(ship.engines[0].angle - Math.PI) * 4 + ship.y);
                 ctx.lineTo(ship.x, ship.y);
                 ctx.closePath();
                 ctx.fillStyle = "orange";
@@ -81,7 +81,7 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 15, (ship.battery.amount / ship.battery.capacity) * 30, 3);
+            ctx.rect(ship.x - 15, ship.y + 15, (ship.storages[0].amount / ship.storages[0].capacity) * 30, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -97,7 +97,7 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 20, (ship.jumptank.amount / ship.jumptank.capacity) * 10, 3);
+            ctx.rect(ship.x - 15, ship.y + 20, (ship.storages[2].amount / ship.storages[2].capacity) * 10, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -167,17 +167,17 @@ var Renderer = (function() {
 
             if (backgroundStar || app.viewport.isInside(obj.x, obj.y)) {
 
-                if (backgroundStar === 1 && app.ship.engine.speed > 0) {
-                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.1;
-                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.1
+                if (backgroundStar === 1 && app.ship.engines[0].speed > 0) {
+                    obj.x -= app.ship.engines[0].speed * Math.cos(app.ship.engines[0].angle) * timeDelta * 0.1;
+                    obj.y -= app.ship.engines[0].speed * Math.sin(app.ship.engines[0].angle) * timeDelta * 0.1
                 }
-                if (backgroundStar === 2 && app.ship.engine.speed > 0) {
-                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.05;
-                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.05;
+                if (backgroundStar === 2 && app.ship.engines[0].speed > 0) {
+                    obj.x -= app.ship.engines[0].speed * Math.cos(app.ship.engines[0].angle) * timeDelta * 0.05;
+                    obj.y -= app.ship.engines[0].speed * Math.sin(app.ship.engines[0].angle) * timeDelta * 0.05;
                 }
-                if (backgroundStar === 3 && app.ship.engine.speed > 0 && timeDelta) {
-                    obj.x -= app.ship.engine.speed * Math.cos(app.ship.engine.angle) * timeDelta * 0.01;
-                    obj.y -= app.ship.engine.speed * Math.sin(app.ship.engine.angle) * timeDelta * 0.01;
+                if (backgroundStar === 3 && app.ship.engines[0].speed > 0 && timeDelta) {
+                    obj.x -= app.ship.engines[0].speed * Math.cos(app.ship.engines[0].angle) * timeDelta * 0.01;
+                    obj.y -= app.ship.engines[0].speed * Math.sin(app.ship.engines[0].angle) * timeDelta * 0.01;
                 }
 
                 switch(obj.name) {

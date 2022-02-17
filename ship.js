@@ -7,12 +7,8 @@ class Ship {
         this.y = randomNumBetween(size);
         this.spawnShip(size);
 
-        // engines,
         // arms,
         // shields,
-        // fueltanks,
-        // batteries,
-        // storages,
         // crew,
         // passengers,
         // bunks
@@ -25,19 +21,20 @@ class Ship {
             variant: "f"
         };
 
-        
-        this.engine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
-        this.backupEngine = new EngineModule(undefined, 1, true, 0, 0, 350, 1);
-        this.backupFuelTank = new StorageModule(undefined, 1, false, 'liquid', 100, 100, -100, 100);
-        this.jumptank = new StorageModule(undefined, 1, false, 'liquid', 100, 100, -100, 100);
-        this.battery = new StorageModule(undefined, 1, false, 'energy', 100, 100, -100, 100),
         this.storages = [
-            new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
-            new StorageModule(undefined, 1, false, 'solid', 0, 100, -100, 100),
-            this.backupFuelTank,
-            this.jumptank,
-            this.battery
+            new StorageModule(undefined, false, 'energy', 100, 100, -100, 100),
+            new StorageModule(undefined, false, 'liquid', 100, 100, -100, 100),
+            new StorageModule(undefined, false, 'liquid', 100, 100, -100, 100),
+            new StorageModule(undefined, false, 'solid', 0, 100, -100, 100),
+            new StorageModule(undefined, false, 'solid', 0, 100, -100, 100),
         ];
+
+        this.engines = [
+            new EngineModule(undefined, true, "energy", 0, 0, 0, 350, 1),
+            new EngineModule(undefined, true, "fuel", 1, 0, 0, 200, 1),
+            new EngineModule(undefined, true, "jump", 2, 0, 5000, 5000, 1),
+        ];
+        
         this.capacity = 5;
         this.credits = 13.37;
 
@@ -113,8 +110,8 @@ class Ship {
                 return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
             });
     
-            if (collidedObjects.length > 0 && this.battery.capacity > (this.battery.amount + Star.energyRegenerationAmount)) {
-                this.battery.amount += Star.energyRegenerationAmount * timeDelta * collidedObjects.length;
+            if (collidedObjects.length > 0 && this.storages[0].capacity > (this.storages[0].amount + Star.energyRegenerationAmount)) {
+                this.storages[0].amount += Star.energyRegenerationAmount * timeDelta * collidedObjects.length;
             }
         }
     }
@@ -146,54 +143,54 @@ class Ship {
 
     move(timeDelta) {
 
-        if (this.battery.amount <= 0 || app.blackout || app.spaceJump) {
+        if (this.storages[0].amount <= 0 || app.blackout || app.spaceJump) {
             app.wPressed = false;
             app.sPressed = false;
             app.aPressed = false;
             app.dPressed = false;
     
-            let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
-            let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
+            let xVelocity = this.engines[0].speed * Math.cos(this.engines[0].angle);
+            let yVelocity = this.engines[0].speed * Math.sin(this.engines[0].angle);
     
             this.x += xVelocity * timeDelta;
             this.y += yVelocity * timeDelta;
             return;
         }
     
-        if (app.wPressed && this.engine.speed < this.engine.speedMax) {
-            this.engine.speed += this.engine.acceleration;
-            this.battery.amount -= 1 * timeDelta;
+        if (app.wPressed && this.engines[0].speed < this.engines[0].speedMax) {
+            this.engines[0].speed += this.engines[0].acceleration;
+            this.storages[0].amount -= 1 * timeDelta;
         }
-        if (app.sPressed && this.engine.speed > 0) {
-            this.engine.speed -= this.engine.acceleration;
-            this.battery.amount -= 1 * timeDelta;
+        if (app.sPressed && this.engines[0].speed > 0) {
+            this.engines[0].speed -= this.engines[0].acceleration;
+            this.storages[0].amount -= 1 * timeDelta;
         }
-        if (!this.engine.angle)
-            this.engine.angle = 0;
+        if (!this.engines[0].angle)
+            this.engines[0].angle = 0;
     
-        let angleSpeedMod = (this.engine.speed / this.engine.speedMax - 1) * -1;
+        let angleSpeedMod = (this.engines[0].speed / this.engines[0].speedMax - 1) * -1;
         if (angleSpeedMod < 0.1)
             angleSpeedMod = 0.1;
     
         if (app.aPressed) {
-            if ((this.engine.angle - angleSpeedMod) < (Math.PI * -1))
-                this.engine.angle = Math.PI;
+            if ((this.engines[0].angle - angleSpeedMod) < (Math.PI * -1))
+                this.engines[0].angle = Math.PI;
             else
-                this.engine.angle -= angleSpeedMod * timeDelta * 5;
+                this.engines[0].angle -= angleSpeedMod * timeDelta * 5;
     
-            this.battery.amount -= 1  * timeDelta;
+            this.storages[0].amount -= 1  * timeDelta;
         }
         if (app.dPressed) {
-            if ((this.engine.angle + angleSpeedMod) > Math.PI)
-                this.engine.angle = Math.PI * -1;
+            if ((this.engines[0].angle + angleSpeedMod) > Math.PI)
+                this.engines[0].angle = Math.PI * -1;
             else
-                this.engine.angle += angleSpeedMod * timeDelta * 5;
+                this.engines[0].angle += angleSpeedMod * timeDelta * 5;
     
-            this.battery.amount -= 1 * timeDelta;
+            this.storages[0].amount -= 1 * timeDelta;
         }
     
-        let xVelocity = this.engine.speed * Math.cos(this.engine.angle);
-        let yVelocity = this.engine.speed * Math.sin(this.engine.angle);
+        let xVelocity = this.engines[0].speed * Math.cos(this.engines[0].angle);
+        let yVelocity = this.engines[0].speed * Math.sin(this.engines[0].angle);
     
         this.x += xVelocity * timeDelta;
         this.y += yVelocity * timeDelta;
@@ -208,7 +205,7 @@ class Ship {
                 if (collidedObjects[0].name === 'Wormhole' && collidedObjects[0].partner) {
                     this.x = collidedObjects[0].partner.x + collidedObjects[0].partner.r + 30;
                     this.y = collidedObjects[0].partner.y + collidedObjects[0].partner.r + 30;
-                    this.engine.angle = randomNumBetween(Math.PI, -Math.PI);
+                    this.engines[0].angle = randomNumBetween(Math.PI, -Math.PI);
                 }
                 else {
                     alert('You collided with an astronomical entity and got smashed to bits in the process.');

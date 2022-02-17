@@ -2,7 +2,6 @@
 class Module {
 
     #moduleType;
-    #level;
     #builtin;
 
     #validModuleTypes = {
@@ -11,17 +10,13 @@ class Module {
         "engine": true,
     }
 
-    constructor (moduleType, level, builtin) {
+    constructor (moduleType, builtin) {
         this.#setModuleType(moduleType);
-        this.#setLevel(level);
         this.#setBuiltin(builtin);
     }
 
     get moduleType() {
         return this.#moduleType;
-    }
-    get level() {
-        return this.#level;
     }
     get builtin() {
         return this.#builtin;
@@ -32,13 +27,6 @@ class Module {
             throw new Error("Invalid moduleType given.");
 
         this.#moduleType = moduleType;
-    }
-    #setLevel(level) {
-        if (typeof level !== 'number' || level !== level || level < 1 || level > 3) {
-            console.error('Invalid value for level given. Level set to 1', level);
-            level = 1;
-        }
-        this.#level = level;
     }
     #setBuiltin(builtin) {
         if (typeof builtin !== 'boolean') {
@@ -64,11 +52,10 @@ class StorageModule extends Module {
     #tempMin;
     #tempMax;
     
-    constructor(dataObject, level, builtin, type, amount, capacity, tempMin, tempMax) {
+    constructor(dataObject, builtin, type, amount, capacity, tempMin, tempMax) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
-            level = dataObject.level;
             builtin = dataObject.builtin;
             type = dataObject.type;
             amount = dataObject.amount;
@@ -77,7 +64,7 @@ class StorageModule extends Module {
             tempMax = dataObject.tempMax;
         }
 
-        super("storage", level, builtin);
+        super("storage", builtin);
 
         this.#setType(type);
         this.#setAmount(amount);
@@ -173,31 +160,47 @@ class StorageModule extends Module {
 
 class EngineModule extends Module {
 
+    #validEngineTypes = {
+        "jump": true,
+        "energy": true,
+        "fuel": true,
+    };
     #angle;
     #speed;
     #speedMax;
     #acceleration;
+    #type;
+    #energySource;
 
-    constructor(dataObject, level, builtin, angle, speed, speedMax, acceleration) {
+    constructor(dataObject, builtin, type, energySource, angle, speed, speedMax, acceleration) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
-            level = dataObject.level;
             builtin = dataObject.builtin;
+            type = type;
+            energySource = energySource;
             angle = dataObject.angle;
             speed = dataObject.speed;
             speedMax = dataObject.speedMax;
             acceleration = dataObject.acceleration;
         }
 
-        super("engine", level, builtin);
+        super("engine", builtin);
 
+        this.#setType(type);
+        this.#setEnergySource(energySource);
         this.#setAngle(angle);
         this.#setSpeed(speed);
         this.#setSpeedMax(speedMax);
         this.#setAcceleration(acceleration);
     }
 
+    get type() {
+        return this.#type;
+    }
+    get energySource() {
+        return this.#energySource;
+    }
     get angle() {
         return this.#angle;
     }
@@ -211,6 +214,9 @@ class EngineModule extends Module {
         return this.#acceleration;
     }
 
+    set energySource(energySource) {
+        this.#setEnergySource(energySource);
+    }
     set angle(angle) {
         this.#setAngle(angle);
     }
@@ -246,5 +252,20 @@ class EngineModule extends Module {
             acceleration = 1;
         }
         this.#acceleration = acceleration;
+    }
+    #setType(type) {
+        if (typeof type !== 'string' || !this.#validEngineTypes[type]) {
+            console.error('Invalid value for type given. type set to solid', type);
+            type = 'solid';
+        }
+        this.#type = type;
+    }
+    #setEnergySource(energySource) {
+        //TODO: check if energy source matches type
+        if (typeof energySource !== 'number' || energySource !== energySource || energySource < 0 ) {
+            console.error('Invalid value for energySource given. energySource set to 0', energySource);
+            energySource = 0;
+        }
+        this.#energySource = energySource;
     }
 }

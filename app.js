@@ -69,8 +69,8 @@ var app = (function() {
             if (typeof app.ship.credits === 'number' && app.ship.credits === app.ship.credits) {
                 userInterface.credits.textContent = ship.credits + ' $';
             }
-            if (userInterface.speed && ship.engine) {
-                userInterface.speed.textContent = pad(app.ship.engine.speed, 3);
+            if (userInterface.speed && app.ship.engines[0]) {
+                userInterface.speed.textContent = pad(app.ship.engines[0].speed, 3);
             }
             if (userInterface.xCoordinate) {
                 userInterface.xCoordinate.textContent = (Math.round(app.ship.x) / 1000).toFixed(3);

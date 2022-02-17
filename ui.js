@@ -186,16 +186,16 @@ var userInterface = (function() {
             }
         },
         spaceJump: function() {
-            if (app.ship.engine.speed < app.ship.engine.speedMax) {
+            if (app.ship.engines[0].speed < app.ship.engines[0].speedMax) {
                 alert('YOU NEED MORE SPEED');
                 return;
             }
-            else if (app.ship.jumptank.amount < 10) {
+            else if (app.ship.storages[2].amount < 10) {
                 alert('OUT OF JUMP FUEL');
                 return;
             }
         
-            app.ship.jumptank.amount -= 10;
+            app.ship.storages[2].amount -= 10;
         
             app.spaceJump = true;
         
@@ -203,11 +203,11 @@ var userInterface = (function() {
                 app.spaceJump = undefined;
                 app.blackout = true;
         
-                app.ship.engine.speed = 5000;
+                app.ship.engines[0].speed = 5000;
         
                 setTimeout(function() {
                     app.blackout = undefined;
-                    app.ship.engine.speed = 350;
+                    app.ship.engines[0].speed = 350;
                 }, 1000);
             }, 1000);
         },
