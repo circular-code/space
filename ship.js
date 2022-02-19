@@ -35,7 +35,19 @@ class Ship {
             new EngineModule(undefined, true, "jump", 2, 0, 5000, 5000, 1),
         ];
         
-        this.capacity = 5;
+        //TODO: valid modules for slot, transfer builtin to slot?
+        this.slots = [
+            undefined,
+            this.storages[0],
+            this.storages[1],
+            this.storages[2],
+            this.storages[3],
+            this.storages[4],
+            this.engines[0],
+            this.engines[1],
+            this.engines[2]
+        ];
+
         this.credits = 13.37;
 
         this.storages.forEach(storage => {

@@ -156,6 +156,20 @@ class StorageModule extends Module {
         this.storageUI = storageContainer;
         document.getElementById('storage').appendChild(storageContainer);
     };
+
+    createSlot() {
+        builtin = dataObject.builtin;
+        type = dataObject.type;
+        amount = dataObject.amount;
+        capacity = dataObject.capacity;
+        tempMin = dataObject.tempMin;
+        tempMax = dataObject.tempMax;
+
+        var container = document.createElement('div');
+        container.classList = 'storagemodule-container storagemodule-' + this.type;
+        //TODO: add stuff
+        return container;
+    }
 }
 
 class EngineModule extends Module {

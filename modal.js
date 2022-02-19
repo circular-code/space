@@ -201,6 +201,22 @@ function createShipDetailsModal(ship) {
 
     var infoPanel = createModalPanel('tradepost-info', 'Basic Ship Information', 295);
 
+	var slotContainer = document.createElement('div');
+	slotContainer.id = 'slotContainer';
+
+	for (let i = 0; i < ship.slots.length; i++) {
+
+		let module = ship.slots[i];
+		let dom = document.createElement('div');
+	
+		dom.classList = 'slot';
+		if (module.constructor && module.createSlot) {
+			dom.appendChild(module.createSlot());
+			dom.classList.add('slot-' + slot.constructor.name.toLowerCase());
+		}
+	}
+
     var modalContent = document.getElementById('modalContent');
     modalContent.appendChild(infoPanel.panel);
+	modalContent.appendChild(slotContainer);
 }
