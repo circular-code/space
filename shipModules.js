@@ -39,6 +39,14 @@ class Module {
 
 class StorageModule extends Module {
 
+    #type;
+    #amount;
+    #capacity;
+    #temperatureMin;
+    #temperatureMax;
+    #temperatureCurrent;
+    #content;
+
     #validStorageTypes = {
         "solid": true,
         "liquid": true,
@@ -46,13 +54,13 @@ class StorageModule extends Module {
         "plasma": true,
         "energy": true
     }
-    #type;
-    #amount;
-    #capacity;
-    #tempMin;
-    #tempMax;
+    #validContentTypes = {
+        "stone": true,
+        "energy": true,
+        "fuel": true,
+    };
     
-    constructor(dataObject, builtin, type, amount, capacity, tempMin, tempMax) {
+    constructor(dataObject, builtin, type, amount, capacity, temperatureMin, temperatureMax, temperatureCurrent, content) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
@@ -60,17 +68,34 @@ class StorageModule extends Module {
             type = dataObject.type;
             amount = dataObject.amount;
             capacity = dataObject.capacity;
-            tempMin = dataObject.tempMin;
-            tempMax = dataObject.tempMax;
+            temperatureMin = dataObject.temperatureMin;
+            temperatureMax = dataObject.temperatureMax;
+            temperatureCurrent = dataObject.temperatureCurrent;
+            content = dataObject.temperatureCurrent;
         }
+
+        if (typeof builtin === 'undefined' ||
+            typeof type === 'undefined' ||
+            typeof capacity === 'undefined' ||
+            typeof temperatureMin === 'undefined' ||
+            typeof temperatureMax === 'undefined')
+            throw new Error("Missing StorageModule constructor parameters.");
 
         super("storage", builtin);
 
         this.#setType(type);
-        this.#setAmount(amount);
         this.#setCapacity(capacity);
-        this.#setTempMin(tempMin);
-        this.#setTempMax(tempMax);
+        this.#setTemperatureMin(temperatureMin);
+        this.#setTemperatureMax(temperatureMax);
+
+        if (typeof amount !== 'undefined')
+            this.#setAmount(amount);
+        
+        if (typeof temperatureCurrent !== 'undefined')
+            this.#setTemperatureCurrent(temperatureCurrent);
+
+        if(typeof content !== 'undefined')
+            this.#setContent(content);
     }
 
     get type() {
@@ -82,17 +107,29 @@ class StorageModule extends Module {
     get capacity() {
         return this.#capacity;
     }
-    get tempMin() {
-        return this.#tempMin;
+    get temperatureMin() {
+        return this.#temperatureMin;
     }
-    get tempMax() {
-        return this.#tempMax;
+    get temperatureMax() {
+        return this.#temperatureMax;
+    }
+    get temperatureCurrent() {
+        return this.#temperatureCurrent;
+    }
+    get content() {
+        return this.#content;
     }
 
     set amount(amount) {
         this.#setAmount(amount);
     }
-
+    set temperatureCurrent(temperatureCurrent) {
+        this.#setTemperatureCurrent(temperatureCurrent);
+    }
+    set content(content) {
+        this.#setContent(content);
+    }
+    
     #setType(type) {
         if (typeof type !== 'string' || !this.#validStorageTypes[type]) {
             console.error('Invalid value for type given. type set to solid', type);
@@ -114,19 +151,31 @@ class StorageModule extends Module {
         }
         this.#capacity = capacity;
     }
-    #setTempMin(tempMin) {
-        if (typeof tempMin !== 'number' || tempMin !== tempMin || tempMin < -273.15) {
-            console.error('Invalid value for tempMin given. tempMin set to 0', tempMin);
-            tempMin = 0;
+    #setTemperatureMin(temperatureMin) {
+        if (typeof temperatureMin !== 'number' || temperatureMin !== temperatureMin || temperatureMin < -273.15) {
+            console.error('Invalid value for temperatureMin given. temperatureMin set to 0', temperatureMin);
+            temperatureMin = 0;
         }
-        this.#tempMin = tempMin;
+        this.#temperatureMin = temperatureMin;
     }
-    #setTempMax(tempMax) {
-        if (typeof tempMax !== 'number' || tempMax !== tempMax || tempMax < -273.15) {
-            console.error('Invalid value for tempMax given. tempMax set to 0', tempMax);
-            tempMax = 0;
+    #setTemperatureMax(temperatureMax) {
+        if (typeof temperatureMax !== 'number' || temperatureMax !== temperatureMax || temperatureMax < -273.15) {
+            console.error('Invalid value for temperatureMax given. temperatureMax set to 0', temperatureMax);
+            temperatureMax = 0;
         }
-        this.#tempMax = tempMax;
+        this.#temperatureMax = temperatureMax;
+    }
+    #setTemperatureCurrent(temperatureCurrent) {
+        if (typeof temperatureCurrent !== 'number' || temperatureCurrent !== temperatureCurrent || temperatureCurrent < this.#temperatureMin || temperatureCurrent > this.#temperatureMax) {
+            throw new Error('Invalid value for temperatureCurrent given. temperatureCurrent needs to be between ' + this.#temperatureMin + ' and ' + this.temperatureMax + '. temperatureCurrent set to ' + this.#temperatureMin);
+        }
+        this.#temperatureCurrent = temperatureCurrent;
+    }
+    #setContent(content) {
+        if (typeof content !== 'string' || !this.#validContentTypes[content]) {
+            throw new Error('Invalid value for content given.');
+        }
+        this.#content = content;
     }
  
     refreshUI() {
@@ -158,16 +207,20 @@ class StorageModule extends Module {
     };
 
     createSlot() {
-        builtin = dataObject.builtin;
-        type = dataObject.type;
-        amount = dataObject.amount;
-        capacity = dataObject.capacity;
-        tempMin = dataObject.tempMin;
-        tempMax = dataObject.tempMax;
-
         var container = document.createElement('div');
-        container.classList = 'storagemodule-container storagemodule-' + this.type;
-        //TODO: add stuff
+        container.classList = 'storagemodule-container storagemodule-' + this.type + ' ' + this.builtin;
+
+        container.innerHTML = `<div class="storagemodule-container storagemodule-liquid">
+            <div class="storage-type">
+                ${this.type + (this.builtin ? ' builtin' : '')}
+            </div>
+            <div class="storage-content">
+                ${this.content || ''}
+            </div>
+            <div class="progress-bar">
+                <div class="progress" style="width:${ this.amount / this.capacity * 100}%"></div>
+            </div>
+        </div>`;
         return container;
     }
 }
