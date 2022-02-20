@@ -26,7 +26,8 @@ class Ship {
             new StorageModule(undefined, false, 'liquid', 100, 100, -100, 100),
             new StorageModule(undefined, false, 'liquid', 100, 100, -100, 100),
             new StorageModule(undefined, false, 'solid', 0, 100, -100, 100),
-            new StorageModule(undefined, false, 'solid', 0, 100, -100, 100),
+            new StorageModule(undefined, false, 'plasma', 0, 100, -100, 100),
+            new StorageModule(undefined, false, 'gas', 0, 100, -100, 100),
         ];
 
         this.engines = [
@@ -43,6 +44,7 @@ class Ship {
             this.storages[2],
             this.storages[3],
             this.storages[4],
+            this.storages[5],
             this.engines[0],
             this.engines[1],
             this.engines[2]

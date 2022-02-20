@@ -210,18 +210,25 @@ class StorageModule extends Module {
         var container = document.createElement('div');
         container.classList = 'storagemodule-container storagemodule-' + this.type + ' ' + this.builtin;
 
-        container.innerHTML = `<div class="storagemodule-container storagemodule-liquid">
+        container.innerHTML = `<div class="storagemodule-container storagemodule-${this.type}">
             <div class="storage-type">
-                ${this.type + (this.builtin ? ' builtin' : '')}
+                <p>${this.type + (this.builtin ? ' builtin' : '')}</p>
+                <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="storage-content">
-                ${this.content || ''}
+                <p>${this.content || ''}</p>
             </div>
             <div class="progress-bar">
                 <div class="progress" style="width:${ this.amount / this.capacity * 100}%"></div>
             </div>
         </div>`;
         return container;
+
+        // "solid": true,
+        // "liquid": true,
+        // "gas": true,
+        // "plasma": true,
+        // "energy": true
     }
 }
 
