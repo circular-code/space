@@ -256,12 +256,22 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 #topUi button {
-	background: transparent;
-    border: 1px solid rgba(255,255,255,0.5);
+    background: transparent;
+    border: none;
     width: 30px;
     height: 30px;
-    border-radius: 2px;
-	cursor: pointer;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 1.2rem;
+	background: rgb(0 0 0 / 50%);
+}
+
+#topUi button:hover {
+    background: rgb(0 0 0 / 70%);
+}
+
+#topUi button:hover img {
+    filter:invert(1);
 }
 
 .modal button {
@@ -351,6 +361,17 @@ div#slotContainer {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* icons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+img.svg {
+    filter: invert(0.7);
+    height: 20px;
+    position: relative;
+    bottom: 0.6rem;
+    right: 0.5rem;
 }
 
 /* ANIMATIONS
