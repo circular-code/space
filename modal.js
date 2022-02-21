@@ -225,29 +225,34 @@ function createShipDetailsModal(ship) {
         shipSlotsContainer.appendChild(slotContainer)
 	}
 
-	var availableModulesContainer = document.createElement('div');
-	availableModulesContainer.id = 'availableModulesContainer';
-	availableModulesContainer.classList = 'modal-panel';
+	//TODO: Slottypes, available Modules are more for shop than edit?
+	//--> every module that is not beeing used, will use up one free storage slot
+	// if there are no free storage slots, you can not unequip your modules, only destroy?
+	// but storage is also modules, how does that work
 
-	for (let i = 0; i < ship.slots.length; i++) {
+	// var availableModulesContainer = document.createElement('div');
+	// availableModulesContainer.id = 'availableModulesContainer';
+	// availableModulesContainer.classList = 'modal-panel';
 
-		let module = ship.slots[i];
-		let slotContainer = document.createElement('div');
+	// for (let i = 0; i < ship.slots.length; i++) {
+
+	// 	let module = ship.slots[i];
+	// 	let slotContainer = document.createElement('div');
 	
-		slotContainer.classList = 'slot';
-		if (module && module.constructor && module.createSlot) {
-			slotContainer.appendChild(module.createSlot());
-			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
-		}
-		else {
-			let storageContainer = document.createElement('div');
-			storageContainer.classList = 'storagemodule-container storagemodule-empty';
-			storageContainer.innerHTML = 'empty';
-			slotContainer.appendChild(storageContainer);
-		}
+	// 	slotContainer.classList = 'slot';
+	// 	if (module && module.constructor && module.createSlot) {
+	// 		slotContainer.appendChild(module.createSlot());
+	// 		slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
+	// 	}
+	// 	else {
+	// 		let storageContainer = document.createElement('div');
+	// 		storageContainer.classList = 'storagemodule-container storagemodule-empty';
+	// 		storageContainer.innerHTML = 'empty';
+	// 		slotContainer.appendChild(storageContainer);
+	// 	}
 
-        availableModulesContainer.appendChild(slotContainer)
-	}
+    //     availableModulesContainer.appendChild(slotContainer)
+	// }
 
     var modalContent = document.getElementById('modalContent');
     modalContent.appendChild(infoPanel.panel);
