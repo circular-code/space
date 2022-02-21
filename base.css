@@ -112,6 +112,25 @@ table {
 	justify-content: space-between;
 }
 
+.builtin {
+	font-size: 0.6rem;
+}
+
+#slotContainer,
+#availableModulesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    height: auto;
+}
+
+#slotContainer {
+	width: 40%;
+}
+#availableModulesContainer {
+    width: calc(60% - 105px);
+}
+
 .modal .close-modal {
 	position: absolute;
     top: 20px;
@@ -158,6 +177,28 @@ table {
     bottom: -6px;
     right: 0px;
 	filter: invert(55%) sepia(100%) saturate(3.5) hue-rotate(380deg);
+}
+
+.engine-type {
+	width: 100%;
+    color: #00ffa1;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 1rem;
+}
+
+.ship-modal #tradepost-info {
+    max-height: 295px;
+    width: 100%;
+    height: 100px;
+}
+
+.engine-type .svg {
+	height: 25px;
+    position: relative;
+    bottom: -6px;
+    right: 0px;
+	filter: invert(55%) sepia(100%) saturate(3.5) hue-rotate(100deg);
 }
 
 .modal #modalContent {
@@ -373,19 +414,18 @@ input[type=number]::-webkit-outer-spin-button {
 	background-color: rgb(253 206 42 / 10%);
 }
 
-div#slotContainer {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 1rem;
-}
-
-.storagemodule-container {
+.storagemodule-container,
+.enginemodule-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
+.slot.slot-enginemodule {
+    border: 1px solid rgb(42 253 144 / 50%);
+    background-color: rgb(42 253 144 / 10%);
+}
 /* icons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 

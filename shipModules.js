@@ -212,7 +212,7 @@ class StorageModule extends Module {
 
         container.innerHTML = `<div class="storagemodule-container storagemodule-${this.type}">
             <div class="storage-type">
-                <p>${this.type + (this.builtin ? ' builtin' : '')}</p>
+                <p><span>${this.type}</span><span class="builtin">${this.builtin ? ' (builtin)' : ''}</p>
                 <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="storage-content">
@@ -223,12 +223,6 @@ class StorageModule extends Module {
             </div>
         </div>`;
         return container;
-
-        // "solid": true,
-        // "liquid": true,
-        // "gas": true,
-        // "plasma": true,
-        // "energy": true
     }
 }
 
@@ -341,5 +335,21 @@ class EngineModule extends Module {
             energySource = 0;
         }
         this.#energySource = energySource;
+    }
+
+    createSlot() {
+        var container = document.createElement('div');
+        container.classList = 'enginemodule-container enginemodule-' + this.type + ' ' + this.builtin;
+
+        container.innerHTML = `<div class="enginemodule-container enginemodule-${this.type}">
+            <div class="engine-type">
+                <p><span>${this.type}</span><span class="builtin">${this.builtin ? ' (builtin)' : ''}</p>
+                <img src="icons/${this.type}.svg" class="svg">
+            </div>
+            <div class="engine-content">
+                <p>${this.content || ''}</p>
+            </div>
+        </div>`;
+        return container;
     }
 }

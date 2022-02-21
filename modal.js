@@ -199,10 +199,11 @@ function createShipDetailsModal(ship) {
 	document.getElementById('modal').className = 'modal ship-modal'
 	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
 
-    var infoPanel = createModalPanel('tradepost-info', 'Basic Ship Information', 295);
+    var infoPanel = createModalPanel('tradepost-info', 'Basic Ship Information');
 
-	var slotsContainer = document.createElement('div');
-	slotsContainer.id = 'slotContainer';
+	var shipSlotsContainer = document.createElement('div');
+	shipSlotsContainer.id = 'slotContainer';
+	shipSlotsContainer.classList = 'modal-panel';
 
 	for (let i = 0; i < ship.slots.length; i++) {
 
@@ -221,10 +222,35 @@ function createShipDetailsModal(ship) {
 			slotContainer.appendChild(storageContainer);
 		}
 
-        slotsContainer.appendChild(slotContainer)
+        shipSlotsContainer.appendChild(slotContainer)
+	}
+
+	var availableModulesContainer = document.createElement('div');
+	availableModulesContainer.id = 'availableModulesContainer';
+	availableModulesContainer.classList = 'modal-panel';
+
+	for (let i = 0; i < ship.slots.length; i++) {
+
+		let module = ship.slots[i];
+		let slotContainer = document.createElement('div');
+	
+		slotContainer.classList = 'slot';
+		if (module && module.constructor && module.createSlot) {
+			slotContainer.appendChild(module.createSlot());
+			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
+		}
+		else {
+			let storageContainer = document.createElement('div');
+			storageContainer.classList = 'storagemodule-container storagemodule-empty';
+			storageContainer.innerHTML = 'empty';
+			slotContainer.appendChild(storageContainer);
+		}
+
+        availableModulesContainer.appendChild(slotContainer)
 	}
 
     var modalContent = document.getElementById('modalContent');
     modalContent.appendChild(infoPanel.panel);
-	modalContent.appendChild(slotsContainer);
+	modalContent.appendChild(shipSlotsContainer);
+	modalContent.appendChild(availableModulesContainer);
 }
