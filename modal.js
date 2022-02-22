@@ -225,10 +225,9 @@ function createShipDetailsModal(ship) {
         shipSlotsContainer.appendChild(slotContainer)
 	}
 
-	//TODO: Slottypes, available Modules are more for shop than edit?
-	//--> every module that is not beeing used, will use up one free storage slot
-	// if there are no free storage slots, you can not unequip your modules, only destroy?
-	// but storage is also modules, how does that work
+	//TODO: Slottypes
+	//TODO: only replace slots/modules in shipyard
+	//TODO: mostly view, little edit current modules in ship (e.g. change active engine, toggle shields on/off, choose main battery?)
 
 	// var availableModulesContainer = document.createElement('div');
 	// availableModulesContainer.id = 'availableModulesContainer';
