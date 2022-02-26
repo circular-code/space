@@ -11,7 +11,7 @@
 //TODO: space nyan cat
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
-//TODO: populate shipyards
+//TODO: populate Shipyards
 //TODO: reposition contextmenu/overlay when changing browser/window size
 //TODO: populate trading posts more details
 //TODO: draw basic ship models instead of circle

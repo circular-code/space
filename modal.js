@@ -147,59 +147,96 @@ function clearModal() {
   	document.getElementById('modalContent').innerHTML = '';
 }
 
-function createTradePostModal(post) {
-
+function createModal(data, variant) {
+	
 	clearModal();
-	document.getElementById('modal').className = 'modal tradepost-modal'
+	var className = data.constructor.name.toLowerCase();
+	document.getElementById('modal').className = `modal ${className}-modal`;
+	var content = document.getElementById('modalContent');
+
+	switch (className) {
+		case "tradepost":
+			createTradepostModal(content, data);
+			break;
+
+		case "shipyard":
+			createShipyardModal(content, data);
+			break;
+
+		case "ship":
+			switch (variant) {
+				case "edit":
+					createShipEditModal(content, data);
+					break;
+
+				default:
+					createShipDetailsModal(content, data);
+					break;
+			}
+			break;
+	};
+
+	document.getElementById("modal").classList.add("is-visible");
+}
+
+function createTradepostModal(modal, post) {
 
     document.getElementById('modalTitle').textContent = post.info.title + ' - ' + post.info.system + ' - ' + post.info.allegiance;
 
-    var infoPanel = createModalPanel('tradepost-info', 'General Information', 295);
+    var infoPanel = createModalPanel('Tradepost-info', 'General Information', 295);
     infoPanel.sub.appendChild(createModalInfo('Name', post.info.title));
     infoPanel.sub.appendChild(createModalInfo('System', post.info.system));
     infoPanel.sub.appendChild(createModalInfo('Status', post.info.status));
     infoPanel.sub.appendChild(createModalInfo('Allegiance', post.info.allegiance));
     infoPanel.sub.appendChild(createModalInfo('Commander', post.info.commander));
 
-	var fuelPanel = createModalPanel('tradepost-fuel', 'Maintenance', 283);
+	var fuelPanel = createModalPanel('Tradepost-fuel', 'Maintenance', 283);
 	for (var index = 0; index < post.maintenance.length; index++)
 		fuelPanel.sub.appendChild(createModalCommodity(post.maintenance[index], true));
 
-    var buyPanel = createModalPanel('tradepost-buy', 'Buy');
+    var buyPanel = createModalPanel('Tradepost-buy', 'Buy');
 
     for (var index = 0; index < post.haveResources.length; index++)
       buyPanel.sub.appendChild(createModalCommodity(post.haveResources[index], true));
 
-    var sellPanel = createModalPanel('tradepost-sell', 'Sell');
+    var sellPanel = createModalPanel('Tradepost-sell', 'Sell');
 
     for (var index = 0; index < post.needResources.length; index++)
       	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], false));
 
-    var modalContent = document.getElementById('modalContent');
-    modalContent.appendChild(infoPanel.panel);
-    modalContent.appendChild(fuelPanel.panel);
-    modalContent.appendChild(buyPanel.panel);
-    modalContent.appendChild(sellPanel.panel);
+    modal.appendChild(infoPanel.panel);
+    modal.appendChild(fuelPanel.panel);
+    modal.appendChild(buyPanel.panel);
+    modal.appendChild(sellPanel.panel);
 }
 
-function createShipyardModal(yard) {
+function createShipyardModal(modal, yard) {
 
-    clearModal();
-	document.getElementById('modal').className = 'modal shipyard-modal'
-    document.getElementById('modalTitle').textContent = yard.name;
+	document.getElementById('modalTitle').textContent = yard.name;
 
-    var infoPanel = createModalPanel('tradepost-info', 'Shipyard Information', 295);
+    var infoPanel = createModalPanel('Shipyard-info', 'Shipyard Information', 295);
 
-    var modalContent = document.getElementById('modalContent');
-    modalContent.appendChild(infoPanel.panel);
+	var fuelPanel = createModalPanel('Shipyard-fuel', 'Maintenance', 283);
+	for (var index = 0; index < yard.maintenance.length; index++)
+		fuelPanel.sub.appendChild(createModalCommodity(yard.maintenance[index], true));
+
+	var editPanel = createModalPanel('Shipyard-ship-edit', 'Edit Ship', 295);
+	var editButton = document.createElement('button');
+	editButton.textContent = 'Edit ship';
+	editButton.onclick = () => {createModal(app.ship, "Edit Ship", "edit")};
+	editPanel.sub.appendChild(editButton);
+
+    modal.appendChild(infoPanel.panel);
+	modal.appendChild(fuelPanel.panel);
+	modal.appendChild(editPanel.panel);
 }
 
-function createShipDetailsModal(ship) {
+function createShipDetailsModal(modal, ship) {
 	clearModal();
 	document.getElementById('modal').className = 'modal ship-modal'
 	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
 
-    var infoPanel = createModalPanel('tradepost-info', 'Basic Ship Information');
+    var infoPanel = createModalPanel('Tradepost-info', 'Basic Ship Information');
 
 	var shipSlotsContainer = document.createElement('div');
 	shipSlotsContainer.id = 'slotContainer';
@@ -225,36 +262,70 @@ function createShipDetailsModal(ship) {
         shipSlotsContainer.appendChild(slotContainer)
 	}
 
-	//TODO: Slottypes
-	//TODO: only replace slots/modules in shipyard
-	//TODO: mostly view, little edit current modules in ship (e.g. change active engine, toggle shields on/off, choose main battery?)
+    modal.appendChild(infoPanel.panel);
+	modal.appendChild(shipSlotsContainer);
+}
 
-	// var availableModulesContainer = document.createElement('div');
-	// availableModulesContainer.id = 'availableModulesContainer';
-	// availableModulesContainer.classList = 'modal-panel';
+function createShipEditModal(modal, ship) {
+	clearModal();
+	document.getElementById('modal').className = 'modal ship-modal'
+	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
 
-	// for (let i = 0; i < ship.slots.length; i++) {
+    var infoPanel = createModalPanel('Tradepost-info', 'Basic Ship Information');
 
-	// 	let module = ship.slots[i];
-	// 	let slotContainer = document.createElement('div');
+	var shipSlotsContainer = document.createElement('div');
+	shipSlotsContainer.id = 'slotContainer';
+	shipSlotsContainer.classList = 'modal-panel';
+
+	for (let i = 0; i < ship.slots.length; i++) {
+
+		let module = ship.slots[i];
+		let slotContainer = document.createElement('div');
 	
-	// 	slotContainer.classList = 'slot';
-	// 	if (module && module.constructor && module.createSlot) {
-	// 		slotContainer.appendChild(module.createSlot());
-	// 		slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
-	// 	}
-	// 	else {
-	// 		let storageContainer = document.createElement('div');
-	// 		storageContainer.classList = 'storagemodule-container storagemodule-empty';
-	// 		storageContainer.innerHTML = 'empty';
-	// 		slotContainer.appendChild(storageContainer);
-	// 	}
+		slotContainer.classList = 'slot';
+		if (module && module.constructor && module.createSlot) {
+			slotContainer.appendChild(module.createSlot());
+			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
+		}
+		else {
+			let storageContainer = document.createElement('div');
+			storageContainer.classList = 'storagemodule-container storagemodule-empty';
+			storageContainer.innerHTML = 'empty';
+			slotContainer.appendChild(storageContainer);
+		}
 
-    //     availableModulesContainer.appendChild(slotContainer)
-	// }
+        shipSlotsContainer.appendChild(slotContainer)
+	}
 
-    var modalContent = document.getElementById('modalContent');
-    modalContent.appendChild(infoPanel.panel);
-	modalContent.appendChild(shipSlotsContainer);
-	modalContent.appendChild(availableModulesContainer);
+	// TODO: Slottypes
+	// TODO: only replace slots/modules in Shipyard
+	// TODO: mostly view, little edit current modules in ship (e.g. change active engine, toggle shields on/off, choose main battery?)
+
+	var availableModulesContainer = document.createElement('div');
+	availableModulesContainer.id = 'availableModulesContainer';
+	availableModulesContainer.classList = 'modal-panel';
+
+	for (let i = 0; i < ship.slots.length; i++) {
+
+		let module = ship.slots[i];
+		let slotContainer = document.createElement('div');
+	
+		slotContainer.classList = 'slot';
+		if (module && module.constructor && module.createSlot) {
+			slotContainer.appendChild(module.createSlot());
+			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
+		}
+		else {
+			let storageContainer = document.createElement('div');
+			storageContainer.classList = 'storagemodule-container storagemodule-empty';
+			storageContainer.innerHTML = 'empty';
+			slotContainer.appendChild(storageContainer);
+		}
+
+        availableModulesContainer.appendChild(slotContainer)
+	}
+
+    modal.appendChild(infoPanel.panel);
+	modal.appendChild(shipSlotsContainer);
+	modal.appendChild(availableModulesContainer);
 }

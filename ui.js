@@ -85,8 +85,8 @@ var userInterface = (function() {
 
         switch(astrobject.name) {
 
-            case 'TradingPost':
-            case 'ShipYard':
+            case 'Tradepost':
+            case 'Shipyard':
                 addFlag.style.display = 'block';
                 removeFlag.style.display = 'block';
                 requestLanding.style.display = 'block';
@@ -212,18 +212,12 @@ var userInterface = (function() {
             }, 1000);
         },
         viewShipDetails: function() {
-            createShipDetailsModal(app.ship);
-            document.getElementById("modal").classList.add("is-visible");
+            createModal(app.ship);
         },
         requestLanding: function() {
             if (app.ship.checkCollision(app.map.contextMenuAstrobject.range, app.map.contextMenuAstrobject.x, app.map.contextMenuAstrobject.y)){
                 alert('Landing granted.');
-                if (app.map.contextMenuAstrobject instanceof ShipYard)
-                    createShipyardModal(app.map.contextMenuAstrobject);
-                else
-                    createTradePostModal(app.map.contextMenuAstrobject);
-                
-                document.getElementById("modal").classList.add("is-visible");
+                createModal(app.map.contextMenuAstrobject);
             }
             else
                 alert('Too far away.');
@@ -383,11 +377,11 @@ var userInterface = (function() {
                     case 'Moon':
                         astrobject = Object.assign(new Moon(true), astrobject);
                         break;
-                    case 'TradingPost':
-                        astrobject = Object.assign(new TradingPost(true), astrobject);
+                    case 'Tradepost':
+                        astrobject = Object.assign(new Tradepost(true), astrobject);
                         break;
-                    case 'ShipYard':
-                        astrobject = Object.assign(new ShipYard(true), astrobject);
+                    case 'Shipyard':
+                        astrobject = Object.assign(new Shipyard(true), astrobject);
                         break;
                 }
             }

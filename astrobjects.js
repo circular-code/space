@@ -2,167 +2,172 @@
 // Stars, Planets, Dwarf planets, minor planets, exoplanets, brown dwarfs, galaxies, discs, nebulae, void
 // https://en.wikipedia.org/wiki/Astronomical_object#Categories_by_location
 
-function Astrobject(r, x, y) {
-    this.r = r;
-    this.x = x;
-    this.y = y;
-    this.color = '#0000ff';
-    this.name = 'Astrobject';
-    this.hasFlag = false;
+class Astrobject{
+    constructor(r, x, y) {
+        this.r = r;
+        this.x = x;
+        this.y = y;
+        this.color = '#0000ff';
+        this.name = 'Astrobject';
+        this.hasFlag = false;
+    }
+
+    checkCollision(r, x, y) {
+        return distance(x, y, this.x, this.y) <= r + this.r;
+    }
 }
 
-Astrobject.prototype.checkCollision = function(r, x, y) {
-    return distance(x, y, this.x, this.y) <= r + this.r;
-};
+class Star extends Astrobject {
+    constructor(dataObject, r, x, y) {
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+            this.color = dataObject.color;
+            this.range = dataObject.range;
+            this.name = dataObject.name;
+        }
 
-function Star(loaded, r, x, y) {
-
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
-    this.range = this.r + randomNumBetween(50,30) * app.scale;
-    this.name = 'Star';
+        super(r, x, y);
+        this.color = '#' + randomNumBetween(230,200,true) + randomNumBetween(230,100,true) + randomNumBetween(230,0,true);
+        this.range = this.r + randomNumBetween(50,30) * app.scale;
+        this.name = 'Star';
+        this.energyRegenerationAmount = 1;
+    }
 }
 
-Star.prototype = Object.create(Astrobject.prototype);
-Star.prototype.constructor = Astrobject;
-Star.energyRegenerationAmount = 1;
+class Planet extends Astrobject {
+    constructor (dataObject, r, x, y, chunk) {
 
-function Planet(loaded, r, x, y, chunk) {
-
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.resources = [];
-    this.name = 'Planet';
-
-    var pType = getType("planet");
-    var pSType = getType("giantPlanet");
-
-    this.planetType = pType;
-    this.planetSubType = pSType;
-
-    var hasBelt = this.hasBelt = !randomNumBetween(9);
-    if (hasBelt) {
-        this.beltRadius = r + randomNumBetween(30,20);
-        this.beltColor = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-        this.beltWidth = randomNumBetween(15,10);
-    }
-
-    var hasMoon = this.hasMoon = !randomNumBetween(5);
-    if (hasMoon) {
-        let chance = randomNumBetween(9);
-        let chanceList = [1,1,1,1,2,2,2,3,4,5];
-        let amount = chanceList[chance];
-
-        while (amount) {
-            new Moon(undefined, this, chunk);
-            amount--;
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
         }
-    }
 
-    var hasTradingPost = this.hasTradingPost = !randomNumBetween(9);
-    if (hasTradingPost) {
-        let amount = 1;
+        super(r, x, y);
+        this.resources = [];
+        this.name = 'Planet';
 
-        while (amount) {
-            new TradingPost(undefined, this, chunk);
-            amount--;
+        var planetType = getType("planet");
+        var planetSubType = getType(planetType);
+
+        this.planetType = planetType;
+        this.planetSubType = planetSubType;
+
+        this.hasBelt = !randomNumBetween(9);
+        if (this.hasBelt) {
+            this.beltRadius = r + randomNumBetween(30,20);
+            this.beltColor = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
+            this.beltWidth = randomNumBetween(15,10);
         }
-    }
 
-    var hasShipYard = this.hasShipYard = !randomNumBetween(9);
-    if (hasShipYard) {
-        let amount = 1;
+        if (!randomNumBetween(5)) {
+            this.moons = [];
+            let chanceList = [1,1,1,1,2,2,2,3,4,5];
+            let amount = chanceList[randomNumBetween(9)];
 
-        while (amount) {
-            new ShipYard(undefined, this, chunk);
-            amount--;
-        }
-    }
-
-    this.resourceRanges = [];
-    var restRange = r - 10;
-    for (let i = 0; i < r/10; i++) {
-        if (restRange > 10) {
-            this.resourceRanges.push(restRange);
-            restRange -= 10;
-        }
-        else {
-            break;
-        }
-    }
-
-    switch (pType) {
-        case 'giant':
-
-            this.range = this.r + randomNumBetween(50,30);
-
-            switch (pSType) {
-                case 'gas':
-                    this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
-                    this.resources.push(new Resource(undefined, 'gas', 'gas', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'crystal', 'liquid', 5000, 0, this.resourceRanges.length));
-
-                    break;
-
-                case 'ice':
-                    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
-                    this.resources.push(new Resource(undefined, 'crystal', 'liquid', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'metal', 'solid', 5000, 0, this.resourceRanges.length));
-                    break;
-
-                case 'solid':
-                    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-                    this.resources.push(new Resource(undefined, 'metal', 'solid', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'gas', 'gas', 5000, 0, this.resourceRanges.length));
-                    break;
+            while (amount) {
+                this.moons.push(new Moon(undefined, this, chunk));
+                amount--;
             }
+        }
 
-            break;
+        if (!randomNumBetween(9)) {
+            this.tradeposts = [];
+            let amount = 1;
 
-        case 'meso':
+            while (amount) {
+                this.tradeposts.push(new Tradepost(undefined, this, chunk));
+                amount--;
+            }
+        }
 
-            break;
+        if (!randomNumBetween(9)) {
+            this.shipyards = [];
+            let amount = 1;
 
-        case 'mini-neptune':
+            while (amount) {
+                this.shipyards.push(new Shipyard(undefined, this, chunk));
+                amount--;
+            }
+        }
 
-            break;
+        this.resourceRanges = [];
+        var restRange = r - 10;
+        for (let i = 0; i < r/10; i++) {
+            if (restRange > 10) {
+                this.resourceRanges.push(restRange);
+                restRange -= 10;
+            }
+            else {
+                break;
+            }
+        }
 
-        case 'planemo':
+        switch (planetType) {
+            case 'giant':
 
-            break;
+                this.range = this.r + randomNumBetween(50,30);
 
-        case 'planetar':
+                switch (planetSubType) {
+                    case 'gas':
+                        this.color = '#' + randomNumBetween(235,200,true) + randomNumBetween(210,170,true) + randomNumBetween(185, 150,true);
+                        this.resources.push(new Resource(undefined, 'gas', 'gas', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'crystal', 'liquid', 5000, 0, this.resourceRanges.length));
 
-            break;
+                        break;
 
-        case 'super-earth':
+                    case 'ice':
+                        this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(190,175,true) + randomNumBetween(220, 195,true);
+                        this.resources.push(new Resource(undefined, 'crystal', 'liquid', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'metal', 'solid', 5000, 0, this.resourceRanges.length));
+                        break;
 
-            break;
+                    case 'solid':
+                        this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
+                        this.resources.push(new Resource(undefined, 'metal', 'solid', 5000, 0, this.resourceRanges.length), new Resource(undefined, 'gas', 'gas', 5000, 0, this.resourceRanges.length));
+                        break;
+                }
 
-        case 'super-jupiter':
+                break;
 
-            break;
+            case 'meso':
 
-        case 'sub-earth':
+                break;
 
-            break;
+            case 'mini-neptune':
+
+                break;
+
+            case 'planemo':
+
+                break;
+
+            case 'planetar':
+
+                break;
+
+            case 'super-earth':
+
+                break;
+
+            case 'super-jupiter':
+
+                break;
+
+            case 'sub-earth':
+
+                break;
+        }
     }
 }
 
-Planet.prototype = Object.create(Astrobject.prototype);
-Planet.prototype.constructor = Astrobject;
-
-function Nebula(loaded, r, x, y) {
-
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
-    this.nebulaType = getType("nebula");
-    this.name = 'Nebula';
+class Nebula extends Astrobject {
+    constructor(loaded, r, x, y) {
+        super(r, x, y);
+        this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
+        this.nebulaType = getType("nebula");
+        this.name = 'Nebula';
+    }
 }
 
 Nebula.prototype = Object.create(Astrobject.prototype);
@@ -208,7 +213,7 @@ function Wormhole(loaded, r, x, y, partner) {
 Wormhole.prototype = Object.create(Astrobject.prototype);
 Wormhole.prototype.constructor = Astrobject;
 
-//TODO: refactor trading posts, moons and shipyards into one function?
+//TODO: refactor trading posts, moons and Shipyards into one function?
 function Moon(loaded, planet, chunk) {
 
     if (loaded)
@@ -264,7 +269,7 @@ function Moon(loaded, planet, chunk) {
 Moon.prototype = Object.create(Astrobject.prototype);
 Moon.prototype.constructor = Astrobject;
 
-function TradingPost(loaded, planet, chunk) {
+function Tradepost(loaded, planet, chunk) {
 
     if (loaded)
         return this;
@@ -309,7 +314,7 @@ function TradingPost(loaded, planet, chunk) {
     Astrobject.call(this, this.r, this.x, this.y);
 
     this.color = 'purple';
-    this.name = 'TradingPost';
+    this.name = 'Tradepost';
     this.info = {
         title: states[randomNumBetween(states.length)] + ' Outpost',
         system: 'Dalarian 113.14',
@@ -355,10 +360,10 @@ function TradingPost(loaded, planet, chunk) {
     chunk.allAstrobjects.push(this);
 }
 
-TradingPost.prototype = Object.create(Astrobject.prototype);
-TradingPost.prototype.constructor = Astrobject;
+Tradepost.prototype = Object.create(Astrobject.prototype);
+Tradepost.prototype.constructor = Astrobject;
 
-function ShipYard(loaded, planet, chunk) {
+function Shipyard(loaded, planet, chunk) {
 
     if (loaded)
         return this;
@@ -403,13 +408,20 @@ function ShipYard(loaded, planet, chunk) {
     Astrobject.call(this, this.r, this.x, this.y);
 
     this.color = 'yellow';
-    this.name = 'ShipYard';
+    this.name = 'Shipyard';
+
+    this.maintenance = [
+        new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+        new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
+        new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
+    ];
 
     chunk.allAstrobjects.push(this);
 }
 
-ShipYard.prototype = Object.create(Astrobject.prototype);
-ShipYard.prototype.constructor = Astrobject;
+Shipyard.prototype = Object.create(Astrobject.prototype);
+Shipyard.prototype.constructor = Astrobject;
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 function BackgroundStar(loaded, r, x, y) {
@@ -447,7 +459,7 @@ var types = {
         // "super-jupiter",
         // "sub-earth"
     ],
-    giantPlanet: [
+    giant: [
         "gas",
         "ice",
         "solid"

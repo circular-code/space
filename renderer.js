@@ -381,7 +381,7 @@ var Renderer = (function() {
                         ctx.globalAlpha = 1;
                         break;
 
-                    case 'TradingPost':
+                    case 'Tradepost':
                         ctx.beginPath();
                         ctx.fillStyle = obj.color;
                         ctx.fillRect(obj.x - obj.r/2, obj.y - obj.r/2, obj.r, obj.r);
@@ -410,7 +410,7 @@ var Renderer = (function() {
                         ctx.globalAlpha = 1;
                         break;
 
-                    case 'ShipYard':
+                    case 'Shipyard':
                         ctx.beginPath();
                         ctx.fillStyle = obj.color;
                         ctx.fillRect(obj.x - obj.r/2, obj.y - obj.r/2, obj.r, obj.r);
