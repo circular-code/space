@@ -3,8 +3,10 @@
 //TODO: implement seed based generation: save key to generate chunk,only save changes from the player made inside the chunk, then re-generate chunk based on key and apply changes from the player, instead of saving the whole thing
 //TODO: change to es6 style
 //TODO: change shipmodules ui
+//TODO: save überarbeiten (localfile/server)?
 //TODO: backupEngine and backupFueltank
 //TODO: save state with new file api
+//TODO: fix backgroundstars
 //TODO: fade nebulae borders
 //TODO: make empty energy blink red
 //TODO: use backup fueltank when energy empty

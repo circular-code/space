@@ -162,7 +162,14 @@ class Planet extends Astrobject {
 }
 
 class Nebula extends Astrobject {
-    constructor(loaded, r, x, y) {
+    constructor(dataObject, r, x, y) {
+
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+        }
+
         super(r, x, y);
         this.color = '#' + randomNumBetween(70,0,true) + randomNumBetween(200,100,true) + randomNumBetween(255, 160,true);
         this.nebulaType = getType("nebula");
@@ -170,273 +177,273 @@ class Nebula extends Astrobject {
     }
 }
 
-Nebula.prototype = Object.create(Astrobject.prototype);
-Nebula.prototype.constructor = Astrobject;
+class Asteroid extends Astrobject {
+    constructor(dataObject, r, x, y) {
 
-function Asteroid(loaded, r, x, y) {
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+        }
 
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
-    this.name = 'Asteroid';
-}
-
-Asteroid.prototype = Object.create(Astrobject.prototype);
-Asteroid.prototype.constructor = Astrobject;
-
-function Wormhole(loaded, r, x, y, partner) {
-
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.color = '#' + randomNumBetween(200,130,true) + randomNumBetween(10,0,true) + randomNumBetween(200, 130,true);
-    this.range = this.r + randomNumBetween(50,30);
-    this.name = 'Wormhole';
-
-    if (partner) {
-        this.partner = {
-            x: partner.x,
-            y: partner.y,
-            r: partner.r
-        };
-        partner.partner = {
-            x: this.x,
-            y: this.y,
-            r: this.r
-        };
+        super(r, x, y);
+        this.color = '#' + randomNumBetween(170,150,true) + randomNumBetween(170,150,true) + randomNumBetween(170, 150,true);
+        this.name = 'Asteroid';
     }
 }
 
-Wormhole.prototype = Object.create(Astrobject.prototype);
-Wormhole.prototype.constructor = Astrobject;
+class Wormhole extends Astrobject {
+    constructor(dataObject, r, x, y, partner) {
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+        }
+
+        super(r, x, y);
+        this.color = '#' + randomNumBetween(200,130,true) + randomNumBetween(10,0,true) + randomNumBetween(200, 130,true);
+        this.range = this.r + randomNumBetween(50,30);
+        this.name = 'Wormhole';
+
+        if (partner) {
+            this.partner = {
+                x: partner.x,
+                y: partner.y,
+                r: partner.r
+            };
+            partner.partner = {
+                x: this.x,
+                y: this.y,
+                r: this.r
+            };
+        }
+    }
+}
 
 //TODO: refactor trading posts, moons and Shipyards into one function?
-function Moon(loaded, planet, chunk) {
+class Moon extends Astrobject {
+    constructor(dataObject, planet, chunk) {
 
-    if (loaded)
-        return this;
+        // if (dataObject) {
+        //     r = dataObject.r;
+        //     x = dataObject.x;
+        //     y = dataObject.y;
+        // }
 
-    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
-    // this.origin = planet;
-    this.originX = planet.x;
-    this.originY = planet.y;
-    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
+        super(0, 0, 0);
 
-    var moonCollided = true;
+        // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+        // this.origin = planet;
+        this.originX = planet.x;
+        this.originY = planet.y;
+        this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
 
-    while (moonCollided) {
+        var moonCollided = true;
 
-        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.r = planet.r * (randomNumBetween(5,1)/10);
+        while (moonCollided) {
 
-        this.x = planet.x + this.extRadius * Math.cos(this.angle);
-        this.y = planet.y + this.extRadius * Math.sin(this.angle);
+            this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+            this.r = planet.r * (randomNumBetween(5,1)/10);
 
-        var all = chunk.allAstrobjects;
+            this.x = planet.x + this.extRadius * Math.cos(this.angle);
+            this.y = planet.y + this.extRadius * Math.sin(this.angle);
 
-        for (var i = 0; i < all.length; i++) {
-            if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.r, this.x, this.y)) {
-                    moonCollided = true;
-                    break;
+            var all = chunk.allAstrobjects;
+
+            for (var i = 0; i < all.length; i++) {
+                if (all[i].type !== 'nebula') {
+                    if (all[i].checkCollision(this.r, this.x, this.y)) {
+                        moonCollided = true;
+                        break;
+                    }
+
+                    moonCollided = false;
                 }
+                else {
+                    moonCollided = false;
+                }
+            }
 
+            if (all.length === 0)
                 moonCollided = false;
-            }
-            else {
-                moonCollided = false;
-            }
         }
 
-        if (all.length === 0)
-            moonCollided = false;
+        var chance = randomNumBetween(3);
+        var chanceList = ['#eeeeee', '#eeeeee', '#ee5533', '#ee3355'];
+
+        this.color = chanceList[chance];
+        this.name = 'Moon';
+
+        chunk.allAstrobjects.push(this);
     }
-
-    Astrobject.call(this, this.r, this.x, this.y);
-
-    var chance = randomNumBetween(3);
-    var chanceList = ['#eeeeee', '#eeeeee', '#ee5533', '#ee3355'];
-
-    this.color = chanceList[chance];
-    this.name = 'Moon';
-
-    chunk.allAstrobjects.push(this);
 }
 
-Moon.prototype = Object.create(Astrobject.prototype);
-Moon.prototype.constructor = Astrobject;
+class Tradepost extends Astrobject {
+    constructor(dataObject, planet, chunk) {
 
-function Tradepost(loaded, planet, chunk) {
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+        }
 
-    if (loaded)
-        return this;
+        super(0, 0, 0);
 
-    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
-    // this.origin = planet;
-    this.originX = planet.x;
-    this.originY = planet.y;
-    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10) * app.scale;
+        // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+        // this.origin = planet;
+        this.originX = planet.x;
+        this.originY = planet.y;
+        this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10) * app.scale;
 
-    var postCollided = true;
+        var postCollided = true;
 
-    while (postCollided) {
+        while (postCollided) {
 
-        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.r = planet.r * (randomNumBetween(5,1)/10);
-        this.range = this.r + 20;
+            this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+            this.r = planet.r * (randomNumBetween(5,1)/10);
+            this.range = this.r + 20;
 
-        this.x = planet.x + this.extRadius * Math.cos(this.angle);
-        this.y = planet.y + this.extRadius * Math.sin(this.angle);
+            this.x = planet.x + this.extRadius * Math.cos(this.angle);
+            this.y = planet.y + this.extRadius * Math.sin(this.angle);
 
-        var all = chunk.allAstrobjects;
+            var all = chunk.allAstrobjects;
 
-        for (var i = 0; i < all.length; i++) {
-            if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.r, this.x, this.y)) {
-                    postCollided = true;
-                    break;
+            for (var i = 0; i < all.length; i++) {
+                if (all[i].type !== 'nebula') {
+                    if (all[i].checkCollision(this.r, this.x, this.y)) {
+                        postCollided = true;
+                        break;
+                    }
+
+                    postCollided = false;
                 }
-
-                postCollided = false;
-            }
-            else {
-                postCollided = false;
-            }
-        }
-
-        if (all.length === 0)
-            postCollided = false;
-    }
-
-    Astrobject.call(this, this.r, this.x, this.y);
-
-    this.color = 'purple';
-    this.name = 'Tradepost';
-    this.info = {
-        title: states[randomNumBetween(states.length)] + ' Outpost',
-        system: 'Dalarian 113.14',
-        status: 'peaceful',
-        allegiance: 'High Order',
-        commander: 'Rasmus Skarsgard'
-    };
-    this.haveResources = [];
-    this.needResources = [];
-    this.maintenance = [
-        new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
-        new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
-    ];
-
-    var temp = [];
-
-    for (var index = 0; index < randomNumBetween(32,8); index++) {
-        var element = elements[randomNumBetween(elements.length)];
-        if (temp.indexOf(element) === -1) {
-            temp.push(element);
-            //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
-            this.haveResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
-        }
-        else
-            index--;
-    }
-
-    temp.length = 0;
-
-    for (var index = 0; index < randomNumBetween(32,8); index++) {
-        var element = elements[randomNumBetween(elements.length)]
-        if (temp.indexOf(element) === -1) {
-            temp.push(element);
-            //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
-            this.needResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
-        }
-        else
-            index--;
-    }
-
-    chunk.allAstrobjects.push(this);
-}
-
-Tradepost.prototype = Object.create(Astrobject.prototype);
-Tradepost.prototype.constructor = Astrobject;
-
-function Shipyard(loaded, planet, chunk) {
-
-    if (loaded)
-        return this;
-
-    // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
-    // this.origin = planet;
-    this.originX = planet.x;
-    this.originY = planet.y;
-    this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
-
-    var postCollided = true;
-
-    while (postCollided) {
-
-        this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
-        this.r = planet.r * (randomNumBetween(5,1)/10);
-        this.range = this.r + 20;
-
-        this.x = planet.x + this.extRadius * Math.cos(this.angle);
-        this.y = planet.y + this.extRadius * Math.sin(this.angle);
-
-        var all = chunk.allAstrobjects;
-
-        for (var i = 0; i < all.length; i++) {
-            if (all[i].type !== 'nebula') {
-                if (all[i].checkCollision(this.r, this.x, this.y)) {
-                    postCollided = true;
-                    break;
+                else {
+                    postCollided = false;
                 }
+            }
 
+            if (all.length === 0)
                 postCollided = false;
-            }
-            else {
-                postCollided = false;
-            }
         }
 
-        if (all.length === 0)
-            postCollided = false;
+        this.color = 'purple';
+        this.name = 'Tradepost';
+        this.info = {
+            title: states[randomNumBetween(states.length)] + ' Outpost',
+            system: 'Dalarian 113.14',
+            status: 'peaceful',
+            allegiance: 'High Order',
+            commander: 'Rasmus Skarsgard'
+        };
+        this.haveResources = [];
+        this.needResources = [];
+        this.maintenance = [
+            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
+            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
+        ];
+
+        var temp = [];
+
+        for (var index = 0; index < randomNumBetween(32,8); index++) {
+            var element = elements[randomNumBetween(elements.length)];
+            if (temp.indexOf(element) === -1) {
+                temp.push(element);
+                //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
+                this.haveResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
+            }
+            else
+                index--;
+        }
+
+        temp.length = 0;
+
+        for (var index = 0; index < randomNumBetween(32,8); index++) {
+            var element = elements[randomNumBetween(elements.length)]
+            if (temp.indexOf(element) === -1) {
+                temp.push(element);
+                //TODO: richtige zustände (solid/fluid/gas/plasma) herausfinden bei X grad
+                this.needResources.push(new Commodity(false, element, randomNumBetween(100,1), 'solid', randomNumBetween(1000,10)));
+            }
+            else
+                index--;
+        }
+
+        chunk.allAstrobjects.push(this);
     }
-
-    Astrobject.call(this, this.r, this.x, this.y);
-
-    this.color = 'yellow';
-    this.name = 'Shipyard';
-
-    this.maintenance = [
-        new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-        new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
-        new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
-    ];
-
-    chunk.allAstrobjects.push(this);
 }
 
-Shipyard.prototype = Object.create(Astrobject.prototype);
-Shipyard.prototype.constructor = Astrobject;
+class Shipyard extends Astrobject {
+    constructor(dataObject, planet, chunk) {
+
+        if (dataObject) {
+            r = dataObject.r;
+            x = dataObject.x;
+            y = dataObject.y;
+        }
+
+        super(0, 0, 0);
+        // can not reference planet because it creates a circular structure so it cant be converted to json, if origin is necessary later on, implement an referencing id
+        // this.origin = planet;
+        this.originX = planet.x;
+        this.originY = planet.y;
+        this.extRadius = planet.r + planet.r / 2 + randomNumBetween(60,10);
+
+        var postCollided = true;
+
+        while (postCollided) {
+
+            this.angle = randomNumBetween(Math.PI * 10, Math.PI * -10)/10;
+            this.r = planet.r * (randomNumBetween(5,1)/10);
+            this.range = this.r + 20;
+
+            this.x = planet.x + this.extRadius * Math.cos(this.angle);
+            this.y = planet.y + this.extRadius * Math.sin(this.angle);
+
+            var all = chunk.allAstrobjects;
+
+            for (var i = 0; i < all.length; i++) {
+                if (all[i].type !== 'nebula') {
+                    if (all[i].checkCollision(this.r, this.x, this.y)) {
+                        postCollided = true;
+                        break;
+                    }
+
+                    postCollided = false;
+                }
+                else {
+                    postCollided = false;
+                }
+            }
+
+            if (all.length === 0)
+                postCollided = false;
+        }
+
+        this.color = 'yellow';
+        this.name = 'Shipyard';
+
+        this.maintenance = [
+            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
+            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
+            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
+        ];
+
+        chunk.allAstrobjects.push(this);
+    }
+}
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
-function BackgroundStar(loaded, r, x, y) {
-
-    if (loaded)
-        return this;
-
-    Astrobject.call(this, r, x, y);
-    this.color = '#' + randomNumBetween(150,100,true) + randomNumBetween(150,100,true) + randomNumBetween(150, 100,true);
-    this.opacity = randomNumBetween(100);
-    this.name = 'BackgroundStar';
+class BackgroundStar extends Astrobject {
+    constructor(r, x, y) {
+        super(r, x, y);
+        this.color = '#' + randomNumBetween(150,100,true) + randomNumBetween(150,100,true) + randomNumBetween(150, 100,true);
+        this.opacity = randomNumBetween(100);
+        this.name = 'BackgroundStar';
+    }
 }
-
-BackgroundStar.prototype = Object.create(Astrobject.prototype);
-BackgroundStar.prototype.constructor = Astrobject;
 
 function getType(type) {
     return types[type][randomNumBetween(types[type].length)];
