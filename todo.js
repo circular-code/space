@@ -6,7 +6,6 @@
 //TODO: save überarbeiten (localfile/server)?
 //TODO: backupEngine and backupFueltank
 //TODO: save state with new file api
-//TODO: fix backgroundstars
 //TODO: fade nebulae borders
 //TODO: make empty energy blink red
 //TODO: use backup fueltank when energy empty
@@ -16,6 +15,7 @@
 //TODO: populate Shipyards
 //TODO: reposition contextmenu/overlay when changing browser/window size
 //TODO: populate trading posts more details
+//TODO: travel & experts, loges and cabins
 //TODO: draw basic ship models instead of circle
 //TODO: add a second/third layer of background stars, to create a feeling of depth, second layer needs to move
 //TODO: manage flags (which are shown, what color etc.) in an ui (list of places traveled or something)

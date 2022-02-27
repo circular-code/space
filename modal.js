@@ -223,7 +223,7 @@ function createShipyardModal(modal, yard) {
 	var editPanel = createModalPanel('Shipyard-ship-edit', 'Edit Ship', 295);
 	var editButton = document.createElement('button');
 	editButton.textContent = 'Edit ship';
-	editButton.onclick = () => {createModal(app.ship, "Edit Ship", "edit")};
+	editButton.onclick = () => {createModal(app.ship, "edit")};
 	editPanel.sub.appendChild(editButton);
 
     modal.appendChild(infoPanel.panel);

@@ -437,7 +437,7 @@ class Shipyard extends Astrobject {
 
 //TODO: Backgroundstars überarbeiten, immer nur für aktuellen Screen + umgebung erstellen, nicht über save speichern
 class BackgroundStar extends Astrobject {
-    constructor(r, x, y) {
+    constructor(dataObject, r, x, y) {
         super(r, x, y);
         this.color = '#' + randomNumBetween(150,100,true) + randomNumBetween(150,100,true) + randomNumBetween(150, 100,true);
         this.opacity = randomNumBetween(100);
