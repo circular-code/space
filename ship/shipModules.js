@@ -2,24 +2,18 @@
 class Module {
 
     #moduleType;
-    #builtin;
 
     #validModuleTypes = {
-        "scanner": true,
-        "storage": true,
-        "engine": true,
+        "StorageModule": true,
+        "EngineModule": true,
     }
 
-    constructor (moduleType, builtin) {
+    constructor (moduleType) {
         this.#setModuleType(moduleType);
-        this.#setBuiltin(builtin);
     }
 
     get moduleType() {
         return this.#moduleType;
-    }
-    get builtin() {
-        return this.#builtin;
     }
 
     #setModuleType(moduleType) {
@@ -27,13 +21,6 @@ class Module {
             throw new Error("Invalid moduleType given.");
 
         this.#moduleType = moduleType;
-    }
-    #setBuiltin(builtin) {
-        if (typeof builtin !== 'boolean') {
-            console.error('Invalid value for builtin given. builtin set to true', builtin);
-            builtin = true;
-        }
-        this.#builtin = builtin;
     }
 }
 
@@ -60,11 +47,10 @@ class StorageModule extends Module {
         "fuel": true,
     };
     
-    constructor(dataObject, builtin, type, amount, capacity, temperatureMin, temperatureMax, temperatureCurrent, content) {
+    constructor(dataObject, type, amount, capacity, temperatureMin, temperatureMax, temperatureCurrent, content) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
-            builtin = dataObject.builtin;
             type = dataObject.type;
             amount = dataObject.amount;
             capacity = dataObject.capacity;
@@ -74,14 +60,13 @@ class StorageModule extends Module {
             content = dataObject.temperatureCurrent;
         }
 
-        if (typeof builtin === 'undefined' ||
-            typeof type === 'undefined' ||
+        if (typeof type === 'undefined' ||
             typeof capacity === 'undefined' ||
             typeof temperatureMin === 'undefined' ||
             typeof temperatureMax === 'undefined')
             throw new Error("Missing StorageModule constructor parameters.");
 
-        super("storage", builtin);
+        super("StorageModule");
 
         this.#setType(type);
         this.#setCapacity(capacity);
@@ -208,11 +193,11 @@ class StorageModule extends Module {
 
     createSlot() {
         var container = document.createElement('div');
-        container.classList = 'storagemodule-container storagemodule-' + this.type + ' ' + this.builtin;
+        container.classList = 'storagemodule-container storagemodule-' + this.type + ' ';
 
         container.innerHTML = `<div class="storagemodule-container storagemodule-${this.type}">
             <div class="storage-type">
-                <p><span>${this.type}</span><span class="builtin">${this.builtin ? ' (builtin)' : ''}</p>
+                <p>${this.type}</p>
                 <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="storage-content">
@@ -240,11 +225,10 @@ class EngineModule extends Module {
     #type;
     #energySource;
 
-    constructor(dataObject, builtin, type, energySource, angle, speed, speedMax, acceleration) {
+    constructor(dataObject, type, energySource, angle, speed, speedMax, acceleration) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
-            builtin = dataObject.builtin;
             type = type;
             energySource = energySource;
             angle = dataObject.angle;
@@ -253,7 +237,7 @@ class EngineModule extends Module {
             acceleration = dataObject.acceleration;
         }
 
-        super("engine", builtin);
+        super("EngineModule");
 
         this.#setType(type);
         this.#setEnergySource(energySource);
@@ -339,11 +323,11 @@ class EngineModule extends Module {
 
     createSlot() {
         var container = document.createElement('div');
-        container.classList = 'enginemodule-container enginemodule-' + this.type + ' ' + this.builtin;
+        container.classList = 'enginemodule-container enginemodule-' + this.type;
 
         container.innerHTML = `<div class="enginemodule-container enginemodule-${this.type}">
             <div class="engine-type">
-                <p><span>${this.type}</span><span class="builtin">${this.builtin ? ' (builtin)' : ''}</p>
+                <p><span>${this.type}</span></p>
                 <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="engine-content">
@@ -351,5 +335,92 @@ class EngineModule extends Module {
             </div>
         </div>`;
         return container;
+    }
+}
+
+class Slot {
+
+    #type;
+    #module;
+    #depth;
+    #width;
+    #builtin;
+
+    #validTypes = {
+        "StorageModule": true,
+        "EngineModule": true,
+        "ArmsModule": true,
+        "ShieldsModule": true,
+    }
+
+    constructor (type, builtin, depth, width, module) {
+        this.#setType(type);
+        this.#setBuiltin(builtin);
+        this.#setDepth(depth);
+        this.#setWidth(width);
+
+        if (module) {
+            this.#setModule(module);
+        }
+    }
+
+    get type() {
+        return this.#type;
+    }
+    get builtin() {
+        return this.#builtin;
+    }
+    get module() {
+        return this.#module;
+    }
+    get depth() {
+        return this.#depth;
+    }
+    get width() {
+        return this.#width;
+    }
+
+    set module(module) {
+        this.#setModule(module);
+    }
+
+    #setType(type) {
+        if (typeof type !== 'string' || !this.#validTypes[type])
+            throw new Error("Invalid type given.");
+
+            this.#type = type;
+    }
+    #setBuiltin(builtin) {
+        if (typeof builtin !== 'boolean') {
+            console.error('Invalid value for builtin given. builtin set to true', builtin);
+            builtin = true;
+        }
+        this.#builtin = builtin;
+    }
+    #setModule(module) {
+        if (!module ||
+            typeof module !== 'object' ||
+            !module.constructor ||
+            !module.constructor.name ||
+            typeof module.constructor.name !== 'string' ||
+            !this.#validTypes[module.constructor.name] ||
+            module.constructor.name !== this.type)
+            throw new Error("Invalid module given.");
+
+        this.#module = module;
+    }
+    #setDepth(depth) {
+        if (typeof depth !== 'number' || depth !== depth || depth < 1) {
+            console.error('Invalid value for depth given. depth set to 1', depth);
+            depth = 1;
+        }
+        this.#depth = depth;
+    }
+    #setWidth(width) {
+        if (typeof width !== 'number' || width !== width || width < 1) {
+            console.error('Invalid value for width given. width set to 1', width);
+            width = 1;
+        }
+        this.#width = width;
     }
 }

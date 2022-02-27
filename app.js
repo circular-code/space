@@ -92,4 +92,3 @@ app.map = new Map(3000, app.scale);
 app.ship = new Ship(app.map.chunkSize);
 app.viewport = new Viewport(0,0);
 app.renderLoop();
-
