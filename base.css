@@ -335,23 +335,23 @@ input[type=number]::-webkit-outer-spin-button {
 	position: relative;
 }
 
-.modal.Shipyard-modal .modal-panel,
-.modal.Shipyard-modal h3.modal-subtitle {
+.modal.shipyard-modal .modal-panel,
+.modal.shipyard-modal h3.modal-subtitle {
     background: rgb(35 34 16 / 70%);
 }
 
-.modal.Shipyard-modal .modal-dialog,
-.modal.Shipyard-modal .modal-panel,
-.modal.Shipyard-modal h3.modal-subtitle {
+.modal.shipyard-modal .modal-dialog,
+.modal.shipyard-modal .modal-panel,
+.modal.shipyard-modal h3.modal-subtitle {
 	border-top: 1px solid rgb(255 246 127 / 25%);
 	border-bottom: 1px solid rgb(255 246 127 / 25%);
 }
 
-.modal.Shipyard-modal h2 {
+.modal.shipyard-modal h2 {
 	color: #ffeb00;
 }
 
-.modal.Shipyard-modal button {
+.modal.shipyard-modal button {
 	background: #ffeb00;
 }
 
@@ -391,6 +391,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 .storagemodule-container .progress-bar .progress {
 	background-color: #f8e000;
+}
+
+.storage-content p {
+	color: #f8e000;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    margin-top: -5px;
 }
 
 .progress-bar .progress {

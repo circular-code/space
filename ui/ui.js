@@ -190,12 +190,12 @@ var userInterface = (function() {
                 alert('YOU NEED MORE SPEED');
                 return;
             }
-            else if (app.ship.storages[2].amount < 10) {
+            else if (app.ship.energySources[2].amount < 10) {
                 alert('OUT OF JUMP FUEL');
                 return;
             }
         
-            app.ship.storages[2].amount -= 10;
+            app.ship.energySources[2].amount -= 30;
         
             app.spaceJump = true;
         

@@ -282,6 +282,8 @@ function createShipSlots(container, ship, edit) {
 		let slotContainer = document.createElement('div');
 		slotContainer.classList = 'slot';
 
+		//TODO: if edit
+
 		if (module && module.constructor && module.createSlot) {
 			slotContainer.appendChild(module.createSlot());
 			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
@@ -300,6 +302,7 @@ function createShipSlots(container, ship, edit) {
 							document.querySelector('.slot-enginemodule.active').classList.remove('active');
 							slotContainer.classList.add('active');
 							module.active = true;
+							ship.activeEngine = module;
 						});
 					break;
 				

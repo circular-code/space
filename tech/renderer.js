@@ -81,7 +81,7 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 15, (ship.storages[0].amount / ship.storages[0].capacity) * 30, 3);
+            ctx.rect(ship.x - 15, ship.y + 15, (ship.activeEngine.energySource.amount / ship.activeEngine.energySource.capacity) * 30, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -97,7 +97,7 @@ var Renderer = (function() {
 
             //energyAmount
             ctx.beginPath();
-            ctx.rect(ship.x - 15, ship.y + 20, (ship.storages[2].amount / ship.storages[2].capacity) * 10, 3);
+            ctx.rect(ship.x - 15, ship.y + 20, (ship.energySources[2].amount / ship.energySources[2].capacity) * 10, 3);
             ctx.globalAlpha = 0.7;
             ctx.fillStyle = "#FFA500";
             ctx.fill();
@@ -208,7 +208,7 @@ var Renderer = (function() {
                         //draw range line
                         ctx.beginPath();
                         ctx.arc(obj.x, obj.y, obj.range, 0, Math.PI*2);
-                        ctx.globalAlpha = 0.03;
+                        ctx.globalAlpha = 0.06;
                         ctx.strokeStyle = obj.color;
                         ctx.lineWidth = 1;
                         ctx.stroke();
@@ -274,7 +274,8 @@ var Renderer = (function() {
                                 gradient.addColorStop(0.4, 'green');
                                 gradient.addColorStop(0.5, 'orange');
                                 gradient.addColorStop(0.8, '#652323');
-                                gradient.addColorStop(1, '#000000');
+                                // gradient.addColorStop(1, '#000000');
+                                gradient.addColorStop(1, 'rgba(0,0,0,0)');
 
                                 ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
@@ -293,7 +294,8 @@ var Renderer = (function() {
 
                                 gradient = ctx.createRadialGradient(obj.x, obj.y, innerRadius, obj.x, obj.y, outerRadius);
                                 gradient.addColorStop(0, '#51FFD6');
-                                gradient.addColorStop(1, 'white');
+                                gradient.addColorStop(0.8, 'rgba(255,255,255,0.5)');
+                                gradient.addColorStop(1, 'rgba(255,255,255,0)');
 
                                 ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
@@ -314,7 +316,8 @@ var Renderer = (function() {
                                 gradient.addColorStop(0, '#582335');
                                 gradient.addColorStop(0.3, '#6F274C');
                                 gradient.addColorStop(0.6, '#652323');
-                                gradient.addColorStop(1, '#000000');
+                                gradient.addColorStop(0.8, 'rgba(0,0,0,0.2)');
+                                gradient.addColorStop(1, 'rgba(0,0,0,0)');
 
                                 ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 
@@ -335,7 +338,8 @@ var Renderer = (function() {
                                 gradient.addColorStop(0, 'white');
                                 gradient.addColorStop(0.3, 'purple');
                                 gradient.addColorStop(0.6, 'white');
-                                gradient.addColorStop(1, 'purple');
+                                gradient.addColorStop(0.8, 'rgba(255,0,255,0.2)');
+                                gradient.addColorStop(1, 'rgba(255,0,255,0)');
 
                                 ctx.arc(obj.x, obj.y, obj.r, 0, 2 * Math.PI);
 

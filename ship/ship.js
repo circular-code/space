@@ -33,27 +33,25 @@ class Ship {
             new StorageModule(undefined, 'gas', 0, 100, -100, 100),
         ];
 
-        //TODO: add energySource to Engine, use energySource of engine when flying
-
         this.engines = [
-            new EngineModule(undefined, "energy", 0, 0, 0, 350, 1, true),
-            new EngineModule(undefined, "fuel", 1, 0, 0, 200, 1),
-            new EngineModule(undefined, "jump", 2, 0, 5000, 5000, 1),
+            new EngineModule(undefined, "energy", this.energySources[0], 0, 0, 350, 1, true),
+            new EngineModule(undefined, "fuel", this.energySources[1], 0, 0, 200, 1),
+            new EngineModule(undefined, "jump", this.energySources[2], 0, 5000, 5000, 1),
         ];
 
-        //TODO: module as index for slots
+        this.activeEngine = this.engines[0];
         
         this.slots = [
+            new Slot("StorageModule", false, 1, 1, this.energySources[0]),
+            new Slot("StorageModule", false, 1, 1, this.energySources[1]),
+            new Slot("StorageModule", false, 1, 1, this.energySources[2]),
             new Slot("StorageModule", false, 1, 1, this.storages[0]),
             new Slot("StorageModule", false, 1, 1, this.storages[1]),
-            new Slot("StorageModule", false, 1, 1, this.storages[2]),
-            new Slot("StorageModule", false, 1, 1),
-            new Slot("StorageModule", false, 1, 1, this.storages[3]),
-            new Slot("StorageModule", false, 1, 1, this.storages[4]),
-            new Slot("StorageModule", false, 1, 1,  this.storages[5]),
+            new Slot("StorageModule", false, 1, 1,  this.storages[2]),
             new Slot("EngineModule", true, 1, 1, this.engines[0]),
             new Slot("EngineModule", true, 1, 1, this.engines[1]),
-            new Slot("EngineModule", true, 1, 1, this.engines[2])
+            new Slot("EngineModule", true, 1, 1, this.engines[2]),
+            new Slot("StorageModule", false, 1, 1),
         ];
 
         this.credits = 13.37;
@@ -130,8 +128,13 @@ class Ship {
                 return object.name === 'Star' ? distance(ship.x, ship.y, object.x, object.y) <= ship.r + object.range : false;
             });
     
-            if (collidedObjects.length > 0 && this.storages[0].capacity > (this.storages[0].amount + Star.energyRegenerationAmount)) {
-                this.storages[0].amount += Star.energyRegenerationAmount * timeDelta * collidedObjects.length;
+            //TODO: recharge not activeEngines also (if energy)
+
+            if (collidedObjects.length > 0 && this.activeEngine.energySource.type === 'energy') {
+                var regAmount = collidedObjects.reduce((total, object) => total + (object.energyRegenerationAmount || 0), 0);
+                this.activeEngine.energySource.amount += regAmount * timeDelta * collidedObjects.length;
+                if (this.activeEngine.energySource.amount > this.activeEngine.energySource.capacity)
+                    this.activeEngine.energySource.amount = this.activeEngine.energySource.capacity;
             }
         }
     }
@@ -163,7 +166,7 @@ class Ship {
 
     move(timeDelta) {
 
-        if (this.storages[0].amount <= 0 || app.blackout || app.spaceJump) {
+        if (this.activeEngine.energySource.amount <= 0 || app.blackout || app.spaceJump) {
             app.wPressed = false;
             app.sPressed = false;
             app.aPressed = false;
@@ -179,11 +182,11 @@ class Ship {
     
         if (app.wPressed && this.engines[0].speed < this.engines[0].speedMax) {
             this.engines[0].speed += this.engines[0].acceleration;
-            this.storages[0].amount -= 1 * timeDelta;
+            this.activeEngine.energySource.amount -= 1 * timeDelta;
         }
         if (app.sPressed && this.engines[0].speed > 0) {
             this.engines[0].speed -= this.engines[0].acceleration;
-            this.storages[0].amount -= 1 * timeDelta;
+            this.activeEngine.energySource.amount -= 1 * timeDelta;
         }
         if (!this.engines[0].angle)
             this.engines[0].angle = 0;
@@ -198,7 +201,7 @@ class Ship {
             else
                 this.engines[0].angle -= angleSpeedMod * timeDelta * 5;
     
-            this.storages[0].amount -= 1  * timeDelta;
+            this.activeEngine.energySource.amount -= 1  * timeDelta;
         }
         if (app.dPressed) {
             if ((this.engines[0].angle + angleSpeedMod) > Math.PI)
@@ -206,7 +209,7 @@ class Ship {
             else
                 this.engines[0].angle += angleSpeedMod * timeDelta * 5;
     
-            this.storages[0].amount -= 1 * timeDelta;
+            this.activeEngine.energySource.amount -= 1 * timeDelta;
         }
     
         let xVelocity = this.engines[0].speed * Math.cos(this.engines[0].angle);

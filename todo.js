@@ -4,11 +4,14 @@
 //TODO: change to es6 style
 //TODO: change shipmodules ui
 //TODO: put render back in respective classes
+//TODO: recharge not activeEngines also (if energy)
 //TODO: save überarbeiten (localfile/server)?
 //TODO: backupEngine and backupFueltank
 //TODO: save state with new file api
-//TODO: fade nebulae borders
 //TODO: make empty energy blink red
+//TODO: bug sometimes cant move after stopping
+//TODO: bug sometimes energy bar white border size gets too big
+//TODO: bug cant access shipyard in nebula
 //TODO: apply organization of space (clusters, galaxies, etc)
 //TODO: use backup fueltank when energy empty
 //TODO: space nyan cat (rare shiny comet?)
@@ -47,7 +50,6 @@
 //module ideas
 //scanner
 //fuel tank(s)
-//storage connected to fuel tank for easy refuel
 //shield generator
 //solar fuel generator
 //atomic particle fuel generator

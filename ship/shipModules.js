@@ -45,6 +45,7 @@ class StorageModule extends Module {
         "stone": true,
         "energy": true,
         "fuel": true,
+        "jumpfuel": true
     };
     
     constructor(dataObject, type, amount, capacity, temperatureMin, temperatureMax, temperatureCurrent, content) {
@@ -201,7 +202,7 @@ class StorageModule extends Module {
                 <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="storage-content">
-                <p>${this.content || ''}</p>
+                <p>${this.content || '-'}<br>(${this.amount}/${this.capacity})</p>
             </div>
             <div class="progress-bar">
                 <div class="progress" style="width:${ this.amount / this.capacity * 100}%"></div>
@@ -214,9 +215,9 @@ class StorageModule extends Module {
 class EngineModule extends Module {
 
     #validEngineTypes = {
-        "jump": true,
-        "energy": true,
-        "fuel": true,
+        "jump": "jumpfuel",
+        "energy": "energy",
+        "fuel": "fuel",
     };
     #angle;
     #speed;
@@ -322,11 +323,16 @@ class EngineModule extends Module {
         this.#type = type;
     }
     #setEnergySource(energySource) {
-        //TODO: check if energy source matches type
-        if (typeof energySource !== 'number' || energySource !== energySource || energySource < 0 ) {
-            console.error('Invalid value for energySource given. energySource set to 0', energySource);
-            energySource = 0;
-        }
+        if (!energySource ||
+            typeof energySource !== 'object' ||
+            !energySource.constructor ||
+            !energySource.constructor.name ||
+            typeof energySource.constructor.name !== 'string' ||
+            !energySource.content || 
+            !this.#validEngineTypes[this.type] === energySource.content ||
+            energySource.constructor.name !== 'StorageModule')
+            throw new Error("Invalid module given.");
+    
         this.#energySource = energySource;
     }
     #setActive(active) {
