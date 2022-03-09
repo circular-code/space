@@ -382,6 +382,7 @@ input[type=number]::-webkit-outer-spin-button {
 	height: 1rem;
 	background-color: transparent;
 	border: 1px solid white;
+	width: 80px;
 }
 
 .storagemodule-container .progress-bar {
@@ -404,14 +405,23 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 1rem;
     border: 1px solid rgb(255 255 255 / 50%);
     border-radius: 1px;
-    background: rgb(255 255 255 / 10%);
+    /* background: rgb(255 255 255 / 10%); */
     text-align: center;
 	position: relative;
 }
 
 .slot.slot-storagemodule {
     border: 1px solid rgb(253 206 42 / 50%);
+	
+}
+
+.slot.slot-storagemodule.active {
 	background-color: rgb(253 206 42 / 10%);
+}
+
+.enginemodule-fuel,
+.enginemodule-energy {
+	cursor: pointer;
 }
 
 .storagemodule-container,
@@ -423,9 +433,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .slot.slot-enginemodule {
-    border: 1px solid rgb(42 253 144 / 50%);
-    background-color: rgb(42 253 144 / 10%);
+	border: 1px solid rgb(42 253 144 / 50%);
 }
+
+.slot.slot-enginemodule.active {
+	background-color: rgb(42 253 144 / 10%);
+}
+
 /* icons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 

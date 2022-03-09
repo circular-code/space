@@ -242,25 +242,7 @@ function createShipDetailsModal(modal, ship) {
 	shipSlotsContainer.id = 'slotContainer';
 	shipSlotsContainer.classList = 'modal-panel';
 
-	for (let i = 0; i < ship.slots.length; i++) {
-
-		let module = ship.slots[i];
-		let slotContainer = document.createElement('div');
-	
-		slotContainer.classList = 'slot';
-		if (module && module.constructor && module.createSlot) {
-			slotContainer.appendChild(module.createSlot());
-			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
-		}
-		else {
-			let storageContainer = document.createElement('div');
-			storageContainer.classList = 'storagemodule-container storagemodule-empty';
-			storageContainer.innerHTML = 'empty';
-			slotContainer.appendChild(storageContainer);
-		}
-
-        shipSlotsContainer.appendChild(slotContainer)
-	}
+	createShipSlots(shipSlotsContainer, ship);
 
     modal.appendChild(infoPanel.panel);
 	modal.appendChild(shipSlotsContainer);
@@ -277,27 +259,8 @@ function createShipEditModal(modal, ship) {
 	shipSlotsContainer.id = 'slotContainer';
 	shipSlotsContainer.classList = 'modal-panel';
 
-	for (let i = 0; i < ship.slots.length; i++) {
+	createShipSlots(shipSlotsContainer, ship);
 
-		let module = ship.slots[i];
-		let slotContainer = document.createElement('div');
-	
-		slotContainer.classList = 'slot';
-		if (module && module.constructor && module.createSlot) {
-			slotContainer.appendChild(module.createSlot());
-			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
-		}
-		else {
-			let storageContainer = document.createElement('div');
-			storageContainer.classList = 'storagemodule-container storagemodule-empty';
-			storageContainer.innerHTML = 'empty';
-			slotContainer.appendChild(storageContainer);
-		}
-
-        shipSlotsContainer.appendChild(slotContainer)
-	}
-
-	// TODO: Slottypes
 	// TODO: only replace slots/modules in Shipyard
 	// TODO: mostly view, little edit current modules in ship (e.g. change active engine, toggle shields on/off, choose main battery?)
 
@@ -305,15 +268,46 @@ function createShipEditModal(modal, ship) {
 	availableModulesContainer.id = 'availableModulesContainer';
 	availableModulesContainer.classList = 'modal-panel';
 
+	createShipSlots(availableModulesContainer, ship);
+
+    modal.appendChild(infoPanel.panel);
+	modal.appendChild(shipSlotsContainer);
+	modal.appendChild(availableModulesContainer);
+}
+
+function createShipSlots(container, ship, edit) {
 	for (let i = 0; i < ship.slots.length; i++) {
 
-		let module = ship.slots[i];
+		let module = ship.slots[i].module;
 		let slotContainer = document.createElement('div');
-	
 		slotContainer.classList = 'slot';
+
 		if (module && module.constructor && module.createSlot) {
 			slotContainer.appendChild(module.createSlot());
 			slotContainer.classList.add('slot-' + module.constructor.name.toLowerCase());
+
+			switch(module.constructor.name) {
+				case 'EngineModule':
+					if (module.active)
+						slotContainer.classList.add('active');
+
+					if (module.type !== 'jump')
+						slotContainer.addEventListener('click', function() {
+							ship.slots.forEach(slot => {
+								if (slot.module instanceof EngineModule)
+									slot.module.active = false;
+							});
+							document.querySelector('.slot-enginemodule.active').classList.remove('active');
+							slotContainer.classList.add('active');
+							module.active = true;
+						});
+					break;
+				
+				case 'StorageModule':
+					if (module.amount > 0)
+						slotContainer.classList.add('active');
+					break;
+			}
 		}
 		else {
 			let storageContainer = document.createElement('div');
@@ -322,10 +316,6 @@ function createShipEditModal(modal, ship) {
 			slotContainer.appendChild(storageContainer);
 		}
 
-        availableModulesContainer.appendChild(slotContainer)
+        container.appendChild(slotContainer)
 	}
-
-    modal.appendChild(infoPanel.panel);
-	modal.appendChild(shipSlotsContainer);
-	modal.appendChild(availableModulesContainer);
 }

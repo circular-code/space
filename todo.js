@@ -15,7 +15,7 @@
 //TODO: implement space stations, shipwrecks, star bases and other discoverable objects
 //TODO: name astrobjects, colonized planets/moons? fractions/reputation?
 //TODO: populate Shipyards
-//TODO: add clouds for nebulae/ background clouds?
+//TODO: add clouds for nebulae/ background clouds (perlin noise clouds)?
 //TODO: reposition contextmenu/overlay when changing browser/window size
 //TODO: populate trading posts more details
 //TODO: travel & experts, loges and cabins

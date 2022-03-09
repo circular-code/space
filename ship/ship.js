@@ -21,26 +21,33 @@ class Ship {
             variant: "f"
         };
 
+        this.energySources = [
+            new StorageModule(undefined, 'energy', 100, 100, -100, 100, 50, 'energy'),
+            new StorageModule(undefined, 'liquid', 100, 100, -100, 100, 50, 'fuel'),
+            new StorageModule(undefined, 'liquid', 100, 100, -100, 100, 50, 'jumpfuel'),
+        ];
+
         this.storages = [
-            new StorageModule(undefined, 'energy', 100, 100, -100, 100),
-            new StorageModule(undefined, 'liquid', 100, 100, -100, 100),
-            new StorageModule(undefined, 'liquid', 100, 100, -100, 100),
             new StorageModule(undefined, 'solid', 0, 100, -100, 100),
             new StorageModule(undefined, 'plasma', 0, 100, -100, 100),
             new StorageModule(undefined, 'gas', 0, 100, -100, 100),
         ];
 
+        //TODO: add energySource to Engine, use energySource of engine when flying
+
         this.engines = [
-            new EngineModule(undefined, "energy", 0, 0, 0, 350, 1),
+            new EngineModule(undefined, "energy", 0, 0, 0, 350, 1, true),
             new EngineModule(undefined, "fuel", 1, 0, 0, 200, 1),
             new EngineModule(undefined, "jump", 2, 0, 5000, 5000, 1),
         ];
+
+        //TODO: module as index for slots
         
         this.slots = [
-            new Slot("StorageModule", false, 1, 1),
             new Slot("StorageModule", false, 1, 1, this.storages[0]),
             new Slot("StorageModule", false, 1, 1, this.storages[1]),
             new Slot("StorageModule", false, 1, 1, this.storages[2]),
+            new Slot("StorageModule", false, 1, 1),
             new Slot("StorageModule", false, 1, 1, this.storages[3]),
             new Slot("StorageModule", false, 1, 1, this.storages[4]),
             new Slot("StorageModule", false, 1, 1,  this.storages[5]),

@@ -224,8 +224,9 @@ class EngineModule extends Module {
     #acceleration;
     #type;
     #energySource;
+    #active;
 
-    constructor(dataObject, type, energySource, angle, speed, speedMax, acceleration) {
+    constructor(dataObject, type, energySource, angle, speed, speedMax, acceleration, active) {
 
         // enable just throwing old object at constructor to create new object
         if (dataObject) {
@@ -235,6 +236,7 @@ class EngineModule extends Module {
             speed = dataObject.speed;
             speedMax = dataObject.speedMax;
             acceleration = dataObject.acceleration;
+            active = dataObject.active;
         }
 
         super("EngineModule");
@@ -245,6 +247,7 @@ class EngineModule extends Module {
         this.#setSpeed(speed);
         this.#setSpeedMax(speedMax);
         this.#setAcceleration(acceleration);
+        this.#setActive(active);
     }
 
     get type() {
@@ -265,6 +268,9 @@ class EngineModule extends Module {
     get acceleration() {
         return this.#acceleration;
     }
+    get active() {
+        return this.#active;
+    }
 
     set energySource(energySource) {
         this.#setEnergySource(energySource);
@@ -274,6 +280,9 @@ class EngineModule extends Module {
     }
     set speed(speed) {
         this.#setSpeed(speed);
+    }
+    set active(active) {
+        this.#setActive(active);
     }
 
     #setAngle(angle) {
@@ -319,6 +328,9 @@ class EngineModule extends Module {
             energySource = 0;
         }
         this.#energySource = energySource;
+    }
+    #setActive(active) {
+        this.#active = !!active;
     }
 
     createSlot() {
