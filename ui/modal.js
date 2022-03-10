@@ -18,7 +18,7 @@ document.addEventListener("keyup", e => {
   }
 });
 
-function createModalPanel(id, subtitle, height) {
+function createModalPanel(id, panelTitle, height) {
     var panel = document.createElement('div');
     panel.className = 'modal-panel';
 	panel.id = id;
@@ -29,27 +29,27 @@ function createModalPanel(id, subtitle, height) {
 	}
 
     var title = document.createElement('h3');
-    title.className = 'modal-subtitle';
-    title.textContent = subtitle;
+    title.className = 'modal-panel-head';
+    title.textContent = panelTitle;
 
-    var sub = document.createElement('div');
-	sub.className = 'modal-subcontent-container';
+    var content = document.createElement('div');
+	content.className = 'modal-panel-body';
 
 	if (height) {
-		sub.style.height = height - 60 + 'px';
-		sub.style.maxHeight = height - 60 + 'px';
+		content.style.height = height - 60 + 'px';
+		content.style.maxHeight = height - 60 + 'px';
 	}
 
     panel.appendChild(title);
-    panel.appendChild(sub);
+    panel.appendChild(content);
 
-    return {panel:panel, sub: sub};
+    return {panel:panel, content: content, title: title};
 };
 
 function createModalInfo(title, text) {
 
-    var sub = document.createElement('div');
-    sub.className = 'modal-subcontent';
+    var content = document.createElement('div');
+    content.className = 'modal-panel-content';
 
     var h4 = document.createElement('h4');
     h4.textContent = title;
@@ -58,16 +58,16 @@ function createModalInfo(title, text) {
     p.className = 'modal-text';
     p.textContent = text;
 
-    sub.appendChild(h4);
-    sub.appendChild(p);
+    content.appendChild(h4);
+    content.appendChild(p);
 
-    return sub;
+    return content;
 }
 
 function createModalCommodity(commodity, buy, buttontext) {
 
-    var sub = document.createElement('div');
-    sub.className = 'modal-commodity-container modal-subcontent';
+    var content = document.createElement('div');
+    content.className = 'modal-commodity-container modal-panel-content';
 
     var h4 = document.createElement('h4');
     h4.className = 'modal-commodity-name';
@@ -105,15 +105,15 @@ function createModalCommodity(commodity, buy, buttontext) {
 
 	var price = document.createElement('p');
 	price.className = 'modal-commodity-price';
-	price.textContent = commodity.price + ' $/' + commodity.unit;
+	price.textContent = commodity.price + ' $' + (commodity.amount === 1 ? '' : '/' + commodity.unit);
 
-	sub.appendChild(h4);
-	sub.appendChild(amount);
-	sub.appendChild(inputContainer);
-    sub.appendChild(button);
-	sub.appendChild(price);
+	content.appendChild(h4);
+	content.appendChild(amount);
+	content.appendChild(inputContainer);
+    content.appendChild(button);
+	content.appendChild(price);
 
-    return sub;
+    return content;
 }
 
 function changeValue (commodity, buy, amount, input) {
@@ -184,25 +184,25 @@ function createTradepostModal(modal, post) {
     document.getElementById('modalTitle').textContent = post.info.title + ' - ' + post.info.system + ' - ' + post.info.allegiance;
 
     var infoPanel = createModalPanel('Tradepost-info', 'General Information', 295);
-    infoPanel.sub.appendChild(createModalInfo('Name', post.info.title));
-    infoPanel.sub.appendChild(createModalInfo('System', post.info.system));
-    infoPanel.sub.appendChild(createModalInfo('Status', post.info.status));
-    infoPanel.sub.appendChild(createModalInfo('Allegiance', post.info.allegiance));
-    infoPanel.sub.appendChild(createModalInfo('Commander', post.info.commander));
+    infoPanel.content.appendChild(createModalInfo('Name', post.info.title));
+    infoPanel.content.appendChild(createModalInfo('System', post.info.system));
+    infoPanel.content.appendChild(createModalInfo('Status', post.info.status));
+    infoPanel.content.appendChild(createModalInfo('Allegiance', post.info.allegiance));
+    infoPanel.content.appendChild(createModalInfo('Commander', post.info.commander));
 
 	var fuelPanel = createModalPanel('Tradepost-fuel', 'Maintenance', 283);
 	for (var index = 0; index < post.maintenance.length; index++)
-		fuelPanel.sub.appendChild(createModalCommodity(post.maintenance[index], true));
+		fuelPanel.content.appendChild(createModalCommodity(post.maintenance[index], true));
 
     var buyPanel = createModalPanel('Tradepost-buy', 'Buy');
 
     for (var index = 0; index < post.haveResources.length; index++)
-      buyPanel.sub.appendChild(createModalCommodity(post.haveResources[index], true));
+      buyPanel.content.appendChild(createModalCommodity(post.haveResources[index], true));
 
     var sellPanel = createModalPanel('Tradepost-sell', 'Sell');
 
     for (var index = 0; index < post.needResources.length; index++)
-      	sellPanel.sub.appendChild(createModalCommodity(post.needResources[index], false));
+      	sellPanel.content.appendChild(createModalCommodity(post.needResources[index], false));
 
     modal.appendChild(infoPanel.panel);
     modal.appendChild(fuelPanel.panel);
@@ -218,16 +218,26 @@ function createShipyardModal(modal, yard) {
 
 	var fuelPanel = createModalPanel('Shipyard-fuel', 'Maintenance', 283);
 	for (var index = 0; index < yard.maintenance.length; index++)
-		fuelPanel.sub.appendChild(createModalCommodity(yard.maintenance[index], true));
+		fuelPanel.content.appendChild(createModalCommodity(yard.maintenance[index], true));
 
-	var editPanel = createModalPanel('Shipyard-ship-edit', 'Edit Ship', 295);
+	var availableShipsPanel = createModalPanel('availableShipsPanel', 'Available Ships');
+	for (index = 0; index < yard.availableShips.length; index++)
+		availableShipsPanel.content.appendChild(createModalCommodity(yard.availableShips[index], true));
+
+	var availableModulesPanel = createModalPanel('availableModulesPanel', 'Available Modules', 478);
+	for (index = 0; index < yard.availableModules.length; index++)
+	availableModulesPanel.content.appendChild(createModalCommodity(yard.availableModules[index], true));
+
+	var editPanel = createModalPanel('Shipyard-ship-edit', 'Edit Ship', 100);
 	var editButton = document.createElement('button');
 	editButton.textContent = 'Edit ship';
 	editButton.onclick = () => {createModal(app.ship, "edit")};
-	editPanel.sub.appendChild(editButton);
+	editPanel.content.appendChild(editButton);
 
     modal.appendChild(infoPanel.panel);
 	modal.appendChild(fuelPanel.panel);
+	modal.appendChild(availableShipsPanel.panel);
+	modal.appendChild(availableModulesPanel.panel);
 	modal.appendChild(editPanel.panel);
 }
 
@@ -236,7 +246,8 @@ function createShipDetailsModal(modal, ship) {
 	document.getElementById('modal').className = 'modal ship-modal'
 	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
 
-    var infoPanel = createModalPanel('Tradepost-info', 'Basic Ship Information');
+    var infoPanel = createModalPanel('Ship-details-info', 'Basic Ship Information');
+	var shipSlotsContainer = createModalPanel('Ship-details-info', 'Basic Ship Information');
 
 	var shipSlotsContainer = document.createElement('div');
 	shipSlotsContainer.id = 'slotContainer';
@@ -250,10 +261,10 @@ function createShipDetailsModal(modal, ship) {
 
 function createShipEditModal(modal, ship) {
 	clearModal();
-	document.getElementById('modal').className = 'modal ship-modal'
+	document.getElementById('modal').className = 'modal ship-edit-modal'
 	document.getElementById('modalTitle').textContent = `${ship.details.name}, ${ship.details.class} ${ship.details.model}${ship.details.variant}, ${ship.details.manufacturer}`
 
-    var infoPanel = createModalPanel('Tradepost-info', 'Basic Ship Information');
+    var infoPanel = createModalPanel('Ship-edit-info', 'Basic Ship Information');
 
 	var shipSlotsContainer = document.createElement('div');
 	shipSlotsContainer.id = 'slotContainer';
@@ -268,21 +279,19 @@ function createShipEditModal(modal, ship) {
 	availableModulesContainer.id = 'availableModulesContainer';
 	availableModulesContainer.classList = 'modal-panel';
 
-	createShipSlots(availableModulesContainer, ship);
+	// createShipSlots(availableModulesContainer, ship);
 
     modal.appendChild(infoPanel.panel);
 	modal.appendChild(shipSlotsContainer);
 	modal.appendChild(availableModulesContainer);
 }
 
-function createShipSlots(container, ship, edit) {
+function createShipSlots(container, ship) {
 	for (let i = 0; i < ship.slots.length; i++) {
 
 		let module = ship.slots[i].module;
 		let slotContainer = document.createElement('div');
 		slotContainer.classList = 'slot';
-
-		//TODO: if edit
 
 		if (module && module.constructor && module.createSlot) {
 			slotContainer.appendChild(module.createSlot());

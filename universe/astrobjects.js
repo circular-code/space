@@ -338,10 +338,10 @@ class Tradepost extends Astrobject {
         this.haveResources = [];
         this.needResources = [];
         this.maintenance = [
-            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
-            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
+            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'l'),
+            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'l'),
+            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'kwh'),
+            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'h')
         ];
 
         var temp = [];
@@ -425,11 +425,31 @@ class Shipyard extends Astrobject {
         this.name = 'Shipyard';
 
         this.maintenance = [
-            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'L'),
-            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'KWH'),
-            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'H')
+            new Commodity(false,'Fuel', -1, 'fuel', randomNumBetween(100,1), 'l'),
+            new Commodity(false,'Jumpfuel', -1, 'fuel', randomNumBetween(100,1), 'l'),
+            new Commodity(false,'Energy', -1, 'other', randomNumBetween(100,1), 'kwh'),
+            new Commodity(false,'Repair Service', -1, 'other', randomNumBetween(100,1), 'h')
         ];
+
+        this.availableShips = [
+            new Commodity(false,'Vorgan Attack cruiser DLF-2', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Anilian Light Interceptor PPRD-9A', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Andromeda Star cruiser TT', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Junkan R6 Courier Ship', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Vorgan Light cruiser GGF-1', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Anilian Defensive Interceptor PPRD-4C', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Andromeda Bridge cruiser A4', 1, 'ship', randomNumBetween(100000,20000)),
+            new Commodity(false,'Junkan A6 Courier Vessel', 1, 'ship', randomNumBetween(100000,20000))
+        ]
+
+        this.availableModules = [
+            new Commodity(false,'StorageModule 1', 1, 'module', randomNumBetween(100000,20000)),
+            new Commodity(false,'StorageModule 2', 1, 'module', randomNumBetween(100000,20000)),
+            new Commodity(false,'StorageModule 3', 1, 'module', randomNumBetween(100000,20000)),
+            new Commodity(false,'EngineModule 1', 1, 'module', randomNumBetween(100000,20000)),
+            new Commodity(false,'EngineModule 2', 1, 'module', randomNumBetween(100000,20000)),
+            new Commodity(false,'ShieldModule 1', 1, 'module', randomNumBetween(100000,20000)),
+        ]
 
         chunk.allAstrobjects.push(this);
     }

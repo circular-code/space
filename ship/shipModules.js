@@ -202,7 +202,7 @@ class StorageModule extends Module {
                 <img src="icons/${this.type}.svg" class="svg">
             </div>
             <div class="storage-content">
-                <p>${this.content || '-'}<br>(${this.amount}/${this.capacity})</p>
+                <p>${this.content || '-'}<br>(${Math.round(this.amount)}/${this.capacity})</p>
             </div>
             <div class="progress-bar">
                 <div class="progress" style="width:${ this.amount / this.capacity * 100}%"></div>

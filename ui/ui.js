@@ -230,7 +230,7 @@ var userInterface = (function() {
                 app.map.flaggedAstrobjects.push(app.map.contextMenuAstrobject);
             }
             else if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === true)
-                alert.log('astrobject already has a flag');
+                alert('astrobject already has a flag');
 
             canvas.click();
         },
@@ -243,7 +243,7 @@ var userInterface = (function() {
                 }
             }
             else if (app.map.contextMenuAstrobject && app.map.contextMenuAstrobject.hasFlag === false)
-                alert.log('astrobject has no flag that could be removed');
+                alert('astrobject has no flag that could be removed');
 
             canvas.click();
         },
